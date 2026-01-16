@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quick Add • MathQuest Arcade</title>
+
+  <style>
+    :root{
+      --c1:#8ECAE6; --c2:#90BE6D; --c3:#FFB703;
+      --ink:#1b1b1b; --muted:#555; --card:#ffffff;
+      --shadow:0 10px 26px rgba(0,0,0,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-rounded, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(60vmax 60vmax at 100% 0%, var(--c1) 0 25%, transparent 26%),
+        radial-gradient(65vmax 65vmax at 0% 100%, var(--c2) 0 22%, transparent 23%),
+        linear-gradient(180deg, #fff, #fff);
+      min-height:100vh;
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    header{
+      background:var(--card);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      padding:12px 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .title{ font-weight:1000; }
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:10px 14px;
+      font-weight:900;
+      cursor:pointer;
+      background:#f1f1f1;
+    }
+
+    main{ flex:1; display:grid; place-items:center; }
+
+    .game{
+      width:min(92vw,540px);
+      background:var(--card);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:18px;
+      text-align:center;
+    }
+
+    .hud{
+      display:flex;
+      justify-content:space-between;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+    .pill{
+      background:#f6f6f6;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:14px;
+    }
+
+    .difficulty{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      margin:10px 0 6px;
+    }
+    .difficulty button{
+      border:none;
+      border-radius:999px;
+      padding:8px 14px;
+      font-weight:900;
+      cursor:pointer;
+      background:#eee;
+    }
+    .difficulty .active{
+      background:var(--c2);
+      color:#0b2a33;
+    }
+    .difficulty .locked{
+      opacity:.5;
+      pointer-events:none;
+    }
+
+    .diceRow{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:16px;
+      margin:14px 0;
+      flex-wrap:wrap;
+    }
+    .diceRow img{
+      width:110px;
+      height:110px;
+    }
+
+    .answer{
+      margin-top:10px;
+      display:flex;
+      gap:10px;
+      justify-content:center;
+    }
+    input{
+      width:120px;
+      padding:14px;
+      font-size:22px;
+      font-weight:900;
+      border-radius:14px;
+      border:2px solid #ddd;
+      text-align:center;
+    }
+    input:focus{
+      outline:none;
+      border-color:var(--c1);
+      box-shadow:0 0 0 3px rgba(142,202,230,.3);
+    }
+    .submit{
+      padding:14px 18px;
+      font-size:18px;
+      font-weight:900;
+      border:none;
+      border-radius:14px;
+      background:var(--c2);
+      cursor:pointer;
+    }
+
+    .msg{
+      margin-top:12px;
+      min-height:24px;
+      font-weight:900;
+    }
+    .good{ color:#2d7a1f; }
+    .bad{ color:#b51e1e; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="title">🎲 Quick Add</div>
+  <button class="btn" onclick="goHome()">Home</button>
+</header>
+
+<main>
+  <section class="game">
+    <div class="hud">
+      <div class="pill">⏱ Time: <span id="time">30</span>s</div>
+      <div class="pill">⭐ Score: <span id="score">0</span></div>
+    </div>
+
+    <p><strong>Choose a difficulty to start</strong></p>
+
+    <div class="difficulty">
+      <button id="easyBtn" onclick="setDifficulty('easy')">Easy (2 Dice)</button>
+      <button id="hardBtn" onclick="setDifficulty('hard')">Hard (3 Dice)</button>
+    </div>
+
+    <div class="diceRow" id="diceRow"></div>
+
+    <div class="answer">
+      <input id="answer" type="number" placeholder="?" disabled />
+      <button class="submit" onclick="check()" disabled id="submitBtn">✔</button>
+    </div>
+
+    <div class="msg" id="msg"></div>
+  </section>
+</main>
+
+<script>
+  // --- Login gate ---
+  function readProfile(){
+    const raw = sessionStorage.getItem('mq_profile') || localStorage.getItem('mq_profile');
+    if(!raw) return null;
+    try { return JSON.parse(raw); } catch { return null; }
+  }
+  if(!readProfile()) window.location.replace('../index.html');
+
+  // --- Game state ---
+  let timeLeft = 30;
+  let score = 0;
+  let correctCount = 0;
+  let diceCount = 0;
+  let diceValues = [];
+  let timer = null;
+  let started = false;
+
+  const timeEl = document.getElementById('time');
+  const scoreEl = document.getElementById('score');
+  const msgEl = document.getElementById('msg');
+  const ansEl = document.getElementById('answer');
+  const diceRow = document.getElementById('diceRow');
+  const submitBtn = document.getElementById('submitBtn');
+
+  function randDice(){ return Math.floor(Math.random()*6) + 1; }
+
+  function setDifficulty(level){
+    if(started) return;
+
+    diceCount = level === 'hard' ? 3 : 2;
+    document.getElementById('easyBtn').classList.toggle('active', level === 'easy');
+    document.getElementById('hardBtn').classList.toggle('active', level === 'hard');
+
+    // lock difficulty buttons
+    document.getElementById('easyBtn').classList.add('locked');
+    document.getElementById('hardBtn').classList.add('locked');
+
+    started = true;
+    ansEl.disabled = false;
+    submitBtn.disabled = false;
+
+    newRoll();
+    startTimer();
+  }
+
+  function newRoll(){
+    diceValues = [];
+    diceRow.innerHTML = '';
+    for(let i=0;i<diceCount;i++){
+      const v = randDice();
+      diceValues.push(v);
+      const img = document.createElement('img');
+      img.src = `../assets/dice${v}.png`;
+      img.alt = `Dice ${v}`;
+      diceRow.appendChild(img);
+    }
+    ansEl.value = '';
+    ansEl.focus();
+  }
+
+  function check(){
+    if(!started || timeLeft <= 0) return;
+
+    const user = Number(ansEl.value);
+    const correct = diceValues.reduce((a,b)=>a+b,0);
+
+    if(user === correct){
+      score += 10;
+      correctCount++;
+      msgEl.textContent = 'Correct! 🎉';
+      msgEl.className = 'msg good';
+
+      if(correctCount % 10 === 0){
+        score += 50;
+        msgEl.textContent = '🎉 Bonus! +50 points!';
+      }
+    } else {
+      score = Math.max(0, score - 10);
+      msgEl.textContent = 'Oops! Try again 🙂';
+      msgEl.className = 'msg bad';
+    }
+
+    scoreEl.textContent = score;
+    setTimeout(()=> msgEl.textContent='', 700);
+    newRoll();
+  }
+
+  function startTimer(){
+    timer = setInterval(()=>{
+      timeLeft--;
+      timeEl.textContent = timeLeft;
+      if(timeLeft <= 0){
+        clearInterval(timer);
+        msgEl.textContent = `⏰ Time’s up! Final score: ${score}`;
+        ansEl.disabled = true;
+        submitBtn.disabled = true;
+      }
+    },1000);
+  }
+
+  function goHome(){
+    window.location.href = '../home.html';
+  }
+
+  ansEl.addEventListener('keydown', e=>{
+    if(e.key === 'Enter') check();
+  });
+</script>
+
+</body>
+</html>
+

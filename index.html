@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mathive</title>
+  <style>
+    :root{
+      /* soft, friendly colours */
+      --c1:#FFB703;  /* mango */
+      --c2:#8ECAE6;  /* sky */
+      --c3:#90BE6D;  /* green */
+      --c4:#FB8500;  /* orange */
+      --text:#1b1b1b; --muted:#555; --card:#ffffff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-rounded, system-ui, "Segoe UI", Roboto, Arial, sans-serif; color:var(--text);
+      /* simple colourful background, but calm */
+      background:
+        radial-gradient(80vmax 80vmax at 0% 0%, var(--c2) 0 30%, transparent 31%),
+        radial-gradient(60vmax 60vmax at 100% 0%, var(--c3) 0 28%, transparent 29%),
+        radial-gradient(50vmax 50vmax at 100% 100%, var(--c1) 0 26%, transparent 27%),
+        radial-gradient(70vmax 70vmax at 0% 100%, #ffd7a3 0 22%, transparent 23%),
+        linear-gradient(180deg, #fff, #fff);
+      display:grid; place-items:center; padding:20px;
+    }
+    .card{
+      width:min(92vw, 440px);
+      background:var(--card);
+      border-radius:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,.08);
+      padding:28px 24px 22px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; justify-content:center; margin-bottom:6px;
+    }
+    .logo{
+      width:56px; height:56px; border-radius:16px; display:grid; place-items:center;
+      background: var(--c4); color:#fff; font-weight:900; font-size:20px;
+      box-shadow:0 6px 16px rgba(251,133,0,.3);
+    }
+    h1{margin:6px 0 2px; text-align:center; font-size:28px}
+    p.sub{margin:0 0 18px; text-align:center; color:var(--muted)}
+    label{display:block; font-weight:700; font-size:14px; margin:12px 0 6px}
+    input{
+      width:100%; padding:14px 16px; font-size:18px; border-radius:14px;
+      border:2px solid #e8e8e8; outline:none; background:#fff;
+    }
+    input:focus{border-color:var(--c2); box-shadow:0 0 0 3px rgba(142,202,230,.3)}
+    .actions{display:flex; gap:10px; margin-top:18px}
+    button{
+      flex:1; padding:12px 16px; border:none; border-radius:14px; font-weight:800; font-size:16px; cursor:pointer;
+    }
+    .clear{background:#f0f0f0; color:#333}
+    .clear:hover{background:#e8e8e8}
+    .play{background:var(--c3); color:#fff}
+    .play:hover{filter:brightness(0.95)}
+    .error{color:#d12a2a; margin-top:10px; font-size:14px; display:none}
+    .footer{margin-top:16px; text-align:center; color:#777; font-size:12px}
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <div class="brand">
+      <div class="logo">M</div>
+      <div style="font-weight:900; letter-spacing:.3px;">Mathive</div>
+    </div>
+    <h1>Welcome!</h1>
+    <p class="sub">Type your name and Class code.</p>
+
+    <form id="loginForm" novalidate>
+      <label for="studentName">Your name</label>
+      <input id="studentName" type="text" placeholder="e.g., Alex" required autofocus />
+
+      <label for="classCode">Class code <span style="font-weight:500; color:var(--muted)">(optional)</span></label>
+      <input id="classCode" type="text" placeholder="e.g., 4A-2025" />
+
+      <div class="actions">
+        <button type="button" class="clear" id="clearBtn">Clear</button>
+        <button type="submit" class="play">Play</button>
+      </div>
+
+      <div id="error" class="error">Please enter your name.</div>
+    </form>
+
+    <div class="footer">No accounts. Works offline ✨</div>
+  </main>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const nameEl = document.getElementById('studentName');
+    const codeEl = document.getElementById('classCode');
+    const err = document.getElementById('error');
+
+    window.addEventListener('load', ()=> nameEl.focus());
+
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name = nameEl.value.trim();
+      if(!name){ err.style.display='block'; nameEl.focus(); return; }
+      err.style.display='none';
+      const data = JSON.stringify({ name, code: codeEl.value.trim(), ts: Date.now() });
+      sessionStorage.setItem('mq_profile', data);
+      localStorage.setItem('mq_profile', data);
+      window.location.href = 'home.html';
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', ()=>{
+      nameEl.value=''; codeEl.value=''; err.style.display='none'; nameEl.focus();
+    });
+  </script>
+</body>
+</html>

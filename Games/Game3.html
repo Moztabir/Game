@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Game 3 • Factor Smash</title>
+  <style>
+    :root{
+      --c1:#8ECAE6; --c2:#90BE6D; --c3:#FFB703; --c4:#FB8500; --c5:#F28482;
+      --ink:#1b1b1b; --muted:#555; --card:#ffffff;
+      --shadow:0 10px 26px rgba(0,0,0,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-rounded, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(70vmax 70vmax at 0% 0%, var(--c1) 0 22%, transparent 23%),
+        radial-gradient(65vmax 65vmax at 100% 100%, var(--c3) 0 20%, transparent 21%),
+        linear-gradient(180deg, #fff, #fff);
+      min-height:100vh;
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    header{
+      background:var(--card);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      padding:12px 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .title{ font-weight:1000; display:flex; align-items:center; gap:10px; }
+    .tag{
+      font-size:12px; font-weight:1000; padding:6px 10px; border-radius:999px;
+      background:#f6f6f6; color:#333;
+    }
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:10px 14px;
+      font-weight:900;
+      cursor:pointer;
+      background:#f1f1f1;
+    }
+
+    main{ flex:1; display:grid; place-items:center; }
+
+    .card{
+      width:min(92vw, 620px);
+      background:var(--card);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+
+    .hud{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      font-weight:1000;
+    }
+    .pill{
+      background:#f6f6f6;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:14px;
+    }
+
+    .center{ text-align:center; margin-top:10px; }
+    .targetWrap{
+      display:grid;
+      place-items:center;
+      margin-top:10px;
+    }
+    .target{
+      width:220px;
+      height:220px;
+      border-radius:999px;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.95) 0 35%, rgba(142,202,230,.35) 36% 60%, rgba(255,183,3,.35) 61% 100%);
+      box-shadow: 0 16px 26px rgba(0,0,0,.08);
+      display:grid;
+      place-items:center;
+      font-weight:1000;
+    }
+    .targetNum{
+      font-size:64px;
+      line-height:1;
+    }
+    .targetLabel{
+      margin-top:8px;
+      color:var(--muted);
+      font-weight:900;
+      font-size:13px;
+    }
+
+    .difficulty{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      margin-top:12px;
+      flex-wrap:wrap;
+    }
+    .difficulty button{
+      border:none;
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:1000;
+      cursor:pointer;
+      background:#eee;
+    }
+    .difficulty .active{ background:var(--c2); color:#0b2a33; }
+    .difficulty .locked{ opacity:.55; pointer-events:none; }
+
+    .pick{
+      margin-top:10px;
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      font-weight:1000;
+    }
+    .slot{
+      width:120px;
+      padding:10px 12px;
+      border-radius:16px;
+      background:#f6f6f6;
+      text-align:center;
+    }
+
+    .grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap:10px;
+    }
+    .nbtn{
+      border:none;
+      border-radius:16px;
+      padding:14px 0;
+      font-weight:1000;
+      font-size:18px;
+      cursor:pointer;
+      background: rgba(142,202,230,.35);
+      box-shadow: 0 8px 14px rgba(0,0,0,.06);
+    }
+    .nbtn:hover{ filter:brightness(.98); }
+    .nbtn:active{ transform:scale(.99); }
+    .nbtn.selected{
+      background: rgba(144,190,109,.55);
+      outline: 3px solid rgba(144,190,109,.55);
+    }
+
+    .msg{
+      margin-top:12px;
+      min-height:26px;
+      text-align:center;
+      font-weight:1000;
+    }
+    .good{ color:#2d7a1f; }
+    .bad{ color:#b51e1e; }
+
+    .hint{
+      margin-top:8px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    @media (max-width:520px){
+      .grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .target{ width:200px; height:200px; }
+      .targetNum{ font-size:56px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="title">✖️ Game 3: Factor Smash <span class="tag">30 seconds</span></div>
+  <button class="btn" onclick="goHome()">Home</button>
+</header>
+
+<main>
+  <section class="card" aria-label="Factor Smash game">
+    <div class="hud">
+      <div class="pill">⏱ Time: <span id="time">30</span>s</div>
+      <div class="pill">⭐ Score: <span id="score">0</span></div>
+      <div class="pill">🔥 Combo: <span id="combo">0</span></div>
+    </div>
+
+    <div class="center">
+      <div style="font-weight:1000">Find two numbers that multiply to:</div>
+      <div class="targetWrap">
+        <div class="target">
+          <div>
+            <div class="targetNum" id="target">--</div>
+            <div class="targetLabel" id="speedNote">Choose difficulty to start</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="difficulty">
+        <button id="easyBtn" onclick="setDifficulty('easy')">Easy</button>
+        <button id="hardBtn" onclick="setDifficulty('hard')">Hard</button>
+      </div>
+
+      <div class="pick">
+        <div class="slot">Pick 1: <span id="p1">—</span></div>
+        <div class="slot">Pick 2: <span id="p2">—</span></div>
+      </div>
+
+      <div class="grid" id="grid"></div>
+
+      <div class="hint">+15 correct • −10 wrong • +10 if solved in 3s • +25 every 5 correct</div>
+      <div class="msg" id="msg"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+  // --- login gate (optional) ---
+  function readProfile(){
+    const raw = sessionStorage.getItem('mq_profile') || localStorage.getItem('mq_profile');
+    if(!raw) return null;
+    try { return JSON.parse(raw); } catch { return null; }
+  }
+  if(!readProfile()) window.location.replace('../index.html');
+
+  // --- elements ---
+  const timeEl = document.getElementById('time');
+  const scoreEl = document.getElementById('score');
+  const comboEl = document.getElementById('combo');
+  const targetEl = document.getElementById('target');
+  const msgEl = document.getElementById('msg');
+  const gridEl = document.getElementById('grid');
+  const p1El = document.getElementById('p1');
+  const p2El = document.getElementById('p2');
+  const speedNote = document.getElementById('speedNote');
+
+  // --- state ---
+  let started = false;
+  let mode = null;
+  let timeLeft = 30;
+  let timerId = null;
+
+  let score = 0;
+  let combo = 0;
+
+  let target = 0;
+  let pick1 = null;
+  let pick2 = null;
+
+  let roundStart = 0;
+
+  function goHome(){ window.location.href = '../home.html'; }
+  function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+  function setDifficulty(level){
+    if(started) return;
+    started = true;
+    mode = level;
+
+    document.getElementById('easyBtn').classList.toggle('active', level==='easy');
+    document.getElementById('hardBtn').classList.toggle('active', level==='hard');
+    document.getElementById('easyBtn').classList.add('locked');
+    document.getElementById('hardBtn').classList.add('locked');
+
+    buildGrid();
+    newTarget();
+    startTimer();
+  }
+
+  function buildGrid(){
+    // Keep it grade-4 friendly: factors 2..12
+    const nums = [];
+    for(let i=2;i<=12;i++) nums.push(i);
+
+    gridEl.innerHTML = '';
+    nums.forEach(n=>{
+      const b = document.createElement('button');
+      b.className = 'nbtn';
+      b.textContent = n;
+      b.addEventListener('click', ()=> selectNumber(n, b));
+      gridEl.appendChild(b);
+    });
+  }
+
+  function newTarget(){
+    clearSelection();
+
+    let a, b;
+    if(mode === 'easy'){
+      // smaller range: 2..9
+      a = randInt(2,9);
+      b = randInt(2,9);
+    } else {
+      // bigger: 2..12
+      a = randInt(2,12);
+      b = randInt(2,12);
+    }
+
+    target = a * b;
+    targetEl.textContent = target;
+    msgEl.textContent = '';
+    msgEl.className = 'msg';
+
+    roundStart = performance.now();
+    speedNote.textContent = 'Pick 2 numbers fast!';
+  }
+
+  function clearSelection(){
+    pick1 = null; pick2 = null;
+    p1El.textContent = '—';
+    p2El.textContent = '—';
+    [...document.querySelectorAll('.nbtn')].forEach(btn=>btn.classList.remove('selected'));
+  }
+
+  function selectNumber(n, btn){
+    if(!started || timeLeft <= 0) return;
+
+    // select first then second
+    if(pick1 === null){
+      pick1 = n;
+      p1El.textContent = n;
+      btn.classList.add('selected');
+      return;
+    }
+
+    if(pick2 === null){
+      pick2 = n;
+      p2El.textContent = n;
+      btn.classList.add('selected');
+      checkAnswer();
+      return;
+    }
+
+    // if already picked two, start over quickly
+    clearSelection();
+    pick1 = n;
+    p1El.textContent = n;
+    btn.classList.add('selected');
+  }
+
+  function checkAnswer(){
+    const product = pick1 * pick2;
+
+    if(product === target){
+      score += 15;
+      combo += 1;
+
+      // speed bonus if within 3 seconds
+      const secs = (performance.now() - roundStart) / 1000;
+      if(secs <= 3){
+        score += 10;
+        msgEl.textContent = `✅ Correct! +15 (Speed +10)`;
+        msgEl.className = 'msg good';
+      } else {
+        msgEl.textContent = `✅ Correct! +15`;
+        msgEl.className = 'msg good';
+      }
+
+      // combo bonus every 5 correct
+      if(combo % 5 === 0){
+        score += 25;
+        msgEl.textContent = `🔥 Combo Bonus! +25`;
+        msgEl.className = 'msg good';
+      }
+
+      scoreEl.textContent = score;
+      comboEl.textContent = combo;
+
+      setTimeout(newTarget, 350);
+    } else {
+      score = Math.max(0, score - 10);
+      combo = 0;
+
+      scoreEl.textContent = score;
+      comboEl.textContent = combo;
+
+      msgEl.textContent = `❌ Wrong! −10`;
+      msgEl.className = 'msg bad';
+
+      setTimeout(()=>{
+        msgEl.textContent = '';
+        msgEl.className = 'msg';
+        clearSelection();
+      }, 350);
+    }
+  }
+
+  function startTimer(){
+    timeLeft = 30;
+    timeEl.textContent = timeLeft;
+
+    timerId = setInterval(()=>{
+      timeLeft--;
+      timeEl.textContent = timeLeft;
+
+      if(timeLeft <= 0){
+        clearInterval(timerId);
+        msgEl.textContent = `⏰ Time’s up! Final score: ${score}`;
+        msgEl.className = 'msg';
+        speedNote.textContent = 'Great job!';
+      }
+    }, 1000);
+  }
+</script>
+
+</body>
+</html>

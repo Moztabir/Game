@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Game 4 • Smart Shopper Sprint</title>
+  <style>
+    :root{
+      --c1:#8ECAE6; --c2:#90BE6D; --c3:#FFB703; --c4:#FB8500; --c5:#F28482;
+      --ink:#1b1b1b; --muted:#555; --card:#ffffff;
+      --shadow:0 10px 26px rgba(0,0,0,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-rounded, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(60vmax 60vmax at 0% 0%, var(--c2) 0 22%, transparent 23%),
+        radial-gradient(65vmax 65vmax at 100% 100%, var(--c5) 0 18%, transparent 19%),
+        linear-gradient(180deg, #fff, #fff);
+      min-height:100vh;
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    header{
+      background:var(--card);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      padding:12px 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .title{ font-weight:1000; display:flex; align-items:center; gap:10px; }
+    .tag{
+      font-size:12px; font-weight:1000; padding:6px 10px; border-radius:999px;
+      background:#f6f6f6; color:#333;
+    }
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:10px 14px;
+      font-weight:900;
+      cursor:pointer;
+      background:#f1f1f1;
+    }
+
+    main{ flex:1; display:grid; place-items:center; }
+
+    .card{
+      width:min(92vw, 620px);
+      background:var(--card);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:16px;
+      text-align:center;
+    }
+
+    .hud{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      font-weight:1000;
+    }
+    .pill{
+      background:#f6f6f6;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:14px;
+    }
+
+    .difficulty{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      margin-top:12px;
+      flex-wrap:wrap;
+    }
+    .difficulty button{
+      border:none;
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:1000;
+      cursor:pointer;
+      background:#eee;
+    }
+    .difficulty .active{ background:var(--c1); color:#0b2a33; }
+    .difficulty .locked{ opacity:.55; pointer-events:none; }
+
+    .itemCard{
+      margin:14px auto 0;
+      width:min(100%, 520px);
+      border-radius:22px;
+      padding:18px 16px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(142,202,230,.35), transparent 45%),
+        radial-gradient(circle at 80% 70%, rgba(255,183,3,.35), transparent 45%),
+        #fff;
+      box-shadow: 0 12px 20px rgba(0,0,0,.06);
+      border:2px solid rgba(0,0,0,.06);
+    }
+    .itemName{
+      font-size:40px;
+      font-weight:1000;
+      margin:8px 0;
+    }
+    .itemHint{
+      color:var(--muted);
+      font-size:14px;
+      margin:0;
+      font-weight:900;
+    }
+
+    .choices{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin:14px auto 0;
+      width:min(100%, 520px);
+    }
+    .choice{
+      border:none;
+      border-radius:18px;
+      padding:16px 14px;
+      font-weight:1000;
+      font-size:20px;
+      cursor:pointer;
+      box-shadow: 0 10px 16px rgba(0,0,0,.06);
+    }
+    .need{ background: rgba(144,190,109,.55); }
+    .want{ background: rgba(242,132,130,.45); }
+
+    .choice:active{ transform: scale(.99); }
+    .choice:disabled{ opacity:.55; cursor:not-allowed; }
+
+    .msg{
+      margin-top:12px;
+      min-height:26px;
+      font-weight:1000;
+    }
+    .good{ color:#2d7a1f; }
+    .bad{ color:#b51e1e; }
+
+    .hint{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    @media (max-width:520px){
+      .itemName{ font-size:34px; }
+      .choices{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="title">🛒 Game 4: Smart Shopper Sprint <span class="tag">30 seconds</span></div>
+  <button class="btn" onclick="goHome()">Home</button>
+</header>
+
+<main>
+  <section class="card" aria-label="Smart Shopper Sprint game">
+    <div class="hud">
+      <div class="pill">⏱ Time: <span id="time">30</span>s</div>
+      <div class="pill">⭐ Score: <span id="score">0</span></div>
+      <div class="pill">🔥 Streak: <span id="streak">0</span></div>
+    </div>
+
+    <div id="startText" style="margin-top:10px; font-weight:1000;">
+      Choose difficulty to start
+    </div>
+
+    <div class="difficulty">
+      <button id="easyBtn" onclick="setDifficulty('easy')">Easy</button>
+      <button id="hardBtn" onclick="setDifficulty('hard')">Hard</button>
+    </div>
+
+    <div class="itemCard" id="itemCard" style="display:none;">
+      <p class="itemHint" id="itemHint">Is this a need or a want?</p>
+      <div class="itemName" id="itemName">—</div>
+    </div>
+
+    <div class="choices" id="choices" style="display:none;">
+      <button class="choice need" id="needBtn" onclick="choose('need')">NEED</button>
+      <button class="choice want" id="wantBtn" onclick="choose('want')">WANT</button>
+    </div>
+
+    <div class="hint">+10 correct • −10 wrong • +5 fast (2s) • +25 every 5 streak</div>
+    <div class="msg" id="msg"></div>
+  </section>
+</main>
+
+<script>
+  // --- login gate (optional) ---
+  function readProfile(){
+    const raw = sessionStorage.getItem('mq_profile') || localStorage.getItem('mq_profile');
+    if(!raw) return null;
+    try { return JSON.parse(raw); } catch { return null; }
+  }
+  if(!readProfile()) window.location.replace('../index.html');
+
+  // --- elements ---
+  const timeEl = document.getElementById('time');
+  const scoreEl = document.getElementById('score');
+  const streakEl = document.getElementById('streak');
+  const startText = document.getElementById('startText');
+  const itemCard = document.getElementById('itemCard');
+  const itemName = document.getElementById('itemName');
+  const itemHint = document.getElementById('itemHint');
+  const choices = document.getElementById('choices');
+  const msgEl = document.getElementById('msg');
+  const needBtn = document.getElementById('needBtn');
+  const wantBtn = document.getElementById('wantBtn');
+
+  // --- state ---
+  let started = false;
+  let mode = null;
+  let timeLeft = 30;
+  let timerId = null;
+
+  let score = 0;
+  let streak = 0;
+
+  let current = null; // {name, type, note?}
+  let shownAt = 0;
+
+  // item pools
+  const easyItems = [
+    { name:'Water', type:'need' },
+    { name:'Food', type:'need' },
+    { name:'Medicine', type:'need' },
+    { name:'Winter coat', type:'need' },
+    { name:'Soap', type:'need' },
+    { name:'School supplies', type:'need' },
+
+    { name:'Candy', type:'want' },
+    { name:'Video game', type:'want' },
+    { name:'Toy', type:'want' },
+    { name:'Stuffed animal', type:'want' },
+    { name:'Movie ticket', type:'want' },
+    { name:'Ice cream', type:'want' }
+  ];
+
+  // Hard includes some “tricky but still grade-friendly” items.
+  // We keep answers consistent (still one correct choice) for gameplay.
+  const hardItems = [
+    { name:'Rent / Home', type:'need' },
+    { name:'Bus pass', type:'need' },
+    { name:'Toothpaste', type:'need' },
+    { name:'Healthy lunch', type:'need' },
+    { name:'Doctor visit', type:'need' },
+    { name:'Phone (basic)', type:'need', note:'For safety/contact' },
+
+    { name:'Brand shoes', type:'want' },
+    { name:'Streaming subscription', type:'want' },
+    { name:'Collector cards', type:'want' },
+    { name:'Fast food', type:'want' },
+    { name:'New headphones', type:'want' },
+    { name:'Skins / cosmetics', type:'want' }
+  ];
+
+  function goHome(){ window.location.href = '../home.html'; }
+  function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+  function setDifficulty(level){
+    if(started) return;
+    started = true;
+    mode = level;
+
+    document.getElementById('easyBtn').classList.toggle('active', level==='easy');
+    document.getElementById('hardBtn').classList.toggle('active', level==='hard');
+    document.getElementById('easyBtn').classList.add('locked');
+    document.getElementById('hardBtn').classList.add('locked');
+
+    startText.textContent = 'Go! Decide fast!';
+    itemCard.style.display = 'block';
+    choices.style.display = 'grid';
+
+    nextItem();
+    startTimer();
+  }
+
+  function nextItem(){
+    const pool = (mode === 'easy') ? easyItems : hardItems;
+    current = pool[randInt(0, pool.length - 1)];
+
+    itemName.textContent = current.name;
+    itemHint.textContent = current.note ? `Hint: ${current.note}` : 'Is this a need or a want?';
+
+    shownAt = performance.now();
+    msgEl.textContent = '';
+    msgEl.className = 'msg';
+  }
+
+  function choose(answer){
+    if(!started || timeLeft <= 0) return;
+
+    const correctType = current.type;
+    const secs = (performance.now() - shownAt) / 1000;
+
+    if(answer === correctType){
+      score += 10;
+      streak += 1;
+
+      // speed bonus
+      if(secs <= 2){
+        score += 5;
+        msgEl.textContent = '✅ Correct! +10 (Fast +5)';
+        msgEl.className = 'msg good';
+      } else {
+        msgEl.textContent = '✅ Correct! +10';
+        msgEl.className = 'msg good';
+      }
+
+      // streak bonus
+      if(streak % 5 === 0){
+        score += 25;
+        msgEl.textContent = '🔥 Streak Bonus! +25';
+        msgEl.className = 'msg good';
+      }
+    } else {
+      score = Math.max(0, score - 10);
+      streak = 0;
+      msgEl.textContent = '❌ Wrong! −10';
+      msgEl.className = 'msg bad';
+    }
+
+    scoreEl.textContent = score;
+    streakEl.textContent = streak;
+
+    setTimeout(nextItem, 350);
+  }
+
+  function startTimer(){
+    timeLeft = 30;
+    timeEl.textContent = timeLeft;
+
+    timerId = setInterval(()=>{
+      timeLeft--;
+      timeEl.textContent = timeLeft;
+
+      if(timeLeft <= 0){
+        clearInterval(timerId);
+        msgEl.textContent = `⏰ Time’s up! Final score: ${score}`;
+        msgEl.className = 'msg';
+
+        needBtn.disabled = true;
+        wantBtn.disabled = true;
+      }
+    }, 1000);
+  }
+</script>
+
+</body>
+</html>

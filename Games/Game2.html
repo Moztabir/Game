@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Game 2 • Digit Drop Frenzy</title>
+  <style>
+    :root{
+      --c1:#8ECAE6; --c2:#90BE6D; --c3:#FFB703; --c4:#FB8500; --c5:#F28482;
+      --ink:#1b1b1b; --muted:#555; --card:#ffffff;
+      --shadow:0 10px 26px rgba(0,0,0,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-rounded, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(60vmax 60vmax at 0% 0%, var(--c3) 0 22%, transparent 23%),
+        radial-gradient(65vmax 65vmax at 100% 100%, var(--c1) 0 22%, transparent 23%),
+        linear-gradient(180deg, #fff, #fff);
+      min-height:100vh;
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    header{
+      background:var(--card);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      padding:12px 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .title{ font-weight:1000; display:flex; align-items:center; gap:10px; }
+    .tag{
+      font-size:12px; font-weight:1000; padding:6px 10px; border-radius:999px;
+      background:#f6f6f6; color:#333;
+    }
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:10px 14px;
+      font-weight:900;
+      cursor:pointer;
+      background:#f1f1f1;
+    }
+
+    .wrap{
+      flex:1;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+      align-items:start;
+    }
+
+    .panel{
+      background:var(--card);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:14px;
+    }
+
+    .hud{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      font-weight:1000;
+    }
+    .pill{
+      background:#f6f6f6;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:14px;
+    }
+
+    .center{
+      text-align:center;
+      margin-top:10px;
+    }
+    .bigNum{
+      font-size:56px;
+      font-weight:1000;
+      letter-spacing:1px;
+      margin:8px 0 0;
+    }
+    .need{
+      display:inline-block;
+      margin-top:10px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(142,202,230,.35);
+      font-weight:1000;
+    }
+
+    .difficulty{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      margin-top:10px;
+      flex-wrap:wrap;
+    }
+    .difficulty button{
+      border:none;
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:1000;
+      cursor:pointer;
+      background:#eee;
+    }
+    .difficulty .active{ background:var(--c2); color:#0b2a33; }
+    .difficulty .locked{ opacity:.55; pointer-events:none; }
+
+    /* Game area */
+    .arena{
+      position:relative;
+      height:420px;
+      border-radius:18px;
+      background: linear-gradient(180deg, rgba(142,202,230,.18), rgba(144,190,109,.10));
+      overflow:hidden;
+      margin-top:12px;
+      border:2px solid rgba(0,0,0,.06);
+    }
+
+    .digit{
+      position:absolute;
+      width:64px;
+      height:64px;
+      border-radius:18px;
+      display:grid;
+      place-items:center;
+      font-size:28px;
+      font-weight:1000;
+      user-select:none;
+      cursor:pointer;
+      box-shadow:0 10px 18px rgba(0,0,0,.10);
+      border:2px solid rgba(0,0,0,.08);
+    }
+    .digit:active{ transform: scale(.98); }
+
+    .msg{
+      margin-top:10px;
+      min-height:26px;
+      font-weight:1000;
+      text-align:center;
+    }
+    .good{ color:#2d7a1f; }
+    .bad{ color:#b51e1e; }
+
+    .hint{
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      margin-top:8px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="title">🔢 Game 2: Digit Drop Frenzy <span class="tag">30 seconds</span></div>
+  <button class="btn" onclick="goHome()">Home</button>
+</header>
+
+<div class="wrap">
+  <section class="panel">
+    <div class="hud">
+      <div class="pill">⏱ Time: <span id="time">30</span>s</div>
+      <div class="pill">⭐ Score: <span id="score">0</span></div>
+      <div class="pill">🔥 Combo: <span id="combo">0</span></div>
+    </div>
+
+    <div class="center">
+      <div style="font-weight:1000">Target Number</div>
+      <div class="bigNum" id="target">----</div>
+      <div class="need">Click: <span id="need">----</span></div>
+
+      <div id="startText" style="margin-top:10px; font-weight:1000;">
+        Choose difficulty to start
+      </div>
+
+      <div class="difficulty">
+        <button id="easyBtn" onclick="setDifficulty('easy')">Easy (2 digits)</button>
+        <button id="hardBtn" onclick="setDifficulty('hard')">Hard (4 digits)</button>
+      </div>
+
+      <div class="arena" id="arena" aria-label="Digit drop arena"></div>
+      <div class="hint">+10 correct • −10 wrong • +25 every 5 correct clicks in a row</div>
+      <div class="msg" id="msg"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+  // --- login gate (optional) ---
+  function readProfile(){
+    const raw = sessionStorage.getItem('mq_profile') || localStorage.getItem('mq_profile');
+    if(!raw) return null;
+    try { return JSON.parse(raw); } catch { return null; }
+  }
+  if(!readProfile()) window.location.replace('../index.html');
+
+  // --- elements ---
+  const arena = document.getElementById('arena');
+  const timeEl = document.getElementById('time');
+  const scoreEl = document.getElementById('score');
+  const comboEl = document.getElementById('combo');
+  const msgEl = document.getElementById('msg');
+  const targetEl = document.getElementById('target');
+  const needEl = document.getElementById('need');
+  const startText = document.getElementById('startText');
+
+  // --- state ---
+  let started = false;
+  let mode = null;          // 'easy' | 'hard'
+  let places = [];          // order of places to click
+  let currentIndex = 0;     // which place we need next
+  let digitsMap = {};       // {thousands:4, hundreds:5, tens:8, ones:2} etc.
+
+  let score = 0;
+  let combo = 0;
+  let timeLeft = 30;
+
+  let timerId = null;
+  let spawnId = null;
+  let active = [];          // active falling digits
+
+  function goHome(){ window.location.href = '../home.html'; }
+  function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+  function setDifficulty(level){
+    if(started) return;
+    mode = level;
+    started = true;
+
+    document.getElementById('easyBtn').classList.toggle('active', level==='easy');
+    document.getElementById('hardBtn').classList.toggle('active', level==='hard');
+    document.getElementById('easyBtn').classList.add('locked');
+    document.getElementById('hardBtn').classList.add('locked');
+
+    startText.textContent = 'Go! Click the correct digit!';
+    resetRound();
+    startTimer();
+    startSpawning();
+    requestAnimationFrame(loop);
+  }
+
+  function resetRound(){
+    // clear arena
+    arena.innerHTML = '';
+    active = [];
+
+    // create new target number based on difficulty
+    if(mode === 'easy'){
+      // 2-digit: tens, ones
+      const tens = randInt(1,9);
+      const ones = randInt(0,9);
+      digitsMap = { tens, ones };
+      places = ['tens','ones'];
+      targetEl.textContent = `${tens}${ones}`;
+    } else {
+      // 4-digit: thousands, hundreds, tens, ones
+      const thousands = randInt(1,9);
+      const hundreds = randInt(0,9);
+      const tens = randInt(0,9);
+      const ones = randInt(0,9);
+      digitsMap = { thousands, hundreds, tens, ones };
+      places = ['thousands','hundreds','tens','ones'];
+      targetEl.textContent = `${thousands}${hundreds}${tens}${ones}`;
+    }
+
+    currentIndex = 0;
+    updateNeed();
+  }
+
+  function updateNeed(){
+    const p = places[currentIndex];
+    const label = (p === 'thousands') ? 'Thousands' :
+                  (p === 'hundreds')  ? 'Hundreds'  :
+                  (p === 'tens')      ? 'Tens'      : 'Ones';
+    needEl.textContent = `${label} digit`;
+  }
+
+  function startTimer(){
+    timeLeft = 30;
+    timeEl.textContent = timeLeft;
+    timerId = setInterval(()=>{
+      timeLeft--;
+      timeEl.textContent = timeLeft;
+      if(timeLeft <= 0){
+        endGame();
+      }
+    },1000);
+  }
+
+  function endGame(){
+    clearInterval(timerId);
+    clearInterval(spawnId);
+    spawnId = null;
+
+    msgEl.textContent = `⏰ Time’s up! Final score: ${score}`;
+    msgEl.className = 'msg';
+
+    // freeze existing digits
+    active.forEach(d => d.frozen = true);
+  }
+
+  function startSpawning(){
+    // spawn rate depends on difficulty
+    const ms = (mode === 'easy') ? 750 : 550;
+
+    spawnId = setInterval(()=>{
+      spawnDigit();
+    }, ms);
+  }
+
+  function spawnDigit(){
+    if(timeLeft <= 0) return;
+
+    // Decide whether to spawn the needed digit or a distractor
+    const needPlace = places[currentIndex];
+    const needDigit = digitsMap[needPlace];
+
+    const showCorrect = Math.random() < 0.55; // slightly more likely correct
+    const value = showCorrect ? needDigit : randInt(0,9);
+
+    // random x within arena
+    const rect = arena.getBoundingClientRect();
+    const x = randInt(8, Math.max(8, rect.width - 72));
+
+    // create element
+    const el = document.createElement('div');
+    el.className = 'digit';
+    el.textContent = value;
+
+    // colourful but minimal
+    const bg = showCorrect ? 'rgba(144,190,109,.55)' : 'rgba(255,183,3,.55)';
+    el.style.background = bg;
+    el.style.left = x + 'px';
+    el.style.top = '-70px';
+
+    const obj = {
+      el,
+      x,
+      y: -70,
+      speed: (mode === 'easy') ? randInt(120, 180) : randInt(160, 230), // px/sec
+      value,
+      isCorrectCandidate: (value === needDigit),
+      frozen: false
+    };
+
+    el.addEventListener('click', ()=> onDigitClick(obj));
+
+    arena.appendChild(el);
+    active.push(obj);
+  }
+
+  function onDigitClick(obj){
+    if(timeLeft <= 0 || obj.frozen) return;
+
+    const needPlace = places[currentIndex];
+    const needDigit = digitsMap[needPlace];
+
+    if(obj.value === needDigit){
+      // correct
+      score += 10;
+      combo += 1;
+
+      // combo bonus
+      if(combo % 5 === 0){
+        score += 25;
+        msgEl.textContent = '🔥 Combo Bonus! +25';
+        msgEl.className = 'msg good';
+      } else {
+        msgEl.textContent = '✅ Nice!';
+        msgEl.className = 'msg good';
+      }
+
+      // move to next place
+      currentIndex++;
+      if(currentIndex >= places.length){
+        // completed this target number -> new number
+        resetRound();
+      } else {
+        updateNeed();
+      }
+
+      // remove clicked digit
+      removeDigit(obj);
+    } else {
+      // wrong
+      score = Math.max(0, score - 10);
+      combo = 0;
+      msgEl.textContent = '❌ Wrong! −10';
+      msgEl.className = 'msg bad';
+      removeDigit(obj);
+    }
+
+    scoreEl.textContent = score;
+    comboEl.textContent = combo;
+
+    setTimeout(()=>{ msgEl.textContent=''; msgEl.className='msg'; }, 500);
+  }
+
+  function removeDigit(obj){
+    obj.frozen = true;
+    if(obj.el && obj.el.parentNode) obj.el.parentNode.removeChild(obj.el);
+    active = active.filter(d => d !== obj);
+  }
+
+  // animation loop
+  let last = performance.now();
+  function loop(now){
+    if(!started) return;
+    const dt = (now - last) / 1000;
+    last = now;
+
+    // move digits
+    const rect = arena.getBoundingClientRect();
+    const bottom = rect.height + 80;
+
+    active.forEach(d=>{
+      if(d.frozen) return;
+      d.y += d.speed * dt;
+      d.el.style.top = d.y + 'px';
+    });
+
+    // remove digits that fell out
+    active.slice().forEach(d=>{
+      if(d.frozen) return;
+      if(d.y > bottom){
+        removeDigit(d);
+        // small penalty for missing the needed digit (keeps it competitive)
+        // only if it was the needed one
+        const needPlace = places[currentIndex];
+        const needDigit = digitsMap[needPlace];
+        if(d.value === needDigit && timeLeft > 0){
+          score = Math.max(0, score - 5);
+          combo = 0;
+          scoreEl.textContent = score;
+          comboEl.textContent = combo;
+        }
+      }
+    });
+
+    if(timeLeft > 0) requestAnimationFrame(loop);
+  }
+</script>
+
+</body>
+</html>

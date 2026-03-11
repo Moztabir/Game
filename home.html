@@ -6,18 +6,20 @@
   <title>MathQuest Arcade • Home</title>
   <style>
     :root{
-      --c1:#FFB703; /* mango */
-      --c2:#8ECAE6; /* sky */
-      --c3:#90BE6D; /* green */
-      --c4:#FB8500; /* orange */
-      --c5:#F28482; /* soft red */
+      --c1:#FFB703;
+      --c2:#8ECAE6;
+      --c3:#90BE6D;
+      --c4:#FB8500;
+      --c5:#F28482;
       --ink:#1b1b1b;
       --muted:#555;
       --card:#ffffff;
       --shadow: 0 10px 26px rgba(0,0,0,.08);
     }
+
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
+
     body{
       margin:0;
       font-family: ui-rounded, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
@@ -34,7 +36,6 @@
       min-height:100vh;
     }
 
-    /* Header */
     header{
       background:var(--card);
       border-radius:20px;
@@ -45,12 +46,14 @@
       justify-content:space-between;
       gap:12px;
     }
+
     .brand{
       display:flex;
       align-items:center;
       gap:12px;
-      min-width: 220px;
+      min-width:220px;
     }
+
     .logo{
       width:44px;
       height:44px;
@@ -63,21 +66,25 @@
       box-shadow:0 8px 18px rgba(251,133,0,.25);
       user-select:none;
     }
+
     .hello{
       font-weight:1000;
       font-size:18px;
       line-height:1.1;
     }
+
     .subline{
       margin-top:2px;
       font-size:13px;
       color:var(--muted);
     }
+
     .controls{
       display:flex;
       gap:8px;
       align-items:center;
     }
+
     button{
       border:none;
       border-radius:14px;
@@ -86,78 +93,36 @@
       cursor:pointer;
       font-size:14px;
     }
-    .btn-quick{ background:var(--c2); color:#0b2a33; }
-    .btn-logout{ background:#f1f1f1; color:#222; }
 
-    /* Progress strip */
-    .stats{
-      background:var(--card);
-      border-radius:20px;
-      box-shadow:var(--shadow);
-      padding:12px 14px;
-      display:grid;
-      grid-template-columns: 1.3fr 1fr;
-      gap:12px;
-      align-items:center;
+    .btn-quick{
+      background:var(--c2);
+      color:#0b2a33;
     }
-    .progressWrap{ display:flex; flex-direction:column; gap:8px; }
-    .progressTop{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      font-weight:1000;
-      font-size:14px;
-    }
-    .bar{
-      height:14px;
-      border-radius:999px;
+
+    .btn-logout{
       background:#f1f1f1;
-      overflow:hidden;
+      color:#222;
     }
-    .fill{
-      height:100%;
-      width:0%;
-      border-radius:999px;
-      background: linear-gradient(90deg, var(--c3), var(--c1));
-      transition: width .25s ease;
-    }
-    .starWrap{
-      display:flex;
-      justify-content:flex-end;
-      align-items:center;
-    }
-    .starBadge{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding:10px 12px;
-      border-radius:18px;
-      background:#fff7e6;
-      border:2px solid rgba(255,183,3,.35);
-      font-weight:1000;
-      min-width:160px;
-      justify-content:center;
-    }
-    .starBadge .icon{ font-size:18px; }
 
-    /* Game grid */
     main{
       display:grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap:12px;
     }
+
     .card{
       background:var(--card);
       border-radius:20px;
       box-shadow:var(--shadow);
       padding:14px;
-      min-height:160px;
+      min-height:190px;
       display:flex;
       flex-direction:column;
       gap:10px;
       position:relative;
       overflow:hidden;
     }
+
     .tag{
       position:absolute;
       top:12px;
@@ -170,6 +135,26 @@
       color:#333;
       user-select:none;
     }
+
+    .bestTag{
+      position:absolute;
+      top:12px;
+      left:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:1000;
+      background:linear-gradient(90deg, #ffd54f, #ffb703);
+      color:#4a3200;
+      box-shadow:0 6px 12px rgba(255,183,3,.28);
+      user-select:none;
+      display:none;
+    }
+
+    .bestTag.show{
+      display:inline-block;
+    }
+
     .gIcon{
       width:48px;
       height:48px;
@@ -180,8 +165,30 @@
       font-weight:1000;
       user-select:none;
     }
-    .title{ margin:0; font-size:18px; font-weight:1000; }
-    .desc{ margin:0; color:var(--muted); font-size:13px; line-height:1.3; }
+
+    .title{
+      margin:0;
+      font-size:18px;
+      font-weight:1000;
+    }
+
+    .desc{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.3;
+    }
+
+    .scoreLine{
+      margin:0;
+      font-size:13px;
+      font-weight:1000;
+      color:#333;
+      background:#f7f7f7;
+      padding:8px 10px;
+      border-radius:12px;
+      display:inline-block;
+    }
 
     .play{
       margin-top:auto;
@@ -196,8 +203,15 @@
       gap:8px;
       font-size:15px;
     }
-    .play:active{ transform:scale(.99); }
-    .disabled{ opacity:.55; pointer-events:none; }
+
+    .play:active{
+      transform:scale(.99);
+    }
+
+    .disabled{
+      opacity:.55;
+      pointer-events:none;
+    }
 
     footer{
       text-align:center;
@@ -207,13 +221,22 @@
     }
 
     @media (max-width: 520px){
-      .stats{ grid-template-columns: 1fr; }
-      .starWrap{ justify-content:flex-start; }
+      .stats{
+        grid-template-columns:1fr;
+      }
+
+      .starWrap{
+        justify-content:flex-start;
+      }
+
       header{
         flex-direction:column;
         align-items:stretch;
       }
-      .controls button{ flex:1; }
+
+      .controls button{
+        flex:1;
+      }
     }
   </style>
 </head>
@@ -234,140 +257,155 @@
     </div>
   </header>
 
-  <section class="stats" aria-label="Progress and stars">
-    <div class="progressWrap">
-      <div class="progressTop">
-        <span>Progress</span>
-        <span id="progressText">0 / 6 games tried</span>
-      </div>
-      <div class="bar" aria-hidden="true">
-        <div class="fill" id="fill"></div>
-      </div>
-      <div class="subline" style="margin:0">Try each game once to earn stars ⭐</div>
-    </div>
-
-    <div class="starWrap">
-      <div class="starBadge" title="Stars earned">
-        <span class="icon">⭐</span>
-        <span><span id="stars">0</span> Stars</span>
-      </div>
-    </div>
-  </section>
 
   <main aria-label="Mini games">
-    <!-- Game 1 -->
-    <section class="card">
+    <section class="card" id="card1">
+      <span class="bestTag" id="best1">🏆 BEST</span>
       <span class="tag">Easy</span>
       <div class="gIcon" style="background:rgba(142,202,230,.35)">➕</div>
-      <h3 class="title">Dice Addiction</h3>
+      <h3 class="title">Dice Addition</h3>
       <p class="desc">Answer addition questions fast.</p>
-      <button class="play" style="background:var(--c1)" onclick="goToGame('Games/Game1.html','quickAdd')">Play</button>
-    </section>
-    <!-- Game 2 -->
-    <section class="card">
-      <span class="tag">Easy</span>
-      <div class="gIcon" style="background:rgba(144,190,109,.35)">➖</div>
-      <h3 class="title">Digit Drop Frenzy</h3>
-      <p class="desc">Subtract and beat the timer.</p>
-      <button class="play" style="background:var(--c2)" onclick="goToGame('Games/Game2.html','Speed Subtract')">Play</button>
+      <p class="scoreLine">High Score: <span id="hs1">0</span></p>
+      <button class="play" style="background:var(--c1)" onclick="goToGame('Games/Game1.html')">Play</button>
     </section>
 
-    <!-- Game 3 -->
-    <section class="card">
+    <section class="card" id="card2">
+      <span class="bestTag" id="best2">🏆 BEST</span>
+      <span class="tag">Easy</span>
+      <div class="gIcon" style="background:rgba(144,190,109,.35)">🔢</div>
+      <h3 class="title">Digit Drop Frenzy</h3>
+      <p class="desc">Click the correct place value digit.</p>
+      <p class="scoreLine">High Score: <span id="hs2">0</span></p>
+      <button class="play" style="background:var(--c2)" onclick="goToGame('Games/Game2.html')">Play</button>
+    </section>
+
+    <section class="card" id="card3">
+      <span class="bestTag" id="best3">🏆 BEST</span>
       <span class="tag">Medium</span>
       <div class="gIcon" style="background:rgba(255,183,3,.35)">✖️</div>
       <h3 class="title">Factor Smash</h3>
-      <p class="desc">Practice times tables.</p>
-      <button class="play" style="background:var(--c3)" onclick="goToGame('Games/Game3.html','multiply')">Play</button>
+      <p class="desc">Practice multiplication facts fast.</p>
+      <p class="scoreLine">High Score: <span id="hs3">0</span></p>
+      <button class="play" style="background:var(--c3)" onclick="goToGame('Games/Game3.html')">Play</button>
     </section>
 
-    <!-- Game 4 -->
-    <section class="card">
+    <section class="card" id="card4">
+      <span class="bestTag" id="best4">🏆 BEST</span>
       <span class="tag">Medium</span>
-      <div class="gIcon" style="background:rgba(251,133,0,.25)">➗</div>
-      <h3 class="title">Division Pop</h3>
-      <p class="desc">Find the correct quotient.</p>
-      <button class="play" style="background:var(--c4); color:#fff" onclick="goToGame('Games/Game4.html','shopper')">Play</button>
+      <div class="gIcon" style="background:rgba(251,133,0,.25)">🛒</div>
+      <h3 class="title">Smart Shopper Sprint</h3>
+      <p class="desc">Choose if the item is a need or a want.</p>
+      <p class="scoreLine">High Score: <span id="hs4">0</span></p>
+      <button class="play" style="background:var(--c4); color:#fff" onclick="goToGame('Games/Game4.html')">Play</button>
     </section>
 
-    <!-- Game 5 -->
-    <section class="card">
+    <section class="card" id="card5">
+      <span class="bestTag" id="best5">🏆 BEST</span>
       <span class="tag">Medium</span>
-      <div class="gIcon" style="background:rgba(242,132,130,.25)">📏</div>
-      <h3 class="title">Number Line</h3>
-      <p class="desc">Place the answer on the line.</p>
-        <button class="play" style="background:var(--c5); color:#fff" onclick="goToGame('Games/Game5.html','numberLine')">Play</button>
+      <div class="gIcon" style="background:rgba(242,132,130,.25)">🟩</div>
+      <h3 class="title">Area Attack</h3>
+      <p class="desc">Solve rectangle area before time runs out.</p>
+      <p class="scoreLine">High Score: <span id="hs5">0</span></p>
+      <button class="play" style="background:var(--c5); color:#fff" onclick="goToGame('Games/Game5.html')">Play</button>
     </section>
 
-    <!-- Game 6 -->
-    <section class="card">
-      <span class="tag">Hard</span>
+    <section class="card" id="card6">
+      <span class="bestTag" id="best6">🏆 BEST</span>
+      <span class="tag">Soon</span>
       <div class="gIcon" style="background:rgba(142,202,230,.25)">🍕</div>
       <h3 class="title">Shape Fractions</h3>
       <p class="desc">Pick the right fraction.</p>
+      <p class="scoreLine">High Score: <span id="hs6">0</span></p>
       <button class="play disabled" style="background:var(--c2)">Coming soon</button>
     </section>
   </main>
 
-  <footer>© <span id="year"></span> Mathive</footer>
+  <footer>© <span id="year"></span> Mathhive</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    // --- Login gate ---
-    function readProfile(){
-      const raw = sessionStorage.getItem('mq_profile') || localStorage.getItem('mq_profile');
-      if(!raw) return null;
-      try { return JSON.parse(raw); } catch { return null; }
+  function readProfile(){
+    const raw = sessionStorage.getItem('mq_profile') || localStorage.getItem('mq_profile');
+    if(!raw) return null;
+    try{
+      return JSON.parse(raw);
+    }catch{
+      return null;
     }
-    const p = readProfile();
-    if(!p) window.location.replace('index.html');
+  }
 
+  const p = readProfile();
+
+  if(!p){
+    window.location.replace('index.html');
+  } else {
     document.getElementById('hello').textContent = `Hello, ${p.name}!`;
     document.getElementById('subline').textContent = p.code ? `Class: ${p.code}` : 'Choose a game to start.';
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // --- Progress (games tried + stars) ---
-    const progressKey = 'mq_progress';
-    function loadProgress(){
-      const raw = localStorage.getItem(progressKey);
-      if(!raw) return { tried:{}, stars:0 };
-      try { return JSON.parse(raw); } catch { return { tried:{}, stars:0 }; }
-    }
-    function saveProgress(data){
-      localStorage.setItem(progressKey, JSON.stringify(data));
-    }
-    let progress = loadProgress();
-
-    function updateProgressUI(){
-      const triedCount = Object.keys(progress.tried).length;
-      document.getElementById('progressText').textContent = `${triedCount} / 6 games tried`;
-      document.getElementById('fill').style.width = `${Math.round((triedCount/6) * 100)}%`;
-      document.getElementById('stars').textContent = progress.stars || 0;
-    }
-    updateProgressUI();
-
-    // --- Navigation ---
-    function goToGame(url, gameId){
-      // mark "tried" and give one star for first time
-      if(!progress.tried[gameId]){
-        progress.tried[gameId] = true;
-        progress.stars = (progress.stars || 0) + 1;
-        saveProgress(progress);
-        updateProgressUI();
-      }
+    function goToGame(url){
       window.location.href = url;
     }
 
     function quickPlay(){
-      // simple: go to game 1 for now
-      goToGame('games/Game1.html', 'quickAdd');
+      goToGame('Games/Game1.html');
     }
 
     function logout(){
       sessionStorage.removeItem('mq_profile');
-      // localStorage.removeItem('mq_profile'); // uncomment for full sign-out
       window.location.href = 'index.html';
     }
-  </script>
+
+    function loadHighScores(){
+      const scores = {
+        1: Number(localStorage.getItem('game1HighScore')) || 0,
+        2: Number(localStorage.getItem('game2HighScore')) || 0,
+        3: Number(localStorage.getItem('game3HighScore')) || 0,
+        4: Number(localStorage.getItem('game4HighScore')) || 0,
+        5: Number(localStorage.getItem('game5HighScore')) || 0,
+        6: Number(localStorage.getItem('game6HighScore')) || 0
+      };
+
+      document.getElementById('hs1').textContent = scores[1];
+      document.getElementById('hs2').textContent = scores[2];
+      document.getElementById('hs3').textContent = scores[3];
+      document.getElementById('hs4').textContent = scores[4];
+      document.getElementById('hs5').textContent = scores[5];
+      document.getElementById('hs6').textContent = scores[6];
+
+      showBestBadge(scores);
+    }
+
+    function showBestBadge(scores){
+      for(let i = 1; i <= 6; i++){
+        const badge = document.getElementById(`best${i}`);
+        if(badge) badge.classList.remove('show');
+      }
+
+      let bestGame = null;
+      let bestScore = 0;
+
+      for(let i = 1; i <= 6; i++){
+        if(scores[i] > bestScore){
+          bestScore = scores[i];
+          bestGame = i;
+        }
+      }
+
+      if(bestGame !== null && bestScore > 0){
+        const bestBadge = document.getElementById(`best${bestGame}`);
+        if(bestBadge) bestBadge.classList.add('show');
+      }
+    }
+
+    loadHighScores();
+
+    window.goToGame = goToGame;
+    window.quickPlay = quickPlay;
+    window.logout = logout;
+  }
+</script>
 
 </body>
 </html>

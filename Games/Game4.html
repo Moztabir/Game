@@ -26,30 +26,6 @@
       gap:14px;
     }
 
-    header{
-      background:var(--card);
-      border-radius:18px;
-      box-shadow:var(--shadow);
-      padding:12px 14px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-    }
-    .title{ font-weight:1000; display:flex; align-items:center; gap:10px; }
-    .tag{
-      font-size:12px; font-weight:1000; padding:6px 10px; border-radius:999px;
-      background:#f6f6f6; color:#333;
-    }
-    .btn{
-      border:none;
-      border-radius:14px;
-      padding:10px 14px;
-      font-weight:900;
-      cursor:pointer;
-      background:#f1f1f1;
-    }
-
     main{ flex:1; display:grid; place-items:center; }
 
     .card{
@@ -61,20 +37,6 @@
       text-align:center;
     }
 
-    .hud{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      font-weight:1000;
-    }
-    .pill{
-      background:#f6f6f6;
-      padding:8px 12px;
-      border-radius:999px;
-      font-size:14px;
-    }
-
     .difficulty{
       display:flex;
       justify-content:center;
@@ -82,6 +44,7 @@
       margin-top:12px;
       flex-wrap:wrap;
     }
+
     .difficulty button{
       border:none;
       border-radius:999px;
@@ -90,8 +53,16 @@
       cursor:pointer;
       background:#eee;
     }
-    .difficulty .active{ background:var(--c1); color:#0b2a33; }
-    .difficulty .locked{ opacity:.55; pointer-events:none; }
+
+    .difficulty .active{
+      background:var(--c1);
+      color:#0b2a33;
+    }
+
+    .difficulty .locked{
+      opacity:.55;
+      pointer-events:none;
+    }
 
     .itemCard{
       margin:14px auto 0;
@@ -102,14 +73,16 @@
         radial-gradient(circle at 20% 20%, rgba(142,202,230,.35), transparent 45%),
         radial-gradient(circle at 80% 70%, rgba(255,183,3,.35), transparent 45%),
         #fff;
-      box-shadow: 0 12px 20px rgba(0,0,0,.06);
+      box-shadow:0 12px 20px rgba(0,0,0,.06);
       border:2px solid rgba(0,0,0,.06);
     }
+
     .itemName{
       font-size:40px;
       font-weight:1000;
       margin:8px 0;
     }
+
     .itemHint{
       color:var(--muted);
       font-size:14px;
@@ -124,6 +97,7 @@
       margin:14px auto 0;
       width:min(100%, 520px);
     }
+
     .choice{
       border:none;
       border-radius:18px;
@@ -131,12 +105,13 @@
       font-weight:1000;
       font-size:20px;
       cursor:pointer;
-      box-shadow: 0 10px 16px rgba(0,0,0,.06);
+      box-shadow:0 10px 16px rgba(0,0,0,.06);
     }
-    .need{ background: rgba(144,190,109,.55); }
-    .want{ background: rgba(242,132,130,.45); }
 
-    .choice:active{ transform: scale(.99); }
+    .need{ background:rgba(144,190,109,.55); }
+    .want{ background:rgba(242,132,130,.45); }
+
+    .choice:active{ transform:scale(.99); }
     .choice:disabled{ opacity:.55; cursor:not-allowed; }
 
     .msg{
@@ -144,6 +119,7 @@
       min-height:26px;
       font-weight:1000;
     }
+
     .good{ color:#2d7a1f; }
     .bad{ color:#b51e1e; }
 
@@ -153,26 +129,127 @@
       font-size:13px;
     }
 
+    .game-topbar{
+      background:#ffffff;
+      border-radius:20px;
+      box-shadow:0 10px 26px rgba(0,0,0,.08);
+      padding:14px 16px;
+      display:grid;
+      grid-template-columns: 1fr auto auto;
+      gap:14px;
+      align-items:center;
+    }
+
+    .top-left{
+      min-width:180px;
+    }
+
+    .game-title{
+      font-size:22px;
+      font-weight:1000;
+      color:#1b1b1b;
+    }
+
+    .game-subtitle{
+      margin-top:3px;
+      font-size:13px;
+      color:#555;
+      font-weight:700;
+    }
+
+    .top-center{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:8px;
+    }
+
+    .top-pill{
+      background:#f6f6f6;
+      padding:9px 12px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:1000;
+      color:#1b1b1b;
+    }
+
+    .top-right{
+      display:flex;
+      gap:8px;
+      justify-content:flex-end;
+    }
+
+    .top-btn{
+      border:none;
+      border-radius:14px;
+      padding:10px 16px;
+      font-size:14px;
+      font-weight:1000;
+      cursor:pointer;
+    }
+
+    .restart-btn{
+      background:#8ECAE6;
+      color:#0b2a33;
+    }
+
+    .quit-btn{
+      background:#F28482;
+      color:white;
+    }
+
+    .restart-btn:hover,
+    .quit-btn:hover{
+      filter:brightness(.96);
+    }
+
+    @media (max-width:900px){
+      .game-topbar{
+        grid-template-columns:1fr;
+        text-align:center;
+      }
+
+      .top-left,
+      .top-right{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+      }
+
+      .top-right{
+        flex-direction:row;
+        justify-content:center;
+      }
+    }
+
     @media (max-width:520px){
       .itemName{ font-size:34px; }
-      .choices{ grid-template-columns: 1fr; }
+      .choices{ grid-template-columns:1fr; }
     }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="title">🛒 Game 4: Smart Shopper Sprint <span class="tag">30 seconds</span></div>
-  <button class="btn" onclick="goHome()">Home</button>
+<header class="game-topbar">
+  <div class="top-left">
+    <div class="game-title" id="gameTitle">🛒 Game 4: Smart Shopper Sprint</div>
+    <div class="game-subtitle" id="gameSubtitle">Choose if the item is a need or a want!</div>
+  </div>
+
+  <div class="top-center">
+    <div class="top-pill">⏱ Time: <span id="time">30</span>s</div>
+    <div class="top-pill">⭐ Score: <span id="score">0</span></div>
+    <div class="top-pill">🔥 Combo: <span id="combo">0</span></div>
+  </div>
+
+  <div class="top-right">
+    <button class="top-btn restart-btn" onclick="restartGame()">Restart</button>
+    <button class="top-btn quit-btn" onclick="quitGame()">Quit</button>
+  </div>
 </header>
 
 <main>
   <section class="card" aria-label="Smart Shopper Sprint game">
-    <div class="hud">
-      <div class="pill">⏱ Time: <span id="time">30</span>s</div>
-      <div class="pill">⭐ Score: <span id="score">0</span></div>
-      <div class="pill">🔥 Streak: <span id="streak">0</span></div>
-    </div>
 
     <div id="startText" style="margin-top:10px; font-weight:1000;">
       Choose difficulty to start
@@ -198,19 +275,104 @@
   </section>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
 <script>
-  // --- login gate (optional) ---
+
+  let audioStarted = false;
+
+function initAudio(){
+  if(audioStarted) return;
+  audioStarted = true;
+
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if(!AudioContextClass) return;
+
+  window.gameAudioCtx = new AudioContextClass();
+}
+
+function playTone(freq, duration, type = 'sine', volume = 0.05){
+  if(!window.gameAudioCtx) return;
+
+  const ctx = window.gameAudioCtx;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = type;
+  osc.frequency.value = freq;
+
+  gain.gain.value = volume;
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start();
+
+  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+  osc.stop(ctx.currentTime + duration);
+}
+
+function playCorrectSound(){
+  playTone(660, 0.12, 'sine', 0.06);
+  setTimeout(() => playTone(880, 0.14, 'sine', 0.05), 80);
+}
+
+function playWrongSound(){
+  playTone(220, 0.18, 'square', 0.05);
+  setTimeout(() => playTone(180, 0.2, 'square', 0.04), 90);
+}
+
+function playHighScoreSound(){
+  playTone(523, 0.12, 'triangle', 0.06);
+  setTimeout(() => playTone(659, 0.12, 'triangle', 0.06), 100);
+  setTimeout(() => playTone(784, 0.2, 'triangle', 0.06), 200);
+}
+
+function celebrateHighScore(){
+  if(typeof confetti !== 'function') return;
+
+  confetti({
+    particleCount: 140,
+    spread: 90,
+    origin: { y: 0.6 }
+  });
+
+  setTimeout(() => {
+    confetti({
+      particleCount: 80,
+      angle: 60,
+      spread: 70,
+      origin: { x: 0.1, y: 0.7 }
+    });
+
+    confetti({
+      particleCount: 80,
+      angle: 120,
+      spread: 70,
+      origin: { x: 0.9, y: 0.7 }
+    });
+  }, 200);
+}
+
+
   function readProfile(){
     const raw = sessionStorage.getItem('mq_profile') || localStorage.getItem('mq_profile');
     if(!raw) return null;
-    try { return JSON.parse(raw); } catch { return null; }
+    try{
+      return JSON.parse(raw);
+    }catch{
+      return null;
+    }
   }
-  if(!readProfile()) window.location.replace('../index.html');
 
-  // --- elements ---
+  if(!readProfile()){
+    window.location.replace('../index.html');
+  }
+
+
   const timeEl = document.getElementById('time');
   const scoreEl = document.getElementById('score');
-  const streakEl = document.getElementById('streak');
+  const comboEl = document.getElementById('combo');
   const startText = document.getElementById('startText');
   const itemCard = document.getElementById('itemCard');
   const itemName = document.getElementById('itemName');
@@ -219,20 +381,22 @@
   const msgEl = document.getElementById('msg');
   const needBtn = document.getElementById('needBtn');
   const wantBtn = document.getElementById('wantBtn');
+  const easyBtn = document.getElementById('easyBtn');
+  const hardBtn = document.getElementById('hardBtn');
 
-  // --- state ---
+
   let started = false;
+  let ended = false;
   let mode = null;
   let timeLeft = 30;
   let timerId = null;
 
   let score = 0;
-  let streak = 0;
+  let combo = 0;
 
-  let current = null; // {name, type, note?}
+  let current = null;
   let shownAt = 0;
 
-  // item pools
   const easyItems = [
     { name:'Water', type:'need' },
     { name:'Food', type:'need' },
@@ -249,8 +413,6 @@
     { name:'Ice cream', type:'want' }
   ];
 
-  // Hard includes some “tricky but still grade-friendly” items.
-  // We keep answers consistent (still one correct choice) for gameplay.
   const hardItems = [
     { name:'Rent / Home', type:'need' },
     { name:'Bus pass', type:'need' },
@@ -267,18 +429,28 @@
     { name:'Skins / cosmetics', type:'want' }
   ];
 
-  function goHome(){ window.location.href = '../home.html'; }
-  function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function randInt(min, max){
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function updateHUD(){
+    timeEl.textContent = timeLeft;
+    scoreEl.textContent = score;
+    comboEl.textContent = combo;
+  }
 
   function setDifficulty(level){
+    initAudio();
     if(started) return;
+
     started = true;
+    ended = false;
     mode = level;
 
-    document.getElementById('easyBtn').classList.toggle('active', level==='easy');
-    document.getElementById('hardBtn').classList.toggle('active', level==='hard');
-    document.getElementById('easyBtn').classList.add('locked');
-    document.getElementById('hardBtn').classList.add('locked');
+    easyBtn.classList.toggle('active', level === 'easy');
+    hardBtn.classList.toggle('active', level === 'hard');
+    easyBtn.classList.add('locked');
+    hardBtn.classList.add('locked');
 
     startText.textContent = 'Go! Decide fast!';
     itemCard.style.display = 'block';
@@ -286,14 +458,19 @@
 
     nextItem();
     startTimer();
+    updateHUD();
   }
 
   function nextItem(){
-    const pool = (mode === 'easy') ? easyItems : hardItems;
+    if(ended) return;
+
+    const pool = mode === 'easy' ? easyItems : hardItems;
     current = pool[randInt(0, pool.length - 1)];
 
     itemName.textContent = current.name;
-    itemHint.textContent = current.note ? `Hint: ${current.note}` : 'Is this a need or a want?';
+    itemHint.textContent = current.note
+      ? `Hint: ${current.note}`
+      : 'Is this a need or a want?';
 
     shownAt = performance.now();
     msgEl.textContent = '';
@@ -301,16 +478,16 @@
   }
 
   function choose(answer){
-    if(!started || timeLeft <= 0) return;
+    if(!started || ended || timeLeft <= 0) return;
 
     const correctType = current.type;
     const secs = (performance.now() - shownAt) / 1000;
 
     if(answer === correctType){
+      playCorrectSound();
       score += 10;
-      streak += 1;
+      combo += 1;
 
-      // speed bonus
       if(secs <= 2){
         score += 5;
         msgEl.textContent = '✅ Correct! +10 (Fast +5)';
@@ -320,43 +497,85 @@
         msgEl.className = 'msg good';
       }
 
-      // streak bonus
-      if(streak % 5 === 0){
+      if(combo % 5 === 0){
         score += 25;
         msgEl.textContent = '🔥 Streak Bonus! +25';
         msgEl.className = 'msg good';
       }
     } else {
+      playWrongSound();
       score = Math.max(0, score - 10);
-      streak = 0;
+      combo = 0;
       msgEl.textContent = '❌ Wrong! −10';
       msgEl.className = 'msg bad';
     }
 
-    scoreEl.textContent = score;
-    streakEl.textContent = streak;
+    updateHUD();
 
-    setTimeout(nextItem, 350);
+    setTimeout(() => {
+      if(!ended){
+        nextItem();
+      }
+    }, 350);
   }
+
+function saveHighScore(){
+  let highScore = Number(localStorage.getItem('game4HighScore')) || 0;
+
+  if(score > highScore){
+    localStorage.setItem('game4HighScore', score);
+    highScore = score;
+    playHighScoreSound();
+    celebrateHighScore();
+  }
+
+  return highScore;
+}
 
   function startTimer(){
     timeLeft = 30;
-    timeEl.textContent = timeLeft;
+    updateHUD();
 
-    timerId = setInterval(()=>{
+    timerId = setInterval(() => {
       timeLeft--;
-      timeEl.textContent = timeLeft;
+      updateHUD();
 
       if(timeLeft <= 0){
-        clearInterval(timerId);
-        msgEl.textContent = `⏰ Time’s up! Final score: ${score}`;
-        msgEl.className = 'msg';
-
-        needBtn.disabled = true;
-        wantBtn.disabled = true;
+        endGame();
       }
     }, 1000);
   }
+
+  function endGame(){
+    if(ended) return;
+
+    ended = true;
+    timeLeft = 0;
+    updateHUD();
+
+    clearInterval(timerId);
+    timerId = null;
+
+    needBtn.disabled = true;
+    wantBtn.disabled = true;
+
+    const highScore = saveHighScore();
+    msgEl.textContent = `⏰ Time’s up! Final Score: ${score} | High Score: ${highScore}`;
+    msgEl.className = 'msg';
+  }
+
+  function quitGame(){
+    const leave = confirm("Quit the game and go back to Home?");
+    if(leave){
+      window.location.href = "../home.html";
+    }
+  }
+
+  function restartGame(){
+    location.reload();
+  }
+
+  updateHUD();
 </script>
 
 </body>

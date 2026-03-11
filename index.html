@@ -85,31 +85,101 @@
       <div id="error" class="error">Please enter your name.</div>
     </form>
 
-    <div class="footer">No accounts. Works offline ✨</div>
+    <div class="footer">Enter your name to play and save scores</div>
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
 
   <script>
-    const form = document.getElementById('loginForm');
-    const nameEl = document.getElementById('studentName');
-    const codeEl = document.getElementById('classCode');
-    const err = document.getElementById('error');
+  const form = document.getElementById('loginForm');
+  const nameEl = document.getElementById('studentName');
+  const codeEl = document.getElementById('classCode');
+  const err = document.getElementById('error');
 
-    window.addEventListener('load', ()=> nameEl.focus());
+  window.addEventListener('load', ()=> nameEl.focus());
 
-    form.addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const name = nameEl.value.trim();
-      if(!name){ err.style.display='block'; nameEl.focus(); return; }
-      err.style.display='none';
-      const data = JSON.stringify({ name, code: codeEl.value.trim(), ts: Date.now() });
+  async function createOrLoadPlayer(name, classCode){
+    let playerId = localStorage.getItem('mq_player_id');
+
+    if(playerId){
+      const { data: existingPlayer, error: lookupError } = await supabaseClient
+        .from('players')
+        .select('id')
+        .eq('id', playerId)
+        .maybeSingle();
+
+      if(existingPlayer && !lookupError){
+        return playerId;
+      }
+    }
+
+    const newPlayerId = crypto.randomUUID();
+
+    const { data, error } = await supabaseClient
+      .from('players')
+      .insert([
+        {
+          id: newPlayerId,
+          full_name: name,
+          nickname: name,
+          class_code: classCode || 'No Class',
+          school_code: 'Mathive'
+        }
+      ])
+      .select()
+      .single();
+
+    if(error){
+      console.error('Player creation failed:', error);
+      throw error;
+    }
+
+    localStorage.setItem('mq_player_id', data.id);
+    return data.id;
+  }
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+
+    const name = nameEl.value.trim();
+    const classCode = codeEl.value.trim();
+
+    if(!name){
+      err.style.display = 'block';
+      nameEl.focus();
+      return;
+    }
+
+    err.style.display = 'none';
+
+    try{
+      await createOrLoadPlayer(name, classCode);
+
+      const data = JSON.stringify({
+        name,
+        code: classCode,
+        ts: Date.now()
+      });
+
       sessionStorage.setItem('mq_profile', data);
       localStorage.setItem('mq_profile', data);
-      window.location.href = 'home.html';
-    });
 
-    document.getElementById('clearBtn').addEventListener('click', ()=>{
-      nameEl.value=''; codeEl.value=''; err.style.display='none'; nameEl.focus();
-    });
-  </script>
+      window.location.href = 'home.html';
+    }catch(error){
+      err.textContent = 'Could not create player. Please try again.';
+      err.style.display = 'block';
+      console.error(error);
+    }
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', ()=>{
+    nameEl.value = '';
+    codeEl.value = '';
+    err.style.display = 'none';
+    err.textContent = 'Please enter your name.';
+    nameEl.focus();
+  });
+</script>
+
 </body>
 </html>

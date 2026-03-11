@@ -26,30 +26,6 @@
       gap:14px;
     }
 
-    header{
-      background:var(--card);
-      border-radius:18px;
-      box-shadow:var(--shadow);
-      padding:12px 14px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-    }
-    .title{ font-weight:1000; display:flex; align-items:center; gap:10px; }
-    .tag{
-      font-size:12px; font-weight:1000; padding:6px 10px; border-radius:999px;
-      background:#f6f6f6; color:#333;
-    }
-    .btn{
-      border:none;
-      border-radius:14px;
-      padding:10px 14px;
-      font-weight:900;
-      cursor:pointer;
-      background:#f1f1f1;
-    }
-
     main{ flex:1; display:grid; place-items:center; }
 
     .card{
@@ -60,41 +36,31 @@
       padding:16px;
     }
 
-    .hud{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      font-weight:1000;
-    }
-    .pill{
-      background:#f6f6f6;
-      padding:8px 12px;
-      border-radius:999px;
-      font-size:14px;
-    }
-
     .center{ text-align:center; margin-top:10px; }
+
     .targetWrap{
       display:grid;
       place-items:center;
       margin-top:10px;
     }
+
     .target{
       width:220px;
       height:220px;
       border-radius:999px;
       background:
         radial-gradient(circle at 50% 50%, rgba(255,255,255,.95) 0 35%, rgba(142,202,230,.35) 36% 60%, rgba(255,183,3,.35) 61% 100%);
-      box-shadow: 0 16px 26px rgba(0,0,0,.08);
+      box-shadow:0 16px 26px rgba(0,0,0,.08);
       display:grid;
       place-items:center;
       font-weight:1000;
     }
+
     .targetNum{
       font-size:64px;
       line-height:1;
     }
+
     .targetLabel{
       margin-top:8px;
       color:var(--muted);
@@ -109,6 +75,7 @@
       margin-top:12px;
       flex-wrap:wrap;
     }
+
     .difficulty button{
       border:none;
       border-radius:999px;
@@ -117,8 +84,16 @@
       cursor:pointer;
       background:#eee;
     }
-    .difficulty .active{ background:var(--c2); color:#0b2a33; }
-    .difficulty .locked{ opacity:.55; pointer-events:none; }
+
+    .difficulty .active{
+      background:var(--c2);
+      color:#0b2a33;
+    }
+
+    .difficulty .locked{
+      opacity:.55;
+      pointer-events:none;
+    }
 
     .pick{
       margin-top:10px;
@@ -128,6 +103,7 @@
       flex-wrap:wrap;
       font-weight:1000;
     }
+
     .slot{
       width:120px;
       padding:10px 12px;
@@ -142,6 +118,7 @@
       grid-template-columns: repeat(6, minmax(0, 1fr));
       gap:10px;
     }
+
     .nbtn{
       border:none;
       border-radius:16px;
@@ -149,14 +126,16 @@
       font-weight:1000;
       font-size:18px;
       cursor:pointer;
-      background: rgba(142,202,230,.35);
-      box-shadow: 0 8px 14px rgba(0,0,0,.06);
+      background:rgba(142,202,230,.35);
+      box-shadow:0 8px 14px rgba(0,0,0,.06);
     }
+
     .nbtn:hover{ filter:brightness(.98); }
     .nbtn:active{ transform:scale(.99); }
+
     .nbtn.selected{
-      background: rgba(144,190,109,.55);
-      outline: 3px solid rgba(144,190,109,.55);
+      background:rgba(144,190,109,.55);
+      outline:3px solid rgba(144,190,109,.55);
     }
 
     .msg{
@@ -165,6 +144,7 @@
       text-align:center;
       font-weight:1000;
     }
+
     .good{ color:#2d7a1f; }
     .bad{ color:#b51e1e; }
 
@@ -173,6 +153,99 @@
       text-align:center;
       color:var(--muted);
       font-size:13px;
+    }
+
+    .game-topbar{
+      background:#ffffff;
+      border-radius:20px;
+      box-shadow:0 10px 26px rgba(0,0,0,.08);
+      padding:14px 16px;
+      display:grid;
+      grid-template-columns: 1fr auto auto;
+      gap:14px;
+      align-items:center;
+    }
+
+    .top-left{
+      min-width:180px;
+    }
+
+    .game-title{
+      font-size:22px;
+      font-weight:1000;
+      color:#1b1b1b;
+    }
+
+    .game-subtitle{
+      margin-top:3px;
+      font-size:13px;
+      color:#555;
+      font-weight:700;
+    }
+
+    .top-center{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:8px;
+    }
+
+    .top-pill{
+      background:#f6f6f6;
+      padding:9px 12px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:1000;
+      color:#1b1b1b;
+    }
+
+    .top-right{
+      display:flex;
+      gap:8px;
+      justify-content:flex-end;
+    }
+
+    .top-btn{
+      border:none;
+      border-radius:14px;
+      padding:10px 16px;
+      font-size:14px;
+      font-weight:1000;
+      cursor:pointer;
+    }
+
+    .restart-btn{
+      background:#8ECAE6;
+      color:#0b2a33;
+    }
+
+    .quit-btn{
+      background:#F28482;
+      color:white;
+    }
+
+    .restart-btn:hover,
+    .quit-btn:hover{
+      filter:brightness(.96);
+    }
+
+    @media (max-width:900px){
+      .game-topbar{
+        grid-template-columns:1fr;
+        text-align:center;
+      }
+
+      .top-left,
+      .top-right{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+      }
+
+      .top-right{
+        flex-direction:row;
+        justify-content:center;
+      }
     }
 
     @media (max-width:520px){
@@ -184,21 +257,29 @@
 </head>
 <body>
 
-<header>
-  <div class="title">✖️ Game 3: Factor Smash <span class="tag">30 seconds</span></div>
-  <button class="btn" onclick="goHome()">Home</button>
+<header class="game-topbar">
+  <div class="top-left">
+    <div class="game-title" id="gameTitle">✖️ Game 3: Factor Smash</div>
+    <div class="game-subtitle" id="gameSubtitle">Find 2 numbers that multiply to the target!</div>
+  </div>
+
+  <div class="top-center">
+    <div class="top-pill">⏱ Time: <span id="time">30</span>s</div>
+    <div class="top-pill">⭐ Score: <span id="score">0</span></div>
+    <div class="top-pill">🔥 Combo: <span id="combo">0</span></div>
+  </div>
+
+  <div class="top-right">
+    <button class="top-btn restart-btn" onclick="restartGame()">Restart</button>
+    <button class="top-btn quit-btn" onclick="quitGame()">Quit</button>
+  </div>
 </header>
 
 <main>
   <section class="card" aria-label="Factor Smash game">
-    <div class="hud">
-      <div class="pill">⏱ Time: <span id="time">30</span>s</div>
-      <div class="pill">⭐ Score: <span id="score">0</span></div>
-      <div class="pill">🔥 Combo: <span id="combo">0</span></div>
-    </div>
-
     <div class="center">
       <div style="font-weight:1000">Find two numbers that multiply to:</div>
+
       <div class="targetWrap">
         <div class="target">
           <div>
@@ -226,16 +307,100 @@
   </section>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
 <script>
-  // --- login gate (optional) ---
+
+  let audioStarted = false;
+
+function initAudio(){
+  if(audioStarted) return;
+  audioStarted = true;
+
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if(!AudioContextClass) return;
+
+  window.gameAudioCtx = new AudioContextClass();
+}
+
+function playTone(freq, duration, type = 'sine', volume = 0.05){
+  if(!window.gameAudioCtx) return;
+
+  const ctx = window.gameAudioCtx;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = type;
+  osc.frequency.value = freq;
+
+  gain.gain.value = volume;
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start();
+
+  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+  osc.stop(ctx.currentTime + duration);
+}
+
+function playCorrectSound(){
+  playTone(660, 0.12, 'sine', 0.06);
+  setTimeout(() => playTone(880, 0.14, 'sine', 0.05), 80);
+}
+
+function playWrongSound(){
+  playTone(220, 0.18, 'square', 0.05);
+  setTimeout(() => playTone(180, 0.2, 'square', 0.04), 90);
+}
+
+function playHighScoreSound(){
+  playTone(523, 0.12, 'triangle', 0.06);
+  setTimeout(() => playTone(659, 0.12, 'triangle', 0.06), 100);
+  setTimeout(() => playTone(784, 0.2, 'triangle', 0.06), 200);
+}
+
+function celebrateHighScore(){
+  if(typeof confetti !== 'function') return;
+
+  confetti({
+    particleCount: 140,
+    spread: 90,
+    origin: { y: 0.6 }
+  });
+
+  setTimeout(() => {
+    confetti({
+      particleCount: 80,
+      angle: 60,
+      spread: 70,
+      origin: { x: 0.1, y: 0.7 }
+    });
+
+    confetti({
+      particleCount: 80,
+      angle: 120,
+      spread: 70,
+      origin: { x: 0.9, y: 0.7 }
+    });
+  }, 200);
+}
+
   function readProfile(){
     const raw = sessionStorage.getItem('mq_profile') || localStorage.getItem('mq_profile');
     if(!raw) return null;
-    try { return JSON.parse(raw); } catch { return null; }
+    try{
+      return JSON.parse(raw);
+    }catch{
+      return null;
+    }
   }
-  if(!readProfile()) window.location.replace('../index.html');
 
-  // --- elements ---
+  if(!readProfile()){
+    window.location.replace('../index.html');
+  }
+
+
   const timeEl = document.getElementById('time');
   const scoreEl = document.getElementById('score');
   const comboEl = document.getElementById('combo');
@@ -245,9 +410,11 @@
   const p1El = document.getElementById('p1');
   const p2El = document.getElementById('p2');
   const speedNote = document.getElementById('speedNote');
+  const easyBtn = document.getElementById('easyBtn');
+  const hardBtn = document.getElementById('hardBtn');
 
-  // --- state ---
   let started = false;
+  let ended = false;
   let mode = null;
   let timeLeft = 30;
   let timerId = null;
@@ -261,51 +428,65 @@
 
   let roundStart = 0;
 
-  function goHome(){ window.location.href = '../home.html'; }
-  function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function randInt(min, max){
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function updateHUD(){
+    timeEl.textContent = timeLeft;
+    scoreEl.textContent = score;
+    comboEl.textContent = combo;
+  }
 
   function setDifficulty(level){
+    initAudio();
     if(started) return;
+
     started = true;
+    ended = false;
     mode = level;
 
-    document.getElementById('easyBtn').classList.toggle('active', level==='easy');
-    document.getElementById('hardBtn').classList.toggle('active', level==='hard');
-    document.getElementById('easyBtn').classList.add('locked');
-    document.getElementById('hardBtn').classList.add('locked');
+    easyBtn.classList.toggle('active', level === 'easy');
+    hardBtn.classList.toggle('active', level === 'hard');
+    easyBtn.classList.add('locked');
+    hardBtn.classList.add('locked');
 
     buildGrid();
     newTarget();
     startTimer();
+    updateHUD();
   }
 
   function buildGrid(){
-    // Keep it grade-4 friendly: factors 2..12
     const nums = [];
-    for(let i=2;i<=12;i++) nums.push(i);
+    for(let i = 2; i <= 12; i++){
+      nums.push(i);
+    }
 
     gridEl.innerHTML = '';
-    nums.forEach(n=>{
+
+    nums.forEach(n => {
       const b = document.createElement('button');
       b.className = 'nbtn';
       b.textContent = n;
-      b.addEventListener('click', ()=> selectNumber(n, b));
+      b.addEventListener('click', () => selectNumber(n, b));
       gridEl.appendChild(b);
     });
   }
 
   function newTarget(){
+    if(ended) return;
+
     clearSelection();
 
     let a, b;
+
     if(mode === 'easy'){
-      // smaller range: 2..9
-      a = randInt(2,9);
-      b = randInt(2,9);
+      a = randInt(2, 9);
+      b = randInt(2, 9);
     } else {
-      // bigger: 2..12
-      a = randInt(2,12);
-      b = randInt(2,12);
+      a = randInt(2, 12);
+      b = randInt(2, 12);
     }
 
     target = a * b;
@@ -318,16 +499,19 @@
   }
 
   function clearSelection(){
-    pick1 = null; pick2 = null;
+    pick1 = null;
+    pick2 = null;
     p1El.textContent = '—';
     p2El.textContent = '—';
-    [...document.querySelectorAll('.nbtn')].forEach(btn=>btn.classList.remove('selected'));
+
+    document.querySelectorAll('.nbtn').forEach(btn => {
+      btn.classList.remove('selected');
+    });
   }
 
   function selectNumber(n, btn){
-    if(!started || timeLeft <= 0) return;
+    if(!started || ended || timeLeft <= 0) return;
 
-    // select first then second
     if(pick1 === null){
       pick1 = n;
       p1El.textContent = n;
@@ -343,7 +527,6 @@
       return;
     }
 
-    // if already picked two, start over quickly
     clearSelection();
     pick1 = n;
     p1El.textContent = n;
@@ -351,68 +534,115 @@
   }
 
   function checkAnswer(){
+    if(ended) return;
+
     const product = pick1 * pick2;
 
     if(product === target){
+      playCorrectSound();
       score += 15;
       combo += 1;
 
-      // speed bonus if within 3 seconds
       const secs = (performance.now() - roundStart) / 1000;
+
       if(secs <= 3){
         score += 10;
-        msgEl.textContent = `✅ Correct! +15 (Speed +10)`;
+        msgEl.textContent = '✅ Correct! +15 (Speed +10)';
         msgEl.className = 'msg good';
       } else {
-        msgEl.textContent = `✅ Correct! +15`;
+        msgEl.textContent = '✅ Correct! +15';
         msgEl.className = 'msg good';
       }
 
-      // combo bonus every 5 correct
       if(combo % 5 === 0){
         score += 25;
-        msgEl.textContent = `🔥 Combo Bonus! +25`;
+        msgEl.textContent = '🔥 Combo Bonus! +25';
         msgEl.className = 'msg good';
       }
 
-      scoreEl.textContent = score;
-      comboEl.textContent = combo;
+      updateHUD();
 
-      setTimeout(newTarget, 350);
+      setTimeout(() => {
+        if(!ended){
+          newTarget();
+        }
+      }, 350);
     } else {
+      playWrongSound();
       score = Math.max(0, score - 10);
       combo = 0;
 
-      scoreEl.textContent = score;
-      comboEl.textContent = combo;
+      updateHUD();
 
-      msgEl.textContent = `❌ Wrong! −10`;
+      msgEl.textContent = '❌ Wrong! −10';
       msgEl.className = 'msg bad';
 
-      setTimeout(()=>{
-        msgEl.textContent = '';
-        msgEl.className = 'msg';
-        clearSelection();
+      setTimeout(() => {
+        if(!ended){
+          msgEl.textContent = '';
+          msgEl.className = 'msg';
+          clearSelection();
+        }
       }, 350);
     }
   }
 
+function saveHighScore(){
+  let highScore = Number(localStorage.getItem('game3HighScore')) || 0;
+
+  if(score > highScore){
+    localStorage.setItem('game3HighScore', score);
+    highScore = score;
+    playHighScoreSound();
+    celebrateHighScore();
+  }
+
+  return highScore;
+}
+
   function startTimer(){
     timeLeft = 30;
-    timeEl.textContent = timeLeft;
+    updateHUD();
 
-    timerId = setInterval(()=>{
+    timerId = setInterval(() => {
       timeLeft--;
-      timeEl.textContent = timeLeft;
+      updateHUD();
 
       if(timeLeft <= 0){
-        clearInterval(timerId);
-        msgEl.textContent = `⏰ Time’s up! Final score: ${score}`;
-        msgEl.className = 'msg';
-        speedNote.textContent = 'Great job!';
+        endGame();
       }
     }, 1000);
   }
+
+  function endGame(){
+    if(ended) return;
+
+    ended = true;
+    timeLeft = 0;
+    updateHUD();
+
+    clearInterval(timerId);
+    timerId = null;
+
+    const highScore = saveHighScore();
+
+    msgEl.textContent = `⏰ Time’s up! Final Score: ${score} | High Score: ${highScore}`;
+    msgEl.className = 'msg';
+    speedNote.textContent = 'Great job!';
+  }
+
+  function quitGame(){
+    const leave = confirm("Quit the game and go back to Home?");
+    if(leave){
+      window.location.href = "../home.html";
+    }
+  }
+
+  function restartGame(){
+    location.reload();
+  }
+
+  updateHUD();
 </script>
 
 </body>

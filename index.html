@@ -75,7 +75,7 @@
       <input id="studentName" type="text" placeholder="e.g., Alex" required autofocus />
 
       <label for="classCode">Class code <span style="font-weight:500; color:var(--muted)">(optional)</span></label>
-      <input id="classCode" type="text" placeholder="e.g., 4A-2025" />
+      <input id="classCode" type="hidden" placeholder="3F92">
 
       <div class="actions">
         <button type="button" class="clear" id="clearBtn">Clear</button>
@@ -139,38 +139,49 @@
   }
 
   form.addEventListener('submit', async (e)=>{
-    e.preventDefault();
+  e.preventDefault();
 
-    const name = nameEl.value.trim();
-    const classCode = codeEl.value.trim();
+  const name = nameEl.value.trim();
+  const classCode = codeEl.value.trim().toUpperCase();
 
-    if(!name){
-      err.style.display = 'block';
-      nameEl.focus();
-      return;
-    }
+  const nameRegex = /^[A-Za-z]{2,15}$/;
 
-    err.style.display = 'none';
+  if(!nameRegex.test(name)){
+    err.textContent = "Enter a first name using letters only.";
+    err.style.display = "block";
+    nameEl.focus();
+    return;
+  }
 
-    try{
-      await createOrLoadPlayer(name, classCode);
+  if(classCode !== "3F92"){
+    err.textContent = "Invalid class code.";
+    err.style.display = "block";
+    codeEl.focus();
+    return;
+  }
 
-      const data = JSON.stringify({
-        name,
-        code: classCode,
-        ts: Date.now()
-      });
+  err.style.display = "none";
 
-      sessionStorage.setItem('mq_profile', data);
-      localStorage.setItem('mq_profile', data);
+  try{
+    await createOrLoadPlayer(name, classCode);
 
-      window.location.href = 'home.html';
-    }catch(error){
-      err.textContent = 'Could not create player. Please try again.';
-      err.style.display = 'block';
-      console.error(error);
-    }
-  });
+    const data = JSON.stringify({
+      name,
+      code: classCode,
+      ts: Date.now()
+    });
+
+    sessionStorage.setItem('mq_profile', data);
+    localStorage.setItem('mq_profile', data);
+
+    window.location.href = 'home.html';
+
+  }catch(error){
+    err.textContent = "Could not create player.";
+    err.style.display = "block";
+    console.error(error);
+  }
+});
 
   document.getElementById('clearBtn').addEventListener('click', ()=>{
     nameEl.value = '';

@@ -2,108 +2,574 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MathQuest Leaderboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MathQuest Arcade • Leaderboard</title>
   <style>
+    :root{
+      --gold:#f4c542;
+      --silver:#c7ced6;
+      --bronze:#c98a4a;
+      --bg1:#8ECAE6;
+      --bg2:#90BE6D;
+      --bg3:#FFB703;
+      --ink:#1b1b1b;
+      --muted:#5a5a5a;
+      --card:#ffffff;
+      --shadow:0 12px 30px rgba(0,0,0,.10);
+    }
+
+    *{box-sizing:border-box}
     body{
-      font-family: Arial, sans-serif;
       margin:0;
-      padding:24px;
-      background:#f7f7f7;
-      color:#111;
+      font-family:ui-rounded, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(70vmax 70vmax at 0% 0%, rgba(142,202,230,.45) 0 20%, transparent 21%),
+        radial-gradient(70vmax 70vmax at 100% 100%, rgba(144,190,109,.35) 0 18%, transparent 19%),
+        linear-gradient(180deg,#fff,#fff);
+      min-height:100vh;
+      padding:20px;
     }
 
     .wrap{
-      max-width:900px;
+      max-width:1200px;
       margin:0 auto;
-      background:#fff;
-      padding:20px;
-      border-radius:18px;
-      box-shadow:0 10px 24px rgba(0,0,0,.08);
+      display:flex;
+      flex-direction:column;
+      gap:18px;
     }
 
-    h1{
-      margin-top:0;
+    .topbar{
+      background:var(--card);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:16px 18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
     }
 
-    button{
-      padding:10px 14px;
+    .titleWrap h1{
+      margin:0;
+      font-size:30px;
+      line-height:1.05;
+    }
+
+    .titleWrap p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .topActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
       border:none;
-      border-radius:10px;
-      background:#8ECAE6;
-      font-weight:700;
+      border-radius:14px;
+      padding:11px 16px;
+      font-weight:1000;
       cursor:pointer;
-      margin-bottom:16px;
+      font-size:14px;
+    }
+
+    .btn-home{
+      background:#f1f1f1;
+      color:#222;
+    }
+
+    .btn-refresh{
+      background:var(--bg1);
+      color:#0b2a33;
+    }
+
+    .statusCard{
+      background:var(--card);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:14px 18px;
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .statusText{
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    .myRank{
+      font-weight:1000;
+      background:#f7f7f7;
+      padding:10px 14px;
+      border-radius:14px;
+    }
+
+    .podiumSection{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+      align-items:end;
+    }
+
+    .podiumCard{
+      position:relative;
+      background:var(--card);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:18px 16px;
+      text-align:center;
+      overflow:hidden;
+      min-height:240px;
+    }
+
+    .podiumCard::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      opacity:.18;
+      pointer-events:none;
+    }
+
+    .first::before{ background:linear-gradient(180deg,var(--gold),transparent 70%); }
+    .second::before{ background:linear-gradient(180deg,var(--silver),transparent 70%); }
+    .third::before{ background:linear-gradient(180deg,var(--bronze),transparent 70%); }
+
+    .first{
+      transform:translateY(-12px);
+      animation:floatGold 2.8s ease-in-out infinite;
+      border:2px solid rgba(244,197,66,.55);
+    }
+
+    .second{
+      animation:floatSilver 3.2s ease-in-out infinite;
+      border:2px solid rgba(199,206,214,.55);
+    }
+
+    .third{
+      animation:floatBronze 3s ease-in-out infinite;
+      border:2px solid rgba(201,138,74,.55);
+    }
+
+    @keyframes floatGold{
+      0%,100%{ transform:translateY(-12px) }
+      50%{ transform:translateY(-22px) }
+    }
+
+    @keyframes floatSilver{
+      0%,100%{ transform:translateY(0) }
+      50%{ transform:translateY(-10px) }
+    }
+
+    @keyframes floatBronze{
+      0%,100%{ transform:translateY(0) }
+      50%{ transform:translateY(-8px) }
+    }
+
+    .rankBadge{
+      width:58px;
+      height:58px;
+      margin:0 auto 10px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      font-size:24px;
+      font-weight:1000;
+      color:#1b1b1b;
+      box-shadow:0 8px 18px rgba(0,0,0,.10);
+    }
+
+    .rank1{ background:var(--gold); }
+    .rank2{ background:var(--silver); }
+    .rank3{ background:var(--bronze); color:#fff; }
+
+    .playerName{
+      font-size:22px;
+      font-weight:1000;
+      margin-top:6px;
+    }
+
+    .playerClass{
+      color:var(--muted);
+      font-size:14px;
+      margin-top:4px;
+    }
+
+    .totalScore{
+      margin-top:14px;
+      font-size:32px;
+      font-weight:1000;
+    }
+
+    .totalLabel{
+      color:var(--muted);
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .gameBreakdown{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:8px;
+    }
+
+    .mini{
+      background:#f7f7f7;
+      border-radius:12px;
+      padding:8px 4px;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .tableCard{
+      background:var(--card);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:14px;
+      overflow:hidden;
+    }
+
+    .tableWrap{
+      overflow:auto;
     }
 
     table{
       width:100%;
       border-collapse:collapse;
+      min-width:860px;
     }
 
     th, td{
-      padding:12px 10px;
+      padding:14px 12px;
       border-bottom:1px solid #eee;
       text-align:left;
+      font-size:14px;
     }
 
     th{
       background:#fafafa;
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    tr:hover td{
+      background:#fcfcfc;
+    }
+
+    .rankCell{
+      font-weight:1000;
+      width:70px;
+    }
+
+    .nameCell{
+      font-weight:1000;
+    }
+
+    .muted{
+      color:var(--muted);
+    }
+
+    .empty,
+    .loading,
+    .error{
+      background:var(--card);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:24px;
+      text-align:center;
+      font-weight:900;
+    }
+
+    @media (max-width:900px){
+      .podiumSection{
+        grid-template-columns:1fr;
+      }
+
+      .first,
+      .second,
+      .third{
+        transform:none;
+        animation:none;
+      }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>School Leaderboard</h1>
-    <button onclick="loadLeaderboard()">Refresh</button>
+    <section class="topbar">
+      <div class="titleWrap">
+        <h1>🏆 School Leaderboard</h1>
+        <p>Best score from each game is added into one total score.</p>
+      </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Player ID</th>
-          <th>Game</th>
-          <th>Score</th>
-          <th>Submitted</th>
-        </tr>
-      </thead>
-      <tbody id="leaderboardBody">
-        <tr><td colspan="4">Loading...</td></tr>
-      </tbody>
-    </table>
+      <div class="topActions">
+        <button class="btn btn-refresh" onclick="loadLeaderboard()">Refresh</button>
+        <button class="btn btn-home" onclick="window.location.href='home.html'">Back Home</button>
+      </div>
+    </section>
+
+    <section class="statusCard">
+      <div class="statusText" id="statusText">Loading leaderboard...</div>
+      <div class="myRank" id="myRankBox">Your rank: —</div>
+    </section>
+
+    <section id="podiumSection" class="podiumSection"></section>
+
+    <section class="tableCard">
+      <div class="tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Player</th>
+              <th>Class</th>
+              <th>Total</th>
+              <th>Game 1</th>
+              <th>Game 2</th>
+              <th>Game 3</th>
+              <th>Game 4</th>
+              <th>Game 5</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardBody">
+            <tr><td colspan="9" class="loading">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase.js"></script>
 
   <script>
-    async function loadLeaderboard(){
+    function getDisplayName(player){
+      if(player?.nickname && player.nickname.trim()) return player.nickname.trim();
+      if(player?.full_name && player.full_name.trim()) return player.full_name.trim();
+      return "Unknown Player";
+    }
+
+    function groupBestScores(rows){
+      const players = {};
+
+      rows.forEach(row => {
+        const player = row.players;
+        if(!player) return;
+
+        const id = row.player_id;
+
+        if(!players[id]){
+          players[id] = {
+            player_id: id,
+            full_name: player.full_name || "",
+            nickname: player.nickname || "",
+            class_code: player.class_code || "—",
+            game1: 0,
+            game2: 0,
+            game3: 0,
+            game4: 0,
+            game5: 0,
+            total: 0
+          };
+        }
+
+        const score = Number(row.score) || 0;
+        const game = Number(row.game_number);
+
+        if(game === 1) players[id].game1 = Math.max(players[id].game1, score);
+        if(game === 2) players[id].game2 = Math.max(players[id].game2, score);
+        if(game === 3) players[id].game3 = Math.max(players[id].game3, score);
+        if(game === 4) players[id].game4 = Math.max(players[id].game4, score);
+        if(game === 5) players[id].game5 = Math.max(players[id].game5, score);
+      });
+
+      const list = Object.values(players).map(p => {
+        p.total = p.game1 + p.game2 + p.game3 + p.game4 + p.game5;
+        return p;
+      });
+
+      list.sort((a, b) => {
+        if(b.total !== a.total) return b.total - a.total;
+        return getDisplayName(a).localeCompare(getDisplayName(b));
+      });
+
+      list.forEach((p, index) => {
+        p.rank = index + 1;
+      });
+
+      return list;
+    }
+
+    function renderPodium(players){
+      const podium = document.getElementById("podiumSection");
+
+      if(!players.length){
+        podium.innerHTML = `<div class="empty" style="grid-column:1/-1;">No scores yet.</div>`;
+        return;
+      }
+
+      const second = players[1];
+      const first = players[0];
+      const third = players[2];
+
+      const cards = [];
+
+      if(second){
+        cards.push(`
+          <div class="podiumCard second">
+            <div class="rankBadge rank2">2</div>
+            <div class="playerName">${getDisplayName(second)}</div>
+            <div class="playerClass">Class ${second.class_code}</div>
+            <div class="totalScore">${second.total}</div>
+            <div class="totalLabel">Total Score</div>
+            <div class="gameBreakdown">
+              <div class="mini">G1<br>${second.game1}</div>
+              <div class="mini">G2<br>${second.game2}</div>
+              <div class="mini">G3<br>${second.game3}</div>
+              <div class="mini">G4<br>${second.game4}</div>
+              <div class="mini">G5<br>${second.game5}</div>
+            </div>
+          </div>
+        `);
+      } else {
+        cards.push(`<div class="podiumCard second"></div>`);
+      }
+
+      if(first){
+        cards.push(`
+          <div class="podiumCard first">
+            <div class="rankBadge rank1">1</div>
+            <div class="playerName">${getDisplayName(first)}</div>
+            <div class="playerClass">Class ${first.class_code}</div>
+            <div class="totalScore">${first.total}</div>
+            <div class="totalLabel">Total Score</div>
+            <div class="gameBreakdown">
+              <div class="mini">G1<br>${first.game1}</div>
+              <div class="mini">G2<br>${first.game2}</div>
+              <div class="mini">G3<br>${first.game3}</div>
+              <div class="mini">G4<br>${first.game4}</div>
+              <div class="mini">G5<br>${first.game5}</div>
+            </div>
+          </div>
+        `);
+      } else {
+        cards.push(`<div class="podiumCard first"></div>`);
+      }
+
+      if(third){
+        cards.push(`
+          <div class="podiumCard third">
+            <div class="rankBadge rank3">3</div>
+            <div class="playerName">${getDisplayName(third)}</div>
+            <div class="playerClass">Class ${third.class_code}</div>
+            <div class="totalScore">${third.total}</div>
+            <div class="totalLabel">Total Score</div>
+            <div class="gameBreakdown">
+              <div class="mini">G1<br>${third.game1}</div>
+              <div class="mini">G2<br>${third.game2}</div>
+              <div class="mini">G3<br>${third.game3}</div>
+              <div class="mini">G4<br>${third.game4}</div>
+              <div class="mini">G5<br>${third.game5}</div>
+            </div>
+          </div>
+        `);
+      } else {
+        cards.push(`<div class="podiumCard third"></div>`);
+      }
+
+      podium.innerHTML = cards.join("");
+    }
+
+    function renderTable(players){
       const tbody = document.getElementById("leaderboardBody");
-      tbody.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
+
+      if(!players.length){
+        tbody.innerHTML = `<tr><td colspan="9" class="empty">No scores yet.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = players.map(player => `
+        <tr>
+          <td class="rankCell">#${player.rank}</td>
+          <td class="nameCell">${getDisplayName(player)}</td>
+          <td class="muted">${player.class_code}</td>
+          <td><strong>${player.total}</strong></td>
+          <td>${player.game1}</td>
+          <td>${player.game2}</td>
+          <td>${player.game3}</td>
+          <td>${player.game4}</td>
+          <td>${player.game5}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderMyRank(players){
+      const myId = localStorage.getItem("mq_player_id");
+      const box = document.getElementById("myRankBox");
+
+      if(!myId){
+        box.textContent = "Your rank: —";
+        return;
+      }
+
+      const me = players.find(p => p.player_id === myId);
+
+      if(!me){
+        box.textContent = "Your rank: Not ranked yet";
+        return;
+      }
+
+      box.textContent = `Your rank: #${me.rank} • Total ${me.total}`;
+    }
+
+    async function loadLeaderboard(){
+      const statusText = document.getElementById("statusText");
+      const tbody = document.getElementById("leaderboardBody");
+      const podium = document.getElementById("podiumSection");
+
+      statusText.textContent = "Loading leaderboard...";
+      tbody.innerHTML = `<tr><td colspan="9" class="loading">Loading...</td></tr>`;
+      podium.innerHTML = "";
 
       const { data, error } = await supabaseClient
         .from("score_attempts")
-        .select("*")
-        .order("score", { ascending: false })
-        .limit(20);
+        .select(`
+          player_id,
+          game_number,
+          score,
+          submitted_at,
+          players (
+            full_name,
+            nickname,
+            class_code
+          )
+        `)
+        .order("submitted_at", { ascending: false });
 
       if(error){
-        tbody.innerHTML = `<tr><td colspan="4">Error: ${error.message}</td></tr>`;
+        console.error(error);
+        statusText.textContent = "Could not load leaderboard.";
+        tbody.innerHTML = `<tr><td colspan="9" class="error">Error: ${error.message}</td></tr>`;
+        podium.innerHTML = `<div class="error" style="grid-column:1/-1;">Error loading podium.</div>`;
         return;
       }
 
-      if(!data || data.length === 0){
-        tbody.innerHTML = "<tr><td colspan='4'>No scores yet.</td></tr>";
-        return;
-      }
+      const rankedPlayers = groupBestScores(data || []);
 
-      tbody.innerHTML = data.map(row => `
-        <tr>
-          <td>${row.player_id}</td>
-          <td>${row.game_number}</td>
-          <td>${row.score}</td>
-          <td>${new Date(row.submitted_at).toLocaleString()}</td>
-        </tr>
-      `).join("");
+      statusText.textContent = `Showing ${rankedPlayers.length} ranked player${rankedPlayers.length === 1 ? "" : "s"}.`;
+
+      renderPodium(rankedPlayers);
+      renderTable(rankedPlayers);
+      renderMyRank(rankedPlayers);
     }
 
     loadLeaderboard();

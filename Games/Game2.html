@@ -3,17 +3,25 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Game 2 • Digit Drop Frenzy</title>
+  <title>Game 2 • Bar Graph Battle</title>
   <style>
     :root{
-      --c1:#8ECAE6; --c2:#90BE6D; --c3:#FFB703; --c4:#FB8500; --c5:#F28482;
-      --ink:#1b1b1b; --muted:#555; --card:#ffffff;
+      --c1:#8ECAE6;
+      --c2:#90BE6D;
+      --c3:#FFB703;
+      --c4:#FB8500;
+      --c5:#F28482;
+      --ink:#1b1b1b;
+      --muted:#555;
+      --card:#ffffff;
       --shadow:0 10px 26px rgba(0,0,0,.08);
     }
+
     *{box-sizing:border-box}
+
     body{
       margin:0;
-      font-family: ui-rounded, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+      font-family:ui-rounded, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
       color:var(--ink);
       background:
         radial-gradient(60vmax 60vmax at 0% 0%, var(--c3) 0 22%, transparent 23%),
@@ -26,129 +34,18 @@
       gap:14px;
     }
 
-    .wrap{
-      flex:1;
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:12px;
-      align-items:start;
-    }
-
-    .panel{
-      background:var(--card);
-      border-radius:22px;
-      box-shadow:var(--shadow);
-      padding:14px;
-    }
-
-    .center{
-      text-align:center;
-      margin-top:10px;
-    }
-
-    .bigNum{
-      font-size:56px;
-      font-weight:1000;
-      letter-spacing:1px;
-      margin:8px 0 0;
-    }
-
-    .need{
-      display:inline-block;
-      margin-top:10px;
-      padding:8px 12px;
-      border-radius:999px;
-      background:rgba(142,202,230,.35);
-      font-weight:1000;
-    }
-
-    .difficulty{
-      display:flex;
-      justify-content:center;
-      gap:8px;
-      margin-top:10px;
-      flex-wrap:wrap;
-    }
-
-    .difficulty button{
-      border:none;
-      border-radius:999px;
-      padding:10px 14px;
-      font-weight:1000;
-      cursor:pointer;
-      background:#eee;
-    }
-
-    .difficulty .active{
-      background:var(--c2);
-      color:#0b2a33;
-    }
-
-    .difficulty .locked{
-      opacity:.55;
-      pointer-events:none;
-    }
-
-    .arena{
-      position:relative;
-      height:420px;
-      border-radius:18px;
-      background: linear-gradient(180deg, rgba(142,202,230,.18), rgba(144,190,109,.10));
-      overflow:hidden;
-      margin-top:12px;
-      border:2px solid rgba(0,0,0,.06);
-    }
-
-    .digit{
-      position:absolute;
-      width:64px;
-      height:64px;
-      border-radius:18px;
-      display:grid;
-      place-items:center;
-      font-size:28px;
-      font-weight:1000;
-      user-select:none;
-      cursor:pointer;
-      box-shadow:0 10px 18px rgba(0,0,0,.10);
-      border:2px solid rgba(0,0,0,.08);
-    }
-
-    .digit:active{
-      transform:scale(.98);
-    }
-
-    .msg{
-      margin-top:10px;
-      min-height:26px;
-      font-weight:1000;
-      text-align:center;
-    }
-
-    .good{ color:#2d7a1f; }
-    .bad{ color:#b51e1e; }
-
-    .hint{
-      text-align:center;
-      color:var(--muted);
-      font-size:13px;
-      margin-top:8px;
-    }
-
     .game-topbar{
       background:#ffffff;
       border-radius:20px;
       box-shadow:0 10px 26px rgba(0,0,0,.08);
       padding:14px 16px;
       display:grid;
-      grid-template-columns: 1fr auto auto;
+      grid-template-columns:1fr auto auto;
       gap:14px;
       align-items:center;
     }
 
-    .top-left{
-      min-width:180px;
-    }
+    .top-left{ min-width:180px; }
 
     .game-title{
       font-size:22px;
@@ -209,7 +106,187 @@
       filter:brightness(.96);
     }
 
-    @media (max-width: 900px){
+    main{
+      flex:1;
+      display:grid;
+      place-items:center;
+    }
+
+    .card{
+      width:min(96vw, 820px);
+      background:var(--card);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:18px;
+      text-align:center;
+    }
+
+    .difficulty{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      margin-top:10px;
+      flex-wrap:wrap;
+    }
+
+    .difficulty button{
+      border:none;
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:1000;
+      cursor:pointer;
+      background:#eee;
+    }
+
+    .difficulty .active{
+      background:var(--c2);
+      color:#0b2a33;
+    }
+
+    .difficulty .locked{
+      opacity:.55;
+      pointer-events:none;
+    }
+
+    .graphBox{
+      margin:16px auto 0;
+      width:min(100%, 720px);
+      background:#fafafa;
+      border-radius:22px;
+      border:2px solid rgba(0,0,0,.06);
+      padding:18px 14px 14px;
+    }
+
+    .graphTitle{
+      font-size:18px;
+      font-weight:1000;
+      margin-bottom:14px;
+    }
+
+    .question{
+      display:inline-block;
+      margin:10px auto 0;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(142,202,230,.30);
+      font-weight:1000;
+      font-size:14px;
+    }
+
+    .graphArea{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:60px 1fr;
+      gap:10px;
+      align-items:end;
+      min-height:300px;
+    }
+
+    .yAxis{
+      height:260px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      align-items:flex-end;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+      padding-right:4px;
+    }
+
+    .bars{
+      height:260px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-evenly;
+      gap:12px;
+      border-left:3px solid rgba(0,0,0,.10);
+      border-bottom:3px solid rgba(0,0,0,.10);
+      padding:0 10px 0 14px;
+    }
+
+    .barWrap{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-end;
+      gap:8px;
+      min-width:70px;
+    }
+
+    .barValue{
+      font-size:13px;
+      font-weight:1000;
+      color:#333;
+      min-height:18px;
+    }
+
+    .bar{
+      width:100%;
+      max-width:72px;
+      border-radius:14px 14px 8px 8px;
+      box-shadow:0 8px 14px rgba(0,0,0,.08);
+      transition:height .2s ease;
+    }
+
+    .barLabel{
+      font-size:13px;
+      font-weight:1000;
+      color:#333;
+      min-height:32px;
+      display:grid;
+      place-items:center;
+      text-align:center;
+    }
+
+    .choices{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:12px;
+    }
+
+    .choiceBtn{
+      border:none;
+      border-radius:18px;
+      padding:16px 14px;
+      font-weight:1000;
+      font-size:20px;
+      cursor:pointer;
+      box-shadow:0 10px 16px rgba(0,0,0,.06);
+      background:#f6f6f6;
+    }
+
+    .choiceBtn:hover{
+      filter:brightness(.98);
+    }
+
+    .choiceBtn:active{
+      transform:scale(.99);
+    }
+
+    .choiceBtn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
+    .msg{
+      margin-top:12px;
+      min-height:26px;
+      font-weight:1000;
+    }
+
+    .good{ color:#2d7a1f; }
+    .bad{ color:#b51e1e; }
+
+    .hint{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    @media (max-width:900px){
       .game-topbar{
         grid-template-columns:1fr;
         text-align:center;
@@ -227,14 +304,28 @@
         justify-content:center;
       }
     }
+
+    @media (max-width:640px){
+      .choices{
+        grid-template-columns:1fr;
+      }
+
+      .barLabel{
+        font-size:12px;
+      }
+
+      .graphArea{
+        grid-template-columns:44px 1fr;
+      }
+    }
   </style>
 </head>
 <body>
 
 <header class="game-topbar">
   <div class="top-left">
-    <div class="game-title" id="gameTitle">🔢 Game 2: Digit Drop Frenzy</div>
-    <div class="game-subtitle" id="gameSubtitle">Click the correct place value digit!</div>
+    <div class="game-title">📊 Game 2: Bar Graph Battle</div>
+    <div class="game-subtitle">Read the graph and answer fast!</div>
   </div>
 
   <div class="top-center">
@@ -249,107 +340,111 @@
   </div>
 </header>
 
-<div class="wrap">
-  <section class="panel">
-    <div class="center">
-      <div style="font-weight:1000">Target Number</div>
-      <div class="bigNum" id="target">----</div>
-      <div class="need">Click: <span id="need">----</span></div>
-
-      <div id="startText" style="margin-top:10px; font-weight:1000;">
-        Choose difficulty to start
-      </div>
-
-      <div class="difficulty">
-        <button id="easyBtn" onclick="setDifficulty('easy')">Easy (2 digits)</button>
-        <button id="hardBtn" onclick="setDifficulty('hard')">Hard (4 digits)</button>
-      </div>
-
-      <div class="arena" id="arena" aria-label="Digit drop arena"></div>
-      <div class="hint">+10 correct • −10 wrong • +25 every 5 correct clicks in a row</div>
-      <div class="msg" id="msg"></div>
+<main>
+  <section class="card">
+    <div id="startText" style="margin-top:10px; font-weight:1000;">
+      Choose difficulty to start
     </div>
+
+    <div class="difficulty">
+      <button id="easyBtn" onclick="setDifficulty('easy')">Easy</button>
+      <button id="hardBtn" onclick="setDifficulty('hard')">Hard</button>
+    </div>
+
+    <div class="graphBox" id="graphBox" style="display:none;">
+      <div class="graphTitle" id="graphTitle">Favourite Snacks</div>
+      <div class="question" id="questionText">Loading question...</div>
+
+      <div class="graphArea">
+        <div class="yAxis" id="yAxis"></div>
+        <div class="bars" id="bars"></div>
+      </div>
+
+      <div class="choices" id="choices"></div>
+    </div>
+
+    <div class="hint">+10 correct • −10 wrong • +5 fast • +25 every 5 combo</div>
+    <div class="msg" id="msg"></div>
   </section>
-</div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase.js"></script>
 
 <script>
-
   let audioStarted = false;
 
-function initAudio(){
-  if(audioStarted) return;
-  audioStarted = true;
+  function initAudio(){
+    if(audioStarted) return;
+    audioStarted = true;
 
-  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-  if(!AudioContextClass) return;
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if(!AudioContextClass) return;
 
-  window.gameAudioCtx = new AudioContextClass();
-}
+    window.gameAudioCtx = new AudioContextClass();
+  }
 
-function playTone(freq, duration, type = 'sine', volume = 0.05){
-  if(!window.gameAudioCtx) return;
+  function playTone(freq, duration, type = 'sine', volume = 0.05){
+    if(!window.gameAudioCtx) return;
 
-  const ctx = window.gameAudioCtx;
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
+    const ctx = window.gameAudioCtx;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
 
-  osc.type = type;
-  osc.frequency.value = freq;
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.value = volume;
 
-  gain.gain.value = volume;
+    osc.connect(gain);
+    gain.connect(ctx.destination);
 
-  osc.connect(gain);
-  gain.connect(ctx.destination);
+    osc.start();
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+    osc.stop(ctx.currentTime + duration);
+  }
 
-  osc.start();
+  function playCorrectSound(){
+    playTone(660, 0.12, 'sine', 0.06);
+    setTimeout(() => playTone(880, 0.14, 'sine', 0.05), 80);
+  }
 
-  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
-  osc.stop(ctx.currentTime + duration);
-}
+  function playWrongSound(){
+    playTone(220, 0.18, 'square', 0.05);
+    setTimeout(() => playTone(180, 0.2, 'square', 0.04), 90);
+  }
 
-function playCorrectSound(){
-  playTone(660, 0.12, 'sine', 0.06);
-  setTimeout(() => playTone(880, 0.14, 'sine', 0.05), 80);
-}
+  function playHighScoreSound(){
+    playTone(523, 0.12, 'triangle', 0.06);
+    setTimeout(() => playTone(659, 0.12, 'triangle', 0.06), 100);
+    setTimeout(() => playTone(784, 0.2, 'triangle', 0.06), 200);
+  }
 
-function playWrongSound(){
-  playTone(220, 0.18, 'square', 0.05);
-  setTimeout(() => playTone(180, 0.2, 'square', 0.04), 90);
-}
-
-function playHighScoreSound(){
-  playTone(523, 0.12, 'triangle', 0.06);
-  setTimeout(() => playTone(659, 0.12, 'triangle', 0.06), 100);
-  setTimeout(() => playTone(784, 0.2, 'triangle', 0.06), 200);
-}
-
-function celebrateHighScore(){
-  if(typeof confetti !== 'function') return;
-
-  confetti({
-    particleCount: 140,
-    spread: 90,
-    origin: { y: 0.6 }
-  });
-
-  setTimeout(() => {
-    confetti({
-      particleCount: 80,
-      angle: 60,
-      spread: 70,
-      origin: { x: 0.1, y: 0.7 }
-    });
+  function celebrateHighScore(){
+    if(typeof confetti !== 'function') return;
 
     confetti({
-      particleCount: 80,
-      angle: 120,
-      spread: 70,
-      origin: { x: 0.9, y: 0.7 }
+      particleCount: 140,
+      spread: 90,
+      origin: { y: 0.6 }
     });
-  }, 200);
-}
+
+    setTimeout(() => {
+      confetti({
+        particleCount: 80,
+        angle: 60,
+        spread: 70,
+        origin: { x: 0.1, y: 0.7 }
+      });
+
+      confetti({
+        particleCount: 80,
+        angle: 120,
+        spread: 70,
+        origin: { x: 0.9, y: 0.7 }
+      });
+    }, 200);
+  }
 
   function readProfile(){
     const raw = sessionStorage.getItem('mq_profile') || localStorage.getItem('mq_profile');
@@ -365,34 +460,39 @@ function celebrateHighScore(){
     window.location.replace('../index.html');
   }
 
-  const arena = document.getElementById('arena');
+  let started = false;
+  let ended = false;
+  let mode = null;
+  let timeLeft = 30;
+  let score = 0;
+  let combo = 0;
+  let timer = null;
+  let roundStart = 0;
+  let currentRound = null;
+
   const timeEl = document.getElementById('time');
   const scoreEl = document.getElementById('score');
   const comboEl = document.getElementById('combo');
-  const msgEl = document.getElementById('msg');
-  const targetEl = document.getElementById('target');
-  const needEl = document.getElementById('need');
   const startText = document.getElementById('startText');
+  const graphBox = document.getElementById('graphBox');
+  const graphTitle = document.getElementById('graphTitle');
+  const questionText = document.getElementById('questionText');
+  const yAxis = document.getElementById('yAxis');
+  const bars = document.getElementById('bars');
+  const choices = document.getElementById('choices');
+  const msgEl = document.getElementById('msg');
   const easyBtn = document.getElementById('easyBtn');
   const hardBtn = document.getElementById('hardBtn');
 
+  const themes = [
+    { title:"Favourite Fruits", labels:["Apples","Bananas","Grapes","Oranges"] },
+    { title:"Favourite Sports", labels:["Soccer","Basketball","Hockey","Tennis"] },
+    { title:"Favourite Snacks", labels:["Chips","Cookies","Popcorn","Fruit"] },
+    { title:"Favourite Pets", labels:["Dogs","Cats","Fish","Birds"] },
+    { title:"Favourite Colours", labels:["Blue","Red","Green","Yellow"] }
+  ];
 
-  let ended = false;
-  let mode = null;
-  let places = [];
-  let currentIndex = 0;
-  let digitsMap = {};
-
-  let score = 0;
-  let combo = 0;
-  let timeLeft = 30;
-
-  let timerId = null;
-  let spawnId = null;
-  let active = [];
-  let last = performance.now();
-
-  function randInt(min, max){
+  function rand(min, max){
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
@@ -406,65 +506,422 @@ function celebrateHighScore(){
     initAudio();
     if(started) return;
 
-    mode = level;
     started = true;
     ended = false;
+    mode = level;
 
     easyBtn.classList.toggle('active', level === 'easy');
     hardBtn.classList.toggle('active', level === 'hard');
     easyBtn.classList.add('locked');
     hardBtn.classList.add('locked');
 
-    startText.textContent = 'Go! Click the correct digit!';
+    startText.textContent = 'Read the graph and answer fast!';
+    graphBox.style.display = 'block';
 
-    resetRound();
-    updateHUD();
+    newRound();
     startTimer();
-    startSpawning();
-
-    last = performance.now();
-    requestAnimationFrame(loop);
+    updateHUD();
   }
 
-  function resetRound(){
-    arena.innerHTML = '';
-    active = [];
+  function newRound(){
+    if(ended) return;
 
-    if(mode === 'easy'){
-      const tens = randInt(1, 9);
-      const ones = randInt(0, 9);
-      digitsMap = { tens, ones };
-      places = ['tens', 'ones'];
-      targetEl.textContent = `${tens}${ones}`;
-    } else {
-      const thousands = randInt(1, 9);
-      const hundreds = randInt(0, 9);
-      const tens = randInt(0, 9);
-      const ones = randInt(0, 9);
-      digitsMap = { thousands, hundreds, tens, ones };
-      places = ['thousands', 'hundreds', 'tens', 'ones'];
-      targetEl.textContent = `${thousands}${hundreds}${tens}${ones}`;
+    const theme = themes[rand(0, themes.length - 1)];
+
+    const data = theme.labels.map(label => ({
+      label,
+      value: mode === 'easy' ? rand(1, 10) : rand(2, 15)
+    }));
+
+    currentRound = buildQuestion(theme.title, data);
+    renderRound(currentRound);
+    roundStart = performance.now();
+
+    msgEl.textContent = '';
+    msgEl.className = 'msg';
+  }
+
+  function buildQuestion(title, data){
+  const sortedHigh = [...data].sort((a, b) => b.value - a.value);
+  const sortedLow = [...data].sort((a, b) => a.value - b.value);
+
+  const maxItem = sortedHigh[0];
+  const secondMax = sortedHigh[1];
+  const minItem = sortedLow[0];
+  const secondMin = sortedLow[1];
+
+  const totalAll = data.reduce((sum, item) => sum + item.value, 0);
+
+  const i1 = rand(0, data.length - 1);
+  let i2 = rand(0, data.length - 1);
+  while(i2 === i1) i2 = rand(0, data.length - 1);
+
+  let i3 = rand(0, data.length - 1);
+  while(i3 === i1 || i3 === i2) i3 = rand(0, data.length - 1);
+
+  const a = data[i1];
+  const b = data[i2];
+  const c = data[i3];
+
+  const easyQuestions = [
+    {
+      text: `Which category has the greatest number?`,
+      answer: maxItem.label,
+      options: shuffleUnique([
+        maxItem.label,
+        ...pickOtherLabels(data, maxItem.label, 3)
+      ])
+    },
+    {
+      text: `Which category has the least number?`,
+      answer: minItem.label,
+      options: shuffleUnique([
+        minItem.label,
+        ...pickOtherLabels(data, minItem.label, 3)
+      ])
+    },
+    {
+      text: `How many chose ${a.label}?`,
+      answer: String(a.value),
+      options: buildNumberOptions(a.value)
+    },
+    {
+      text: `How many chose ${b.label}?`,
+      answer: String(b.value),
+      options: buildNumberOptions(b.value)
+    },
+    {
+      text: `How many chose ${c.label}?`,
+      answer: String(c.value),
+      options: buildNumberOptions(c.value)
+    },
+    {
+      text: `Which category has more: ${a.label} or ${b.label}?`,
+      answer: a.value >= b.value ? a.label : b.label,
+      options: shuffleUnique([
+        a.label,
+        b.label,
+        ...pickOtherLabels(data, "", 2)
+      ])
+    },
+    {
+      text: `Which category has fewer: ${a.label} or ${b.label}?`,
+      answer: a.value <= b.value ? a.label : b.label,
+      options: shuffleUnique([
+        a.label,
+        b.label,
+        ...pickOtherLabels(data, "", 2)
+      ])
+    },
+    {
+      text: `How many more chose ${maxItem.label} than ${minItem.label}?`,
+      answer: String(maxItem.value - minItem.value),
+      options: buildNumberOptions(maxItem.value - minItem.value)
+    },
+    {
+      text: `How many chose ${a.label} and ${b.label} altogether?`,
+      answer: String(a.value + b.value),
+      options: buildNumberOptions(a.value + b.value)
+    },
+    {
+      text: `How many chose ${b.label} and ${c.label} altogether?`,
+      answer: String(b.value + c.value),
+      options: buildNumberOptions(b.value + c.value)
+    },
+    {
+      text: `What is the total for all categories?`,
+      answer: String(totalAll),
+      options: buildNumberOptions(totalAll)
+    },
+    {
+      text: `Which category is second greatest?`,
+      answer: secondMax.label,
+      options: shuffleUnique([
+        secondMax.label,
+        maxItem.label,
+        minItem.label,
+        secondMin.label
+      ])
+    },
+    {
+      text: `Which category is second least?`,
+      answer: secondMin.label,
+      options: shuffleUnique([
+        secondMin.label,
+        minItem.label,
+        maxItem.label,
+        secondMax.label
+      ])
+    },
+    {
+      text: `How many fewer chose ${minItem.label} than ${maxItem.label}?`,
+      answer: String(maxItem.value - minItem.value),
+      options: buildNumberOptions(maxItem.value - minItem.value)
+    },
+    {
+      text: `Which two categories together make the greatest total?`,
+      answer: `${maxItem.label} + ${secondMax.label}`,
+      options: shuffleUnique([
+        `${maxItem.label} + ${secondMax.label}`,
+        `${minItem.label} + ${secondMin.label}`,
+        `${a.label} + ${b.label}`,
+        `${b.label} + ${c.label}`
+      ])
+    }
+  ];
+
+  const hardQuestions = [
+    {
+      text: `How many more chose ${a.label} than ${b.label}?`,
+      answer: String(Math.max(0, a.value - b.value)),
+      options: buildNumberOptions(Math.max(0, a.value - b.value))
+    },
+    {
+      text: `How many more chose ${b.label} than ${a.label}?`,
+      answer: String(Math.max(0, b.value - a.value)),
+      options: buildNumberOptions(Math.max(0, b.value - a.value))
+    },
+    {
+      text: `How many chose ${a.label} and ${b.label} altogether?`,
+      answer: String(a.value + b.value),
+      options: buildNumberOptions(a.value + b.value)
+    },
+    {
+      text: `How many chose ${a.label}, ${b.label}, and ${c.label} altogether?`,
+      answer: String(a.value + b.value + c.value),
+      options: buildNumberOptions(a.value + b.value + c.value)
+    },
+    {
+      text: `What is the total for all categories?`,
+      answer: String(totalAll),
+      options: buildNumberOptions(totalAll)
+    },
+    {
+      text: `If 2 more students chose ${a.label}, what would the new total be?`,
+      answer: String(a.value + 2),
+      options: buildNumberOptions(a.value + 2)
+    },
+    {
+      text: `If 3 more students chose ${b.label}, what would the new total be?`,
+      answer: String(b.value + 3),
+      options: buildNumberOptions(b.value + 3)
+    },
+    {
+      text: `If 2 students were taken away from ${c.label}, what would the new total be?`,
+      answer: String(Math.max(0, c.value - 2)),
+      options: buildNumberOptions(Math.max(0, c.value - 2))
+    },
+    {
+      text: `How many more students are needed for ${minItem.label} to match ${maxItem.label}?`,
+      answer: String(maxItem.value - minItem.value),
+      options: buildNumberOptions(maxItem.value - minItem.value)
+    },
+    {
+      text: `Which category has the greatest number?`,
+      answer: maxItem.label,
+      options: shuffleUnique([
+        maxItem.label,
+        ...pickOtherLabels(data, maxItem.label, 3)
+      ])
+    },
+    {
+      text: `Which category has the least number?`,
+      answer: minItem.label,
+      options: shuffleUnique([
+        minItem.label,
+        ...pickOtherLabels(data, minItem.label, 3)
+      ])
+    },
+    {
+      text: `Which category is second greatest?`,
+      answer: secondMax.label,
+      options: shuffleUnique([
+        secondMax.label,
+        maxItem.label,
+        minItem.label,
+        secondMin.label
+      ])
+    },
+    {
+      text: `Which category is second least?`,
+      answer: secondMin.label,
+      options: shuffleUnique([
+        secondMin.label,
+        minItem.label,
+        maxItem.label,
+        secondMax.label
+      ])
+    },
+    {
+      text: `How many more chose ${maxItem.label} and ${secondMax.label} together than ${minItem.label} and ${secondMin.label} together?`,
+      answer: String((maxItem.value + secondMax.value) - (minItem.value + secondMin.value)),
+      options: buildNumberOptions((maxItem.value + secondMax.value) - (minItem.value + secondMin.value))
+    },
+    {
+      text: `Which two categories together make the least total?`,
+      answer: `${minItem.label} + ${secondMin.label}`,
+      options: shuffleUnique([
+        `${minItem.label} + ${secondMin.label}`,
+        `${maxItem.label} + ${secondMax.label}`,
+        `${a.label} + ${b.label}`,
+        `${b.label} + ${c.label}`
+      ])
+    }
+  ];
+
+  const questionPool = mode === 'easy' ? easyQuestions : hardQuestions;
+  const picked = questionPool[rand(0, questionPool.length - 1)];
+
+  return {
+    title,
+    data,
+    question: picked.text,
+    answer: picked.answer,
+    options: picked.options
+  };
+}
+
+function pickOtherLabels(data, exclude, count){
+  const others = data
+    .filter(item => !exclude || item.label !== exclude)
+    .map(item => item.label);
+
+  return others.slice(0, count);
+}
+
+function shuffleUnique(arr){
+  const unique = [...new Set(arr)];
+  while(unique.length < 4){
+    unique.push(unique[unique.length - 1] || "0");
+  }
+
+  for(let i = unique.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [unique[i], unique[j]] = [unique[j], unique[i]];
+  }
+
+  return unique.slice(0, 4);
+}
+
+function buildNumberOptions(correct){
+  const set = new Set([String(correct)]);
+
+  while(set.size < 4){
+    const candidate = Math.max(0, correct + rand(-6, 6));
+    set.add(String(candidate));
+  }
+
+  return shuffleUnique([...set]);
+}
+
+  function renderRound(round){
+    graphTitle.textContent = round.title;
+    questionText.textContent = round.question;
+
+    const maxValue = Math.max(...round.data.map(d => d.value), 10);
+    yAxis.innerHTML = '';
+    bars.innerHTML = '';
+    choices.innerHTML = '';
+
+    for(let i = maxValue; i >= 0; i -= Math.max(1, Math.ceil(maxValue / 5))){
+      const tick = document.createElement('div');
+      tick.textContent = i;
+      yAxis.appendChild(tick);
     }
 
-    currentIndex = 0;
-    updateNeed();
+    const colors = ['var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c4)'];
+
+    round.data.forEach((item, index) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'barWrap';
+
+      const value = document.createElement('div');
+      value.className = 'barValue';
+      value.textContent = item.value;
+
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      bar.style.height = `${(item.value / maxValue) * 210}px`;
+      bar.style.background = colors[index % colors.length];
+
+      const label = document.createElement('div');
+      label.className = 'barLabel';
+      label.textContent = item.label;
+
+      wrap.appendChild(value);
+      wrap.appendChild(bar);
+      wrap.appendChild(label);
+      bars.appendChild(wrap);
+    });
+
+    round.options.forEach(option => {
+      const btn = document.createElement('button');
+      btn.className = 'choiceBtn';
+      btn.textContent = option;
+      btn.addEventListener('click', () => choose(option));
+      choices.appendChild(btn);
+    });
   }
 
-  function updateNeed(){
-    const p = places[currentIndex];
-    const label =
-      p === 'thousands' ? 'Thousands' :
-      p === 'hundreds' ? 'Hundreds' :
-      p === 'tens' ? 'Tens' : 'Ones';
+  function choose(selected){
+    if(!started || ended || timeLeft <= 0 || !currentRound) return;
 
-    needEl.textContent = `${label} digit`;
+    const secs = (performance.now() - roundStart) / 1000;
+
+    if(selected === currentRound.answer){
+      playCorrectSound();
+      score += 10;
+      combo += 1;
+
+      if(secs <= 2.5){
+        score += 5;
+        msgEl.textContent = '✅ Correct! +10 (Fast +5)';
+        msgEl.className = 'msg good';
+      } else {
+        msgEl.textContent = '✅ Correct! +10';
+        msgEl.className = 'msg good';
+      }
+
+      if(combo % 5 === 0){
+        score += 25;
+        msgEl.textContent = '🔥 Combo Bonus! +25';
+        msgEl.className = 'msg good';
+      }
+    } else {
+      playWrongSound();
+      score = Math.max(0, score - 10);
+      combo = 0;
+      msgEl.textContent = '❌ Wrong! −10';
+      msgEl.className = 'msg bad';
+    }
+
+    updateHUD();
+
+    setTimeout(() => {
+      if(!ended){
+        newRound();
+      }
+    }, 350);
+  }
+
+  function saveHighScore(){
+    let highScore = Number(localStorage.getItem('game2HighScore')) || 0;
+
+    if(score > highScore){
+      localStorage.setItem('game2HighScore', score);
+      highScore = score;
+      playHighScoreSound();
+      celebrateHighScore();
+    }
+
+    return highScore;
   }
 
   function startTimer(){
     timeLeft = 30;
     updateHUD();
 
-    timerId = setInterval(() => {
+    timer = setInterval(() => {
       timeLeft--;
       updateHUD();
 
@@ -474,180 +931,30 @@ function celebrateHighScore(){
     }, 1000);
   }
 
-function saveHighScore(){
-  let highScore = Number(localStorage.getItem('game2HighScore')) || 0;
-
-  if(score > highScore){
-    localStorage.setItem('game2HighScore', score);
-    highScore = score;
-    playHighScoreSound();
-    celebrateHighScore();
-  }
-
-  return highScore;
-}
-
-  function endGame(){
+  async function endGame(){
     if(ended) return;
 
     ended = true;
     timeLeft = 0;
     updateHUD();
 
-    clearInterval(timerId);
-    clearInterval(spawnId);
-    timerId = null;
-    spawnId = null;
+    clearInterval(timer);
+    timer = null;
 
-    active.forEach(d => d.frozen = true);
+    document.querySelectorAll('.choiceBtn').forEach(btn => {
+      btn.disabled = true;
+    });
 
     const highScore = saveHighScore();
+
+    try{
+      await submitScore(2, score);
+    }catch(error){
+      console.error("Submit score failed:", error);
+    }
+
     msgEl.textContent = `⏰ Time’s up! Final Score: ${score} | High Score: ${highScore}`;
     msgEl.className = 'msg';
-  }
-
-  function startSpawning(){
-    const ms = mode === 'easy' ? 750 : 550;
-
-    spawnId = setInterval(() => {
-      if(!ended){
-        spawnDigit();
-      }
-    }, ms);
-  }
-
-  function spawnDigit(){
-    if(ended || timeLeft <= 0) return;
-
-    const needPlace = places[currentIndex];
-    const needDigit = digitsMap[needPlace];
-
-    const showCorrect = Math.random() < 0.55;
-    let value = showCorrect ? needDigit : randInt(0, 9);
-
-    if(!showCorrect && value === needDigit){
-      value = (value + randInt(1, 9)) % 10;
-    }
-
-    const arenaWidth = arena.clientWidth;
-    const x = randInt(8, Math.max(8, arenaWidth - 72));
-
-    const el = document.createElement('div');
-    el.className = 'digit';
-    el.textContent = value;
-    el.style.background = showCorrect
-      ? 'rgba(144,190,109,.55)'
-      : 'rgba(255,183,3,.55)';
-    el.style.left = x + 'px';
-    el.style.top = '-70px';
-
-    const obj = {
-      el,
-      x,
-      y: -70,
-      speed: mode === 'easy' ? randInt(120, 180) : randInt(160, 230),
-      value,
-      frozen: false
-    };
-
-    el.addEventListener('click', () => onDigitClick(obj));
-
-    arena.appendChild(el);
-    active.push(obj);
-  }
-
-  function onDigitClick(obj){
-    if(ended || timeLeft <= 0 || obj.frozen) return;
-
-    const needPlace = places[currentIndex];
-    const needDigit = digitsMap[needPlace];
-
-    if(obj.value === needDigit){
-      playCorrectSound();
-      score += 10;
-      combo += 1;
-
-      if(combo % 5 === 0){
-        score += 25;
-        msgEl.textContent = '🔥 Combo Bonus! +25';
-        msgEl.className = 'msg good';
-      } else {
-        msgEl.textContent = '✅ Nice!';
-        msgEl.className = 'msg good';
-      }
-
-      currentIndex++;
-
-      if(currentIndex >= places.length){
-        resetRound();
-      } else {
-        updateNeed();
-      }
-
-      removeDigit(obj);
-    } else {
-      playWrongSound();
-      score = Math.max(0, score - 10);
-      combo = 0;
-      msgEl.textContent = '❌ Wrong! −10';
-      msgEl.className = 'msg bad';
-      removeDigit(obj);
-    }
-
-    updateHUD();
-
-    setTimeout(() => {
-      if(!ended){
-        msgEl.textContent = '';
-        msgEl.className = 'msg';
-      }
-    }, 500);
-  }
-
-  function removeDigit(obj){
-    obj.frozen = true;
-
-    if(obj.el && obj.el.parentNode){
-      obj.el.parentNode.removeChild(obj.el);
-    }
-
-    active = active.filter(d => d !== obj);
-  }
-
-  function loop(now){
-    if(!started) return;
-
-    const dt = (now - last) / 1000;
-    last = now;
-
-    const bottom = arena.clientHeight + 80;
-
-    active.forEach(d => {
-      if(d.frozen) return;
-      d.y += d.speed * dt;
-      d.el.style.top = d.y + 'px';
-    });
-
-    active.slice().forEach(d => {
-      if(d.frozen) return;
-
-      if(d.y > bottom){
-        const needPlace = places[currentIndex];
-        const needDigit = digitsMap[needPlace];
-
-        if(d.value === needDigit && !ended && timeLeft > 0){
-          score = Math.max(0, score - 5);
-          combo = 0;
-          updateHUD();
-        }
-
-        removeDigit(d);
-      }
-    });
-
-    if(!ended && timeLeft > 0){
-      requestAnimationFrame(loop);
-    }
   }
 
   function quitGame(){
@@ -663,6 +970,3 @@ function saveHighScore(){
 
   updateHUD();
 </script>
-
-</body>
-</html>

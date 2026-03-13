@@ -253,6 +253,7 @@
 
     <div class="controls">
       <button class="btn-quick" onclick="quickPlay()">Quick Play</button>
+      <button class="btn-quick" onclick="openLeaderboard()">Leaderboard</button>
       <button class="btn-logout" onclick="logout()">Logout</button>
     </div>
   </header>
@@ -273,7 +274,7 @@
       <span class="bestTag" id="best2">🏆 BEST</span>
       <span class="tag">Easy</span>
       <div class="gIcon" style="background:rgba(144,190,109,.35)">🔢</div>
-      <h3 class="title">Digit Drop Frenzy</h3>
+      <h3 class="title">Place Value Panic</h3>
       <p class="desc">Click the correct place value digit.</p>
       <p class="scoreLine">High Score: <span id="hs2">0</span></p>
       <button class="play" style="background:var(--c2)" onclick="goToGame('Games/Game2.html')">Play</button>
@@ -291,9 +292,9 @@
 
     <section class="card" id="card4">
       <span class="bestTag" id="best4">🏆 BEST</span>
-      <span class="tag">Medium</span>
+      <span class="tag">Hard</span>
       <div class="gIcon" style="background:rgba(251,133,0,.25)">🛒</div>
-      <h3 class="title">Smart Shopper Sprint</h3>
+      <h3 class="title">Perimeter Panic</h3>
       <p class="desc">Choose if the item is a need or a want.</p>
       <p class="scoreLine">High Score: <span id="hs4">0</span></p>
       <button class="play" style="background:var(--c4); color:#fff" onclick="goToGame('Games/Game4.html')">Play</button>
@@ -351,6 +352,9 @@
     function quickPlay(){
       goToGame('Games/Game1.html');
     }
+    function openLeaderboard(){
+     window.location.href = 'leaderboard.html';
+    }
 
     function logout(){
       sessionStorage.removeItem('mq_profile');
@@ -403,7 +407,9 @@
 
     window.goToGame = goToGame;
     window.quickPlay = quickPlay;
+    window.openLeaderboard = openLeaderboard;
     window.logout = logout;
+
   }
 </script>
 

@@ -4,259 +4,405 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MathQuest Arcade • Home</title>
+  
   <style>
-    :root{
-      --c1:#FFB703;
-      --c2:#8ECAE6;
-      --c3:#90BE6D;
-      --c4:#FB8500;
-      --c5:#F28482;
-      --ink:#1b1b1b;
-      --muted:#555;
-      --card:#ffffff;
-      --shadow: 0 10px 26px rgba(0,0,0,.08);
-    }
+  :root{
+    --c1:#FFB703;
+    --c2:#8ECAE6;
+    --c3:#90BE6D;
+    --c4:#FB8500;
+    --c5:#F28482;
+    --ink:#1b1b1b;
+    --muted:#555;
+    --card:#ffffff;
+    --shadow:0 10px 26px rgba(0,0,0,.08);
+  }
 
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
+  *{
+    box-sizing:border-box;
+  }
 
-    body{
-      margin:0;
-      font-family: ui-rounded, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
-      color:var(--ink);
-      background:
-        radial-gradient(70vmax 70vmax at 100% 0%, var(--c2) 0 26%, transparent 27%),
-        radial-gradient(65vmax 65vmax at 0% 100%, var(--c3) 0 22%, transparent 23%),
-        radial-gradient(55vmax 55vmax at 10% 15%, #ffd7a3 0 18%, transparent 19%),
-        linear-gradient(180deg, #fff, #fff);
-      padding:18px;
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-      min-height:100vh;
-    }
+  html,body{
+    height:100%;
+  }
 
-    header{
-      background:var(--card);
-      border-radius:20px;
-      box-shadow:var(--shadow);
-      padding:12px 14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
+  body{
+    margin:0;
+    font-family:ui-rounded, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(70vmax 70vmax at 100% 0%, var(--c2) 0 26%, transparent 27%),
+      radial-gradient(65vmax 65vmax at 0% 100%, var(--c3) 0 22%, transparent 23%),
+      radial-gradient(55vmax 55vmax at 10% 15%, #ffd7a3 0 18%, transparent 19%),
+      linear-gradient(180deg, #fff, #fff);
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    min-height:100vh;
+  }
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:220px;
-    }
+  header,
+  main,
+  footer{
+    width:min(1400px, 100%);
+    margin:0 auto;
+  }
 
-    .logo{
-      width:44px;
-      height:44px;
-      border-radius:14px;
-      display:grid;
-      place-items:center;
-      background:var(--c4);
-      color:#fff;
-      font-weight:900;
-      box-shadow:0 8px 18px rgba(251,133,0,.25);
-      user-select:none;
+  /* HEADER */
+  header{
+    background:var(--card);
+    border-radius:24px;
+    box-shadow:var(--shadow);
+    padding:16px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+    flex-wrap:wrap;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    min-width:0;
+    flex:1;
+  }
+
+  .logo-wrap{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+
+  .logo-wrap img{
+    height:72px;
+    width:auto;
+    display:block;
+    object-fit:contain;
+  }
+
+  .brand-text{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    min-width:0;
+  }
+
+  .hello{
+    font-weight:1000;
+    font-size:28px;
+    line-height:1.1;
+    color:var(--ink);
+  }
+
+  .subline{
+    margin-top:6px;
+    font-size:15px;
+    color:var(--muted);
+    line-height:1.3;
+  }
+
+  .controls{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+  }
+
+  button{
+    border:none;
+    border-radius:16px;
+    padding:12px 16px;
+    font-weight:900;
+    cursor:pointer;
+    font-size:15px;
+    transition:transform .15s ease, opacity .15s ease, background .2s ease;
+  }
+
+  button:hover{
+    transform:translateY(-1px);
+  }
+
+  button:active{
+    transform:scale(.98);
+  }
+
+  .btn-quick{
+    background:var(--c2);
+    color:#0b2a33;
+  }
+
+  .btn-quick:hover{
+    background:#79bddc;
+  }
+
+  .btn-logout{
+    background:#f1f1f1;
+    color:#222;
+  }
+
+  .btn-logout:hover{
+    background:#e6e6e6;
+  }
+
+  /* MAIN GRID */
+  main{
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+    gap:20px;
+    align-items:stretch;
+  }
+
+  .card{
+    background:var(--card);
+    border-radius:24px;
+    box-shadow:var(--shadow);
+    padding:20px;
+    min-height:280px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .card::after{
+    content:"";
+    position:absolute;
+    inset:auto -40px -40px auto;
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    background:rgba(0,0,0,.03);
+    pointer-events:none;
+  }
+
+  .tag{
+    position:absolute;
+    top:16px;
+    right:16px;
+    padding:7px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:1000;
+    background:#f6f6f6;
+    color:#333;
+    user-select:none;
+  }
+
+  .bestTag{
+    position:absolute;
+    top:16px;
+    left:16px;
+    padding:7px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:1000;
+    background:linear-gradient(90deg, #ffd54f, #ffb703);
+    color:#4a3200;
+    box-shadow:0 6px 12px rgba(255,183,3,.28);
+    user-select:none;
+    display:none;
+  }
+
+  .bestTag.show{
+    display:inline-block;
+  }
+
+  .gIcon{
+    width:64px;
+    height:64px;
+    border-radius:18px;
+    display:grid;
+    place-items:center;
+    font-size:30px;
+    font-weight:1000;
+    user-select:none;
+    margin-top:8px;
+  }
+
+  .title{
+    margin:0;
+    font-size:26px;
+    font-weight:1000;
+    color:var(--ink);
+    line-height:1.15;
+  }
+
+  .desc{
+    margin:0;
+    color:var(--muted);
+    font-size:15px;
+    line-height:1.45;
+  }
+
+  .scoreLine{
+    margin:0;
+    font-size:15px;
+    font-weight:1000;
+    color:#333;
+    background:#f7f7f7;
+    padding:10px 12px;
+    border-radius:14px;
+    display:inline-block;
+  }
+
+  .play{
+    margin-top:auto;
+    border:none;
+    border-radius:16px;
+    padding:14px 16px;
+    font-weight:1000;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    font-size:17px;
+    width:100%;
+  }
+
+  .play:active{
+    transform:scale(.99);
+  }
+
+  .disabled{
+    opacity:.55;
+    pointer-events:none;
+  }
+
+  footer{
+    text-align:center;
+    color:#777;
+    font-size:13px;
+    padding:8px;
+  }
+
+  /* LARGE TABLET */
+  @media (max-width: 1100px){
+    main{
+      grid-template-columns:repeat(2, minmax(0, 1fr));
     }
 
     .hello{
-      font-weight:1000;
-      font-size:18px;
-      line-height:1.1;
+      font-size:24px;
+    }
+  }
+
+  /* TABLET */
+  @media (max-width: 768px){
+    body{
+      padding:16px;
     }
 
-    .subline{
-      margin-top:2px;
-      font-size:13px;
-      color:var(--muted);
+    header{
+      flex-direction:column;
+      align-items:flex-start;
+    }
+
+    .brand{
+      width:100%;
     }
 
     .controls{
-      display:flex;
-      gap:8px;
-      align-items:center;
+      width:100%;
+      justify-content:flex-start;
     }
 
-    button{
-      border:none;
-      border-radius:14px;
-      padding:10px 14px;
-      font-weight:900;
-      cursor:pointer;
-      font-size:14px;
-    }
-
-    .btn-quick{
-      background:var(--c2);
-      color:#0b2a33;
-    }
-
-    .btn-logout{
-      background:#f1f1f1;
-      color:#222;
+    .logo-wrap img{
+      height:62px;
     }
 
     main{
-      display:grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap:12px;
+      grid-template-columns:1fr;
     }
 
     .card{
-      background:var(--card);
-      border-radius:20px;
-      box-shadow:var(--shadow);
+      min-height:250px;
+    }
+  }
+
+  /* MOBILE */
+  @media (max-width: 520px){
+    body{
       padding:14px;
-      min-height:190px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      position:relative;
-      overflow:hidden;
     }
 
-    .tag{
-      position:absolute;
-      top:12px;
-      right:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:1000;
-      background:#f6f6f6;
-      color:#333;
-      user-select:none;
+    header{
+      padding:14px;
+      border-radius:18px;
     }
 
-    .bestTag{
-      position:absolute;
-      top:12px;
-      left:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:1000;
-      background:linear-gradient(90deg, #ffd54f, #ffb703);
-      color:#4a3200;
-      box-shadow:0 6px 12px rgba(255,183,3,.28);
-      user-select:none;
-      display:none;
+    .brand{
+      align-items:flex-start;
+      gap:12px;
     }
 
-    .bestTag.show{
-      display:inline-block;
+    .logo-wrap img{
+      height:54px;
     }
 
-    .gIcon{
-      width:48px;
-      height:48px;
-      border-radius:16px;
+    .hello{
+      font-size:21px;
+    }
+
+    .subline{
+      font-size:13px;
+    }
+
+    .controls{
+      width:100%;
       display:grid;
-      place-items:center;
-      font-size:22px;
-      font-weight:1000;
-      user-select:none;
+      grid-template-columns:1fr;
+      gap:8px;
+    }
+
+    .controls button{
+      width:100%;
+    }
+
+    .card{
+      padding:18px;
+      min-height:235px;
     }
 
     .title{
-      margin:0;
-      font-size:18px;
-      font-weight:1000;
+      font-size:22px;
     }
 
-    .desc{
-      margin:0;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.3;
+    .gIcon{
+      width:56px;
+      height:56px;
+      font-size:26px;
     }
+  }
+</style>
 
-    .scoreLine{
-      margin:0;
-      font-size:13px;
-      font-weight:1000;
-      color:#333;
-      background:#f7f7f7;
-      padding:8px 10px;
-      border-radius:12px;
-      display:inline-block;
-    }
-
-    .play{
-      margin-top:auto;
-      border:none;
-      border-radius:16px;
-      padding:11px 12px;
-      font-weight:1000;
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      font-size:15px;
-    }
-
-    .play:active{
-      transform:scale(.99);
-    }
-
-    .disabled{
-      opacity:.55;
-      pointer-events:none;
-    }
-
-    footer{
-      text-align:center;
-      color:#777;
-      font-size:12px;
-      padding:6px;
-    }
-
-    @media (max-width: 520px){
-      .stats{
-        grid-template-columns:1fr;
-      }
-
-      .starWrap{
-        justify-content:flex-start;
-      }
-
-      header{
-        flex-direction:column;
-        align-items:stretch;
-      }
-
-      .controls button{
-        flex:1;
-      }
-    }
-  </style>
 </head>
 <body>
 
-  <header>
-    <div class="brand">
-      <div class="logo">MQ</div>
-      <div>
-        <div class="hello" id="hello">Hello!</div>
-        <div class="subline" id="subline">Choose a game to start.</div>
-      </div>
+<header>
+  <div class="brand">
+    <div class="logo-wrap">
+      <img src="assets/Mathieve_logo.png" alt="Mathiv Logo" />
     </div>
 
-    <div class="controls">
-      <button class="btn-quick" onclick="quickPlay()">Quick Play</button>
-      <button class="btn-quick" onclick="openLeaderboard()">Leaderboard</button>
-      <button class="btn-logout" onclick="logout()">Logout</button>
+    <div class="brand-text">
+      <div class="hello" id="hello">Hello!</div>
+      <div class="subline" id="subline">Choose a game to start.</div>
     </div>
-  </header>
+  </div>
+
+  <div class="controls">
+    <button class="btn-quick" onclick="quickPlay()">Quick Play</button>
+    <button class="btn-quick" onclick="openLeaderboard()">Leaderboard</button>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+  </div>
+</header>
 
 
   <main aria-label="Mini games">

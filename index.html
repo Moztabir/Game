@@ -1,196 +1,316 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mathive</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mathiv Login</title>
   <style>
-    :root{
-      /* soft, friendly colours */
-      --c1:#FFB703;  /* mango */
-      --c2:#8ECAE6;  /* sky */
-      --c3:#90BE6D;  /* green */
-      --c4:#FB8500;  /* orange */
-      --text:#1b1b1b; --muted:#555; --card:#ffffff;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family: ui-rounded, system-ui, "Segoe UI", Roboto, Arial, sans-serif; color:var(--text);
-      /* simple colourful background, but calm */
-      background:
-        radial-gradient(80vmax 80vmax at 0% 0%, var(--c2) 0 30%, transparent 31%),
-        radial-gradient(60vmax 60vmax at 100% 0%, var(--c3) 0 28%, transparent 29%),
-        radial-gradient(50vmax 50vmax at 100% 100%, var(--c1) 0 26%, transparent 27%),
-        radial-gradient(70vmax 70vmax at 0% 100%, #ffd7a3 0 22%, transparent 23%),
-        linear-gradient(180deg, #fff, #fff);
-      display:grid; place-items:center; padding:20px;
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+      background: #f4f4f4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      padding: 20px;
     }
-    .card{
-      width:min(92vw, 440px);
-      background:var(--card);
-      border-radius:20px;
-      box-shadow:0 10px 30px rgba(0,0,0,.08);
-      padding:28px 24px 22px;
+
+    /* Background circles */
+    body::before,
+    body::after,
+    .bg1,
+    .bg2 {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(10px);
+      z-index: 0;
     }
-    .brand{
-      display:flex; align-items:center; gap:12px; justify-content:center; margin-bottom:6px;
+
+    body::before {
+      width: 420px;
+      height: 420px;
+      background: #8fc6df;
+      top: -180px;
+      left: -180px;
     }
-    .logo{
-      width:56px; height:56px; border-radius:16px; display:grid; place-items:center;
-      background: var(--c4); color:#fff; font-weight:900; font-size:20px;
-      box-shadow:0 6px 16px rgba(251,133,0,.3);
+
+    body::after {
+      width: 320px;
+      height: 320px;
+      background: #97c374;
+      top: -110px;
+      right: -110px;
     }
-    h1{margin:6px 0 2px; text-align:center; font-size:28px}
-    p.sub{margin:0 0 18px; text-align:center; color:var(--muted)}
-    label{display:block; font-weight:700; font-size:14px; margin:12px 0 6px}
-    input{
-      width:100%; padding:14px 16px; font-size:18px; border-radius:14px;
-      border:2px solid #e8e8e8; outline:none; background:#fff;
+
+    .bg1 {
+      width: 320px;
+      height: 320px;
+      background: #edcc9a;
+      bottom: -130px;
+      left: -130px;
     }
-    input:focus{border-color:var(--c2); box-shadow:0 0 0 3px rgba(142,202,230,.3)}
-    .actions{display:flex; gap:10px; margin-top:18px}
-    button{
-      flex:1; padding:12px 16px; border:none; border-radius:14px; font-weight:800; font-size:16px; cursor:pointer;
+
+    .bg2 {
+      width: 300px;
+      height: 300px;
+      background: #f7b500;
+      bottom: -120px;
+      right: -120px;
     }
-    .clear{background:#f0f0f0; color:#333}
-    .clear:hover{background:#e8e8e8}
-    .play{background:var(--c3); color:#fff}
-    .play:hover{filter:brightness(0.95)}
-    .error{color:#d12a2a; margin-top:10px; font-size:14px; display:none}
-    .footer{margin-top:16px; text-align:center; color:#777; font-size:12px}
+
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 430px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 28px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+      padding: 28px;
+      backdrop-filter: blur(12px);
+    }
+
+    .logo-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 26px;
+    }
+
+    .logo-wrap img {
+      width: 100%;
+      max-width: 260px; /* make png bigger */
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .login-box {
+      border-top: 1px solid #ececec;
+      padding-top: 24px;
+    }
+
+    .login-box h2 {
+      text-align: center;
+      font-size: 1.8rem;
+      color: #111;
+      margin-bottom: 8px;
+    }
+
+    .login-box p {
+      text-align: center;
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #222;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 14px 15px;
+      border: 1px solid #d8d8d8;
+      border-radius: 14px;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.2s ease;
+    }
+
+    .field input:focus {
+      border-color: #8fc165;
+      box-shadow: 0 0 0 4px rgba(143, 193, 101, 0.15);
+    }
+
+    .hint {
+      margin-top: 6px;
+      font-size: 0.78rem;
+      color: #888;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .buttons button {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .clear-btn {
+      background: #ececec;
+      color: #222;
+    }
+
+    .clear-btn:hover {
+      background: #e0e0e0;
+    }
+
+    .play-btn {
+      background: #8fc165;
+      color: #fff;
+    }
+
+    .play-btn:hover {
+      background: #7db252;
+      transform: translateY(-1px);
+    }
+
+    .message {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+      min-height: 20px;
+    }
+
+    .message.error {
+      color: #d13a3a;
+    }
+
+    .message.success {
+      color: #3a8f3a;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 22px;
+      }
+
+      .logo-wrap img {
+        max-width: 220px;
+      }
+
+      .buttons {
+        flex-direction: column;
+      }
+    }
   </style>
 </head>
 <body>
-  <main class="card" role="main">
-    <div class="brand">
-      <div class="logo">M</div>
-      <div style="font-weight:900; letter-spacing:.3px;">Mathive</div>
+  <div class="bg1"></div>
+  <div class="bg2"></div>
+
+  <div class="card">
+    <div class="logo-wrap">
+      <img src="assets/Mathieve_logo.png" alt="Mathiv Logo" />
     </div>
-    <h1>Welcome!</h1>
-    <p class="sub">Type your name and Class code.</p>
 
-    <form id="loginForm" novalidate>
-      <label for="studentName">Your name</label>
-      <input id="studentName" type="text" placeholder="e.g., Alex" required autofocus />
+    <div class="login-box">
+      <h2>Welcome</h2>
+      <p>Type your first name and class code to begin.</p>
 
-      <label for="classCode">Class code <span style="font-weight:500; color:var(--muted)">(optional)</span></label>
-      <input id="classCode" type="hidden" placeholder="3F92">
-
-      <div class="actions">
-        <button type="button" class="clear" id="clearBtn">Clear</button>
-        <button type="submit" class="play">Play</button>
+      <div class="field">
+        <label for="playerName">Your first name</label>
+        <input type="text" id="playerName" placeholder="e.g. Alex" />
       </div>
 
-      <div id="error" class="error">Please enter your name.</div>
-    </form>
+      <div class="field">
+        <label for="classCode">Class code</label>
+        <input type="text" id="classCode" placeholder="e.g. 3F92" />
+        <div class="hint">Use first name only. No spaces or special symbols.</div>
+      </div>
 
-    <div class="footer">Enter your name to play and save scores</div>
-  </main>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase.js"></script>
+      <div class="buttons">
+        <button class="clear-btn" type="button" id="clearBtn">Clear</button>
+        <button class="play-btn" type="button" id="playBtn">Play</button>
+      </div>
+
+      <div class="message" id="message"></div>
+    </div>
+  </div>
 
   <script>
-  const form = document.getElementById('loginForm');
-  const nameEl = document.getElementById('studentName');
-  const codeEl = document.getElementById('classCode');
-  const err = document.getElementById('error');
+    const playerNameInput = document.getElementById("playerName");
+    const classCodeInput = document.getElementById("classCode");
+    const playBtn = document.getElementById("playBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const message = document.getElementById("message");
 
-  window.addEventListener('load', ()=> nameEl.focus());
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = "message " + type;
+    }
 
-  async function createOrLoadPlayer(name, classCode){
-    let playerId = localStorage.getItem('mq_player_id');
+    function validateLogin() {
+      const name = playerNameInput.value.trim();
+      const classCode = classCodeInput.value.trim();
 
-    if(playerId){
-      const { data: existingPlayer, error: lookupError } = await supabaseClient
-        .from('players')
-        .select('id')
-        .eq('id', playerId)
-        .maybeSingle();
+      const validName = /^[A-Za-z]+$/.test(name);
+      const validCode = classCode === "3F92";
 
-      if(existingPlayer && !lookupError){
-        return playerId;
+      if (!name) {
+        showMessage("Please enter your first name.", "error");
+        return;
       }
+
+      if (!validName) {
+        showMessage("Use first name only with letters only.", "error");
+        return;
+      }
+
+      if (!classCode) {
+        showMessage("Please enter the class code.", "error");
+        return;
+      }
+
+      if (!validCode) {
+        showMessage('Class code must be "3F92".', "error");
+        return;
+      }
+
+      localStorage.setItem("mathivPlayerName", name);
+      localStorage.setItem("mathivClassCode", classCode);
+
+      showMessage("Login successful. Redirecting...", "success");
+
+      setTimeout(() => {
+        window.location.href = "home.html"; 
+      }, 800);
     }
 
-    const newPlayerId = crypto.randomUUID();
+    playBtn.addEventListener("click", validateLogin);
 
-    const { data, error } = await supabaseClient
-      .from('players')
-      .insert([
-        {
-          id: newPlayerId,
-          full_name: name,
-          nickname: name,
-          class_code: classCode || 'No Class',
-          school_code: 'Mathive'
-        }
-      ])
-      .select()
-      .single();
-
-    if(error){
-      console.error('Player creation failed:', error);
-      throw error;
-    }
-
-    localStorage.setItem('mq_player_id', data.id);
-    return data.id;
-  }
-
-  form.addEventListener('submit', async (e)=>{
-  e.preventDefault();
-
-  const name = nameEl.value.trim();
-  const classCode = codeEl.value.trim().toUpperCase();
-
-  const nameRegex = /^[A-Za-z]{2,15}$/;
-
-  if(!nameRegex.test(name)){
-    err.textContent = "Enter a first name using letters only.";
-    err.style.display = "block";
-    nameEl.focus();
-    return;
-  }
-
-  if(classCode !== "3F92"){
-    err.textContent = "Invalid class code.";
-    err.style.display = "block";
-    codeEl.focus();
-    return;
-  }
-
-  err.style.display = "none";
-
-  try{
-    await createOrLoadPlayer(name, classCode);
-
-    const data = JSON.stringify({
-      name,
-      code: classCode,
-      ts: Date.now()
+    clearBtn.addEventListener("click", () => {
+      playerNameInput.value = "";
+      classCodeInput.value = "";
+      showMessage("", "");
+      playerNameInput.focus();
     });
 
-    sessionStorage.setItem('mq_profile', data);
-    localStorage.setItem('mq_profile', data);
+    playerNameInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") validateLogin();
+    });
 
-    window.location.href = 'home.html';
-
-  }catch(error){
-    err.textContent = "Could not create player.";
-    err.style.display = "block";
-    console.error(error);
-  }
-});
-
-  document.getElementById('clearBtn').addEventListener('click', ()=>{
-    nameEl.value = '';
-    codeEl.value = '';
-    err.style.display = 'none';
-    err.textContent = 'Please enter your name.';
-    nameEl.focus();
-  });
-</script>
-
+    classCodeInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") validateLogin();
+    });
+  </script>
 </body>
 </html>

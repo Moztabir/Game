@@ -349,132 +349,222 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase.js"></script>
+<script src="js/supabase.js"></script>
 
-  <script>
-  const playerNameInput = document.getElementById("playerName");
-  const classCodeInput = document.getElementById("classCode");
-  const playBtn = document.getElementById("playBtn");
-  const clearBtn = document.getElementById("clearBtn");
-  const message = document.getElementById("message");
-
-  function showMessage(text, type) {
-    message.textContent = text;
-    message.className = "message " + type;
+<script>
+  function getDisplayName(player){
+    if(player?.nickname && player.nickname.trim()) return player.nickname.trim();
+    if(player?.full_name && player.full_name.trim()) return player.full_name.trim();
+    return "Unknown Player";
   }
 
-  async function registerPlayer(name, classCode) {
-    const { data: existingPlayer, error: findError } = await supabaseClient
-      .from("players")
-      .select("id, full_name, class_code")
-      .eq("full_name", name)
-      .eq("class_code", classCode)
-      .maybeSingle();
+  function groupBestScores(rows){
+    const players = {};
 
-    if (findError) {
-      console.error("Player lookup failed:", findError);
-      throw new Error(findError.message);
-    }
+    rows.forEach(row => {
+      const player = row.players;
+      if(!player) return;
 
-    if (existingPlayer) {
-      localStorage.setItem("mq_player_id", existingPlayer.id);
-      return existingPlayer;
-    }
+      const id = row.player_id;
 
-    const { data: newPlayer, error: insertError } = await supabaseClient
-      .from("players")
-      .insert([
-        {
-          full_name: name,
-          class_code: classCode
-        }
-      ])
-      .select("id, full_name, class_code")
-      .single();
+      if(!players[id]){
+        players[id] = {
+          player_id: id,
+          full_name: player.full_name || "",
+          nickname: player.nickname || "",
+          class_code: player.class_code || "—",
+          game1: 0,
+          game2: 0,
+          game3: 0,
+          game4: 0,
+          game5: 0,
+          total: 0
+        };
+      }
 
-    if (insertError) {
-      console.error("Player creation failed:", insertError);
-      throw new Error(insertError.message);
-    }
+      const score = Number(row.score) || 0;
+      const game = Number(row.game_number);
 
-    localStorage.setItem("mq_player_id", newPlayer.id);
-    return newPlayer;
+      if(game === 1) players[id].game1 = Math.max(players[id].game1, score);
+      if(game === 2) players[id].game2 = Math.max(players[id].game2, score);
+      if(game === 3) players[id].game3 = Math.max(players[id].game3, score);
+      if(game === 4) players[id].game4 = Math.max(players[id].game4, score);
+      if(game === 5) players[id].game5 = Math.max(players[id].game5, score);
+    });
+
+    const list = Object.values(players).map(p => {
+      p.total = p.game1 + p.game2 + p.game3 + p.game4 + p.game5;
+      return p;
+    });
+
+    list.sort((a, b) => {
+      if(b.total !== a.total) return b.total - a.total;
+      return getDisplayName(a).localeCompare(getDisplayName(b));
+    });
+
+    list.forEach((p, index) => {
+      p.rank = index + 1;
+    });
+
+    return list;
   }
 
-  async function validateLogin() {
-    const name = playerNameInput.value.trim();
-    const classCode = classCodeInput.value.trim();
+  function renderPodium(players){
+    const podium = document.getElementById("podiumSection");
 
-    const validName = /^[A-Za-z]+$/.test(name);
-    const validCode = classCode === "3F92";
-
-    if (!name) {
-      showMessage("Please enter your first name.", "error");
+    if(!players.length){
+      podium.innerHTML = `<div class="empty" style="grid-column:1/-1;">No scores yet.</div>`;
       return;
     }
 
-    if (!validName) {
-      showMessage("Use first name only with letters only.", "error");
+    const second = players[1];
+    const first = players[0];
+    const third = players[2];
+
+    const cards = [];
+
+    if(second){
+      cards.push(`
+        <div class="podiumCard second">
+          <div class="rankBadge rank2">2</div>
+          <div class="playerName">${getDisplayName(second)}</div>
+          <div class="playerClass">Class ${second.class_code}</div>
+          <div class="totalScore">${second.total}</div>
+          <div class="totalLabel">Total Score</div>
+        </div>
+      `);
+    } else {
+      cards.push(`<div></div>`);
+    }
+
+    if(first){
+      cards.push(`
+        <div class="podiumCard first">
+          <div class="rankBadge rank1">1</div>
+          <div class="playerName">${getDisplayName(first)}</div>
+          <div class="playerClass">Class ${first.class_code}</div>
+          <div class="totalScore">${first.total}</div>
+          <div class="totalLabel">Total Score</div>
+        </div>
+      `);
+    } else {
+      cards.push(`<div></div>`);
+    }
+
+    if(third){
+      cards.push(`
+        <div class="podiumCard third">
+          <div class="rankBadge rank3">3</div>
+          <div class="playerName">${getDisplayName(third)}</div>
+          <div class="playerClass">Class ${third.class_code}</div>
+          <div class="totalScore">${third.total}</div>
+          <div class="totalLabel">Total Score</div>
+        </div>
+      `);
+    } else {
+      cards.push(`<div></div>`);
+    }
+
+    podium.innerHTML = cards.join("");
+  }
+
+  function renderTable(players){
+    const tbody = document.getElementById("leaderboardBody");
+
+    if(!players.length){
+      tbody.innerHTML = `<tr><td colspan="9">No scores yet.</td></tr>`;
       return;
     }
 
-    if (!classCode) {
-      showMessage("Please enter the class code.", "error");
+    tbody.innerHTML = players.map(player => `
+      <tr>
+        <td>#${player.rank}</td>
+        <td>${getDisplayName(player)}</td>
+        <td>${player.class_code}</td>
+        <td><strong>${player.total}</strong></td>
+        <td>${player.game1}</td>
+        <td>${player.game2}</td>
+        <td>${player.game3}</td>
+        <td>${player.game4}</td>
+        <td>${player.game5}</td>
+      </tr>
+    `).join("");
+  }
+
+  function renderMyRank(players){
+    const myId = localStorage.getItem("mq_player_id");
+    const box = document.getElementById("myRankBox");
+
+    if(!myId){
+      box.textContent = "Your rank: —";
       return;
     }
 
-    if (!validCode) {
-      showMessage('Class code must be "3F92".', "error");
+    const me = players.find(p => p.player_id === myId);
+
+    if(!me){
+      box.textContent = "Your rank: Not ranked yet";
       return;
     }
 
-    try {
-      playBtn.disabled = true;
-      showMessage("Signing you in...", "success");
+    box.textContent = `Your rank: #${me.rank} • Total ${me.total}`;
+  }
 
-      const player = await registerPlayer(name, classCode);
+  async function loadLeaderboard(){
+    const statusText = document.getElementById("statusText");
+    const tbody = document.getElementById("leaderboardBody");
+    const podium = document.getElementById("podiumSection");
 
-      const profile = {
-        id: player.id,
-        name: player.full_name,
-        code: player.class_code
-      };
+    statusText.textContent = "Loading leaderboard...";
+    tbody.innerHTML = `<tr><td colspan="9">Loading...</td></tr>`;
+    podium.innerHTML = "";
 
-      localStorage.setItem("mq_profile", JSON.stringify(profile));
-      localStorage.setItem("mathivPlayerName", name);
-      localStorage.setItem("mathivClassCode", classCode);
+    try{
+      if(typeof supabaseClient === "undefined"){
+        throw new Error("supabaseClient is not defined. Check script order and js/supabase.js path.");
+      }
 
-      showMessage("Login successful. Redirecting...", "success");
+      console.log("Leaderboard: supabaseClient loaded", supabaseClient);
 
-      setTimeout(() => {
-        window.location.href = "home.html";
-      }, 700);
-    } catch (err) {
-      console.error(err);
-      showMessage("Login failed: " + err.message, "error");
-      playBtn.disabled = false;
+      const { data, error } = await supabaseClient
+        .from("score_attempts")
+        .select(`
+          player_id,
+          game_number,
+          score,
+          submitted_at,
+          players (
+            full_name,
+            nickname,
+            class_code
+          )
+        `)
+        .order("submitted_at", { ascending: false });
+
+      console.log("Leaderboard raw data:", data);
+      console.log("Leaderboard raw error:", error);
+
+      if(error){
+        throw error;
+      }
+
+      const rankedPlayers = groupBestScores(data || []);
+
+      statusText.textContent = `Showing ${rankedPlayers.length} ranked player${rankedPlayers.length === 1 ? "" : "s"}.`;
+
+      renderPodium(rankedPlayers);
+      renderTable(rankedPlayers);
+      renderMyRank(rankedPlayers);
+    }catch(err){
+      console.error("Leaderboard failed:", err);
+      statusText.textContent = "Could not load leaderboard.";
+      tbody.innerHTML = `<tr><td colspan="9">Error: ${err.message}</td></tr>`;
+      podium.innerHTML = `<div class="empty" style="grid-column:1/-1;">Could not load podium.</div>`;
     }
   }
 
-  playBtn.addEventListener("click", validateLogin);
-
-  clearBtn.addEventListener("click", () => {
-    playerNameInput.value = "";
-    classCodeInput.value = "";
-    showMessage("", "");
-    playerNameInput.focus();
-  });
-
-  playerNameInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") validateLogin();
-  });
-
-  classCodeInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") validateLogin();
-  });
+  loadLeaderboard();
 </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase.js"></script>
 </body>
 </html>

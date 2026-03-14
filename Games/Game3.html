@@ -308,6 +308,9 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase.js"></script>
+
 
 <script>
 
@@ -614,22 +617,28 @@ function saveHighScore(){
     }, 1000);
   }
 
-  function endGame(){
-    if(ended) return;
+async function endGame(){
+  if(ended) return;
 
-    ended = true;
-    timeLeft = 0;
-    updateHUD();
+  ended = true;
+  timeLeft = 0;
+  updateHUD();
 
-    clearInterval(timerId);
-    timerId = null;
+  clearInterval(timerId);
+  timerId = null;
 
-    const highScore = saveHighScore();
+  const highScore = saveHighScore();
 
-    msgEl.textContent = `⏰ Time’s up! Final Score: ${score} | High Score: ${highScore}`;
-    msgEl.className = 'msg';
-    speedNote.textContent = 'Great job!';
+  try{
+    await submitScore(3, score);
+  }catch(error){
+    console.error("Submit score failed:", error);
   }
+
+  msgEl.textContent = `⏰ Time’s up! Final Score: ${score} | High Score: ${highScore}`;
+  msgEl.className = 'msg';
+  speedNote.textContent = 'Great job!';
+}
 
   function quitGame(){
     const leave = confirm("Quit the game and go back to Home?");

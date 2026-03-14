@@ -277,6 +277,8 @@ input:focus{
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase.js"></script>
 
 <script>
 
@@ -515,7 +517,7 @@ function startTimer(){
   }, 1000);
 }
 
-function endGame(){
+async function endGame(){
   if(ended) return;
 
   ended = true;
@@ -529,6 +531,13 @@ function endGame(){
   submitBtn.disabled = true;
 
   const highScore = saveHighScore();
+
+  try{
+    await submitScore(5, score);
+  }catch(error){
+    console.error("Submit score failed:", error);
+  }
+
   msgEl.textContent = `⏰ Time’s up! Final Score: ${score} | High Score: ${highScore}`;
   msgEl.className = 'msg';
 }

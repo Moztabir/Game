@@ -419,9 +419,9 @@
     <section class="card" id="card2">
       <span class="bestTag" id="best2">🏆 BEST</span>
       <span class="tag">Easy</span>
-      <div class="gIcon" style="background:rgba(144,190,109,.35)">🔢</div>
-      <h3 class="title">Place Value Panic</h3>
-      <p class="desc">Click the correct place value digit.</p>
+      <div class="gIcon" style="background:rgba(144,190,109,.35)">📊</div>
+      <h3 class="title">Bar Graph Battle</h3>
+      <p class="desc">Read the graph and answer fast</p>
       <p class="scoreLine">High Score: <span id="hs2">0</span></p>
       <button class="play" style="background:var(--c2)" onclick="goToGame('Games/Game2.html')">Play</button>
     </section>
@@ -441,7 +441,7 @@
       <span class="tag">Hard</span>
       <div class="gIcon" style="background:rgba(251,133,0,.25)">🛒</div>
       <h3 class="title">Perimeter Panic</h3>
-      <p class="desc">Choose if the item is a need or a want.</p>
+      <p class="desc">Solve the perimeter before time runs out</p>
       <p class="scoreLine">High Score: <span id="hs4">0</span></p>
       <button class="play" style="background:var(--c4); color:#fff" onclick="goToGame('Games/Game4.html')">Play</button>
     </section>
@@ -468,8 +468,6 @@
   </main>
 
   <footer>© <span id="year"></span> Mathhive</footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
   function readProfile(){
@@ -503,9 +501,12 @@
     }
 
     function logout(){
-      sessionStorage.removeItem('mq_profile');
-      window.location.href = 'index.html';
-    }
+  sessionStorage.removeItem('mq_profile');
+  localStorage.removeItem('mq_player_id');
+  localStorage.removeItem('mathivPlayerName');
+  localStorage.removeItem('mathivClassCode');
+  window.location.href = 'index.html';
+}
 
     function loadHighScores(){
       const scores = {

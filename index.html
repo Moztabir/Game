@@ -246,71 +246,138 @@
     </div>
   </div>
 
-  <script>
-    const playerNameInput = document.getElementById("playerName");
-    const classCodeInput = document.getElementById("classCode");
-    const playBtn = document.getElementById("playBtn");
-    const clearBtn = document.getElementById("clearBtn");
-    const message = document.getElementById("message");
 
-    function showMessage(text, type) {
-      message.textContent = text;
-      message.className = "message " + type;
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+
+<script>
+  const playerNameInput = document.getElementById("playerName");
+  const classCodeInput = document.getElementById("classCode");
+  const playBtn = document.getElementById("playBtn");
+  const clearBtn = document.getElementById("clearBtn");
+  const message = document.getElementById("message");
+
+  function showMessage(text, type) {
+    message.textContent = text;
+    message.className = "message " + type;
+  }
+
+  async function getOrCreatePlayer(name, classCode) {
+    const normalizedName = name.trim();
+    const normalizedCode = classCode.trim().toUpperCase();
+
+    const { data: existingPlayers, error: lookupError } = await supabaseClient
+      .from("players")
+      .select("id, full_name, nickname, class_code")
+      .eq("class_code", normalizedCode)
+      .or(`full_name.eq.${normalizedName},nickname.eq.${normalizedName}`)
+      .limit(1);
+
+    if (lookupError) {
+      console.error("Player lookup failed:", lookupError);
+      throw lookupError;
     }
 
-    function validateLogin() {
-      const name = playerNameInput.value.trim();
-      const classCode = classCodeInput.value.trim();
+    if (existingPlayers && existingPlayers.length > 0) {
+      const existingPlayer = existingPlayers[0];
+      localStorage.setItem("mq_player_id", existingPlayer.id);
+      return existingPlayer.id;
+    }
 
-      const validName = /^[A-Za-z]+$/.test(name);
-      const validCode = classCode === "3F92";
+    const newPlayerId = crypto.randomUUID();
 
-      if (!name) {
-        showMessage("Please enter your first name.", "error");
-        return;
-      }
+    const { data: newPlayer, error: createError } = await supabaseClient
+      .from("players")
+      .insert([
+        {
+          id: newPlayerId,
+          full_name: normalizedName,
+          nickname: normalizedName,
+          class_code: normalizedCode,
+          school_code: "Mathiv"
+        }
+      ])
+      .select()
+      .single();
 
-      if (!validName) {
-        showMessage("Use first name only with letters only.", "error");
-        return;
-      }
+    if (createError) {
+      console.error("Player creation failed:", createError);
+      throw createError;
+    }
 
-      if (!classCode) {
-        showMessage("Please enter the class code.", "error");
-        return;
-      }
+    localStorage.setItem("mq_player_id", newPlayer.id);
+    return newPlayer.id;
+  }
 
-      if (!validCode) {
-        showMessage('Class code must be "3F92".', "error");
-        return;
-      }
+  async function validateLogin() {
+    const name = playerNameInput.value.trim();
+    const classCode = classCodeInput.value.trim().toUpperCase();
 
+    const validName = /^[A-Za-z]+$/.test(name);
+    const validCode = classCode === "3F92";
+
+    if (!name) {
+      showMessage("Please enter your first name.", "error");
+      return;
+    }
+
+    if (!validName) {
+      showMessage("Use first name only with letters only.", "error");
+      return;
+    }
+
+    if (!classCode) {
+      showMessage("Please enter the class code.", "error");
+      return;
+    }
+
+    if (!validCode) {
+      showMessage('Class code must be "3F92".', "error");
+      return;
+    }
+
+    try {
+      await getOrCreatePlayer(name, classCode);
+
+      const profile = JSON.stringify({
+        name,
+        code: classCode,
+        ts: Date.now()
+      });
+
+      sessionStorage.setItem("mq_profile", profile);
+      localStorage.setItem("mq_profile", profile);
       localStorage.setItem("mathivPlayerName", name);
       localStorage.setItem("mathivClassCode", classCode);
 
       showMessage("Login successful. Redirecting...", "success");
 
       setTimeout(() => {
-        window.location.href = "home.html"; 
+        window.location.href = "home.html";
       }, 800);
+    } catch (error) {
+      console.error(error);
+      showMessage("Could not connect to player database.", "error");
     }
+  }
 
-    playBtn.addEventListener("click", validateLogin);
+  playBtn.addEventListener("click", validateLogin);
 
-    clearBtn.addEventListener("click", () => {
-      playerNameInput.value = "";
-      classCodeInput.value = "";
-      showMessage("", "");
-      playerNameInput.focus();
-    });
+  clearBtn.addEventListener("click", () => {
+    playerNameInput.value = "";
+    classCodeInput.value = "";
+    showMessage("", "");
+    playerNameInput.focus();
+  });
 
-    playerNameInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") validateLogin();
-    });
+  playerNameInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") validateLogin();
+  });
 
-    classCodeInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") validateLogin();
-    });
-  </script>
+  classCodeInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") validateLogin();
+  });
+</script>
+
 </body>
 </html>

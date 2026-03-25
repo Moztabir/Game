@@ -31,6 +31,29 @@
       display:flex;
       flex-direction:column;
       gap:14px;
+      overflow-x:hidden;
+    }
+
+    .game-shell{
+      position:relative;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .game-shell.blur-active .game-content{
+      filter: blur(10px);
+      pointer-events:none;
+      user-select:none;
+    }
+
+    .game-content{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      flex:1;
+      transition:filter .25s ease;
     }
 
     .game-topbar{
@@ -120,33 +143,25 @@
       box-shadow:var(--shadow);
       padding:18px;
       text-align:center;
+      position:relative;
+      overflow:hidden;
     }
 
-    .difficulty{
+    .play-timer-wrap{
       display:flex;
       justify-content:center;
-      gap:8px;
-      margin:10px 0 6px;
-      flex-wrap:wrap;
+      margin-bottom:10px;
     }
 
-    .difficulty button{
-      border:none;
+    .play-timer{
+      background:#f6f6f6;
+      padding:10px 16px;
       border-radius:999px;
-      padding:8px 14px;
-      font-weight:900;
-      cursor:pointer;
-      background:#eee;
-    }
-
-    .difficulty .active{
-      background:var(--c2);
-      color:#0b2a33;
-    }
-
-    .difficulty .locked{
-      opacity:.5;
-      pointer-events:none;
+      font-size:16px;
+      font-weight:1000;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
     }
 
     .diceRow{
@@ -198,6 +213,11 @@
       cursor:pointer;
     }
 
+    .submit:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
     .msg{
       margin-top:12px;
       min-height:28px;
@@ -206,6 +226,155 @@
 
     .good{ color:#2d7a1f; }
     .bad{ color:#b51e1e; }
+
+    .bottom-actions{
+      margin-top:18px;
+      display:flex;
+      justify-content:center;
+    }
+
+    .intro-overlay{
+      position:fixed;
+      inset:0;
+      z-index:50;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background:rgba(255,255,255,.18);
+      backdrop-filter: blur(2px);
+    }
+
+    .intro-card{
+      width:min(92vw, 560px);
+      background:rgba(255,255,255,.96);
+      border-radius:24px;
+      box-shadow:0 16px 40px rgba(0,0,0,.15);
+      padding:24px 22px;
+      text-align:center;
+      border:1px solid rgba(0,0,0,.06);
+    }
+
+    .intro-kicker{
+      display:inline-block;
+      padding:7px 12px;
+      border-radius:999px;
+      background:#f2f2f2;
+      font-size:12px;
+      font-weight:1000;
+      letter-spacing:.04em;
+      margin-bottom:12px;
+    }
+
+    .intro-title{
+      font-size:32px;
+      line-height:1.1;
+      font-weight:1000;
+      margin:0 0 10px;
+    }
+
+    .intro-desc{
+      margin:0 auto 16px;
+      max-width:44ch;
+      font-size:15px;
+      line-height:1.55;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .intro-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin:16px 0 18px;
+      text-align:left;
+    }
+
+    .intro-box{
+      background:#f8f8f8;
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .intro-box h3{
+      margin:0 0 8px;
+      font-size:14px;
+      font-weight:1000;
+    }
+
+    .intro-box p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+      font-weight:700;
+    }
+
+    .intro-actions{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    .mode-btn{
+      border:none;
+      border-radius:999px;
+      padding:12px 18px;
+      font-size:15px;
+      font-weight:1000;
+      cursor:pointer;
+      min-width:140px;
+      transition:transform .12s ease, filter .12s ease;
+    }
+
+    .mode-btn:hover{
+      transform:translateY(-1px);
+      filter:brightness(.98);
+    }
+
+    .mode-easy{
+      background:var(--c2);
+      color:#10321b;
+    }
+
+    .mode-hard{
+      background:var(--c3);
+      color:#3d2a00;
+    }
+
+    .countdown-overlay{
+      position:absolute;
+      inset:0;
+      z-index:20;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:22px;
+      background:rgba(255,255,255,.78);
+      backdrop-filter: blur(2px);
+    }
+
+    .countdown-text{
+      font-size:72px;
+      font-weight:1000;
+      line-height:1;
+      color:#1b1b1b;
+      text-shadow:0 4px 18px rgba(0,0,0,.08);
+      animation:popIn .25s ease;
+    }
+
+    @keyframes popIn{
+      from{
+        transform:scale(.78);
+        opacity:0;
+      }
+      to{
+        transform:scale(1);
+        opacity:1;
+      }
+    }
 
     @media (max-width: 900px){
       .game-topbar{
@@ -225,315 +394,466 @@
         justify-content:center;
       }
     }
+
+    @media (max-width: 640px){
+      .intro-grid{
+        grid-template-columns:1fr;
+      }
+
+      .intro-title{
+        font-size:28px;
+      }
+
+      .countdown-text{
+        font-size:60px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <header class="game-topbar">
-    <div class="top-left">
-      <div class="game-title" id="gameTitle">🎲 Game 1: Dice Addition</div>
-      <div class="game-subtitle" id="gameSubtitle">Add the dice as fast as you can!</div>
+  <div class="game-shell blur-active" id="gameShell">
+    <div class="game-content">
+      <header class="game-topbar">
+        <div class="top-left">
+          <div class="game-title" id="gameTitle">🎲 Game 1: Dice Addition</div>
+          <div class="game-subtitle" id="gameSubtitle">Add the dice as fast as you can!</div>
+        </div>
+
+        <div class="top-center">
+          <div class="top-pill">⏱ Time: <span id="time">30</span>s</div>
+          <div class="top-pill">⭐ Score: <span id="score">0</span></div>
+          <div class="top-pill">🔥 Combo: <span id="combo">0</span></div>
+        </div>
+
+        <div class="top-right">
+          <button class="top-btn restart-btn" onclick="restartGame()">Restart</button>
+          <button class="top-btn quit-btn" onclick="quitGame()">Quit</button>
+        </div>
+      </header>
+
+      <main>
+        <section class="game" id="gameCard">
+          <div class="play-timer-wrap">
+            <div class="play-timer">⏱ Time Left: <span id="playTime">30</span>s</div>
+          </div>
+
+          <div class="diceRow" id="diceRow"></div>
+
+          <div class="answer">
+            <input id="answer" type="number" placeholder="?" disabled />
+            <button class="submit" onclick="checkAnswer()" disabled id="submitBtn">✔</button>
+          </div>
+
+          <div class="msg" id="msg"></div>
+
+          <div class="bottom-actions">
+            <button class="top-btn restart-btn" onclick="restartGame()">Restart</button>
+          </div>
+        </section>
+      </main>
     </div>
 
-    <div class="top-center">
-      <div class="top-pill">⏱ Time: <span id="time">30</span>s</div>
-      <div class="top-pill">⭐ Score: <span id="score">0</span></div>
-      <div class="top-pill">🔥 Combo: <span id="combo">0</span></div>
-    </div>
+    <div class="intro-overlay" id="introOverlay">
+      <div class="intro-card">
+        <div class="intro-kicker">MATHIVE • GAME INTRO</div>
+        <h1 class="intro-title">Dice Addition</h1>
+        <p class="intro-desc">
+          Add up the dice as fast as you can before time runs out. Pick a difficulty below to begin your run.
+        </p>
 
-    <div class="top-right">
-      <button class="top-btn restart-btn" onclick="restartGame()">Restart</button>
-      <button class="top-btn quit-btn" onclick="quitGame()">Quit</button>
-    </div>
-  </header>
+        <div class="intro-grid">
+          <div class="intro-box">
+            <h3>How to Play</h3>
+            <p>Look at the dice, add their total, type your answer, and press Enter or tap the check button.</p>
+          </div>
+          <div class="intro-box">
+            <h3>Points</h3>
+            <p>Correct answers give points, wrong answers remove points, and combo streaks can earn bonus score.</p>
+          </div>
+          <div class="intro-box">
+            <h3>Controls</h3>
+            <p>Use your keyboard to type the answer. Press Enter to submit quickly during fast rounds.</p>
+          </div>
+          <div class="intro-box">
+            <h3>Difficulty</h3>
+            <p>Easy uses 2 dice. Hard uses 3 dice. Choose one to start the countdown right away.</p>
+          </div>
+        </div>
 
-  <main>
-    <section class="game">
-      <p><strong>Choose a difficulty to start</strong></p>
-
-      <div class="difficulty">
-        <button id="easyBtn" onclick="setDifficulty('easy')">Easy (2 Dice)</button>
-        <button id="hardBtn" onclick="setDifficulty('hard')">Hard (3 Dice)</button>
+        <div class="intro-actions">
+          <button class="mode-btn mode-easy" onclick="beginFromIntro('easy')">Easy (2 Dice)</button>
+          <button class="mode-btn mode-hard" onclick="beginFromIntro('hard')">Hard (3 Dice)</button>
+        </div>
       </div>
+    </div>
+  </div>
 
-      <div class="diceRow" id="diceRow"></div>
-
-      <div class="answer">
-        <input id="answer" type="number" placeholder="?" disabled />
-        <button class="submit" onclick="checkAnswer()" disabled id="submitBtn">✔</button>
-      </div>
-
-      <div class="msg" id="msg"></div>
-    </section>
-  </main>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/supabase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js"></script>
 
-<script>
-  let audioStarted = false;
+  <script>
+    let audioStarted = false;
 
-  function initAudio(){
-    if(audioStarted) return;
-    audioStarted = true;
+    function initAudio(){
+      if(audioStarted) return;
+      audioStarted = true;
 
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if(!AudioContextClass) return;
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if(!AudioContextClass) return;
 
-    window.gameAudioCtx = new AudioContextClass();
-  }
-
-  function playTone(freq, duration, type = 'sine', volume = 0.05){
-    if(!window.gameAudioCtx) return;
-
-    const ctx = window.gameAudioCtx;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = type;
-    osc.frequency.value = freq;
-
-    gain.gain.value = volume;
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start();
-
-    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
-    osc.stop(ctx.currentTime + duration);
-  }
-
-  function playCorrectSound(){
-    playTone(660, 0.12, 'sine', 0.06);
-    setTimeout(() => playTone(880, 0.14, 'sine', 0.05), 80);
-  }
-
-  function playWrongSound(){
-    playTone(220, 0.18, 'square', 0.05);
-    setTimeout(() => playTone(180, 0.2, 'square', 0.04), 90);
-  }
-
-  function playHighScoreSound(){
-    playTone(523, 0.12, 'triangle', 0.06);
-    setTimeout(() => playTone(659, 0.12, 'triangle', 0.06), 100);
-    setTimeout(() => playTone(784, 0.2, 'triangle', 0.06), 200);
-  }
-
-  function celebrateHighScore(){
-    if(typeof confetti !== 'function') return;
-
-    confetti({
-      particleCount: 140,
-      spread: 90,
-      origin: { y: 0.6 }
-    });
-
-    setTimeout(() => {
-      confetti({
-        particleCount: 80,
-        angle: 60,
-        spread: 70,
-        origin: { x: 0.1, y: 0.7 }
-      });
-
-      confetti({
-        particleCount: 80,
-        angle: 120,
-        spread: 70,
-        origin: { x: 0.9, y: 0.7 }
-      });
-    }, 200);
-  }
-
-  function readProfile(){
-    const raw = sessionStorage.getItem('mq_profile') || localStorage.getItem('mq_profile');
-    if(!raw) return null;
-    try{
-      return JSON.parse(raw);
-    }catch{
-      return null;
-    }
-  }
-
-  if(!readProfile()){
-    window.location.replace('../index.html');
-  }
-
-  let timeLeft = 30;
-  let score = 0;
-  let combo = 0;
-  let diceCount = 0;
-  let diceValues = [];
-  let timer = null;
-  let started = false;
-  let ended = false;
-
-  const timeEl = document.getElementById('time');
-  const scoreEl = document.getElementById('score');
-  const comboEl = document.getElementById('combo');
-  const msgEl = document.getElementById('msg');
-  const ansEl = document.getElementById('answer');
-  const diceRow = document.getElementById('diceRow');
-  const submitBtn = document.getElementById('submitBtn');
-  const easyBtn = document.getElementById('easyBtn');
-  const hardBtn = document.getElementById('hardBtn');
-
-  function randDice(){
-    return Math.floor(Math.random() * 6) + 1;
-  }
-
-  function updateHUD(){
-    timeEl.textContent = timeLeft;
-    scoreEl.textContent = score;
-    comboEl.textContent = combo;
-  }
-
-  function setDifficulty(level){
-    initAudio();
-    if(started) return;
-
-    diceCount = level === 'hard' ? 3 : 2;
-
-    easyBtn.classList.toggle('active', level === 'easy');
-    hardBtn.classList.toggle('active', level === 'hard');
-
-    easyBtn.classList.add('locked');
-    hardBtn.classList.add('locked');
-
-    started = true;
-    ended = false;
-
-    ansEl.disabled = false;
-    submitBtn.disabled = false;
-
-    newRoll();
-    startTimer();
-    ansEl.focus();
-  }
-
-  function newRoll(){
-    diceValues = [];
-    diceRow.innerHTML = '';
-
-    for(let i = 0; i < diceCount; i++){
-      const v = randDice();
-      diceValues.push(v);
-
-      const img = document.createElement('img');
-      img.src = `../assets/dice${v}.png`;
-      img.alt = `Dice ${v}`;
-      diceRow.appendChild(img);
+      window.gameAudioCtx = new AudioContextClass();
     }
 
-    ansEl.value = '';
-    ansEl.focus();
-  }
+    function playTone(freq, duration, type = 'sine', volume = 0.05){
+      if(!window.gameAudioCtx) return;
 
-  function checkAnswer(){
-    if(!started || ended || timeLeft <= 0) return;
+      const ctx = window.gameAudioCtx;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
 
-    const user = Number(ansEl.value);
-    const correct = diceValues.reduce((a, b) => a + b, 0);
+      osc.type = type;
+      osc.frequency.value = freq;
+      gain.gain.value = volume;
 
-    if(user === correct){
-      playCorrectSound();
-      combo++;
-      score += 10;
+      osc.connect(gain);
+      gain.connect(ctx.destination);
 
-      if(combo > 0 && combo % 5 === 0){
-        score += 20;
-        msgEl.textContent = `Correct! Bonus +20 🎉`;
-      } else {
-        msgEl.textContent = `Correct! 🎉`;
+      osc.start();
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+      osc.stop(ctx.currentTime + duration);
+    }
+
+    function playCorrectSound(){
+      playTone(660, 0.12, 'sine', 0.06);
+      setTimeout(() => playTone(880, 0.14, 'sine', 0.05), 80);
+    }
+
+    function playWrongSound(){
+      playTone(220, 0.18, 'square', 0.05);
+      setTimeout(() => playTone(180, 0.2, 'square', 0.04), 90);
+    }
+
+    function playHighScoreSound(){
+      playTone(523, 0.12, 'triangle', 0.06);
+      setTimeout(() => playTone(659, 0.12, 'triangle', 0.06), 100);
+      setTimeout(() => playTone(784, 0.2, 'triangle', 0.06), 200);
+    }
+
+    function celebrateHighScore(){
+      if(typeof confetti !== 'function') return;
+
+      confetti({
+        particleCount: 140,
+        spread: 90,
+        origin: { y: 0.6 }
+      });
+
+      setTimeout(() => {
+        confetti({
+          particleCount: 80,
+          angle: 60,
+          spread: 70,
+          origin: { x: 0.1, y: 0.7 }
+        });
+
+        confetti({
+          particleCount: 80,
+          angle: 120,
+          spread: 70,
+          origin: { x: 0.9, y: 0.7 }
+        });
+      }, 200);
+    }
+
+    function readProfile(){
+      const raw = sessionStorage.getItem('mq_profile') || localStorage.getItem('mq_profile');
+      if(!raw) return null;
+      try{
+        return JSON.parse(raw);
+      }catch{
+        return null;
+      }
+    }
+
+    if(!readProfile()){
+      window.location.replace('../index.html');
+    }
+
+    let timeLeft = 30;
+    let score = 0;
+    let combo = 0;
+    let diceCount = 0;
+    let diceValues = [];
+    let timer = null;
+    let started = false;
+    let ended = false;
+    let currentDifficulty = null;
+    let countdownRunning = false;
+    let gameReadyForInput = false;
+
+    const timeEl = document.getElementById('time');
+    const playTimeEl = document.getElementById('playTime');
+    const scoreEl = document.getElementById('score');
+    const comboEl = document.getElementById('combo');
+    const msgEl = document.getElementById('msg');
+    const ansEl = document.getElementById('answer');
+    const diceRow = document.getElementById('diceRow');
+    const submitBtn = document.getElementById('submitBtn');
+    const introOverlay = document.getElementById('introOverlay');
+    const gameShell = document.getElementById('gameShell');
+    const gameCard = document.getElementById('gameCard');
+
+    function randDice(){
+      return Math.floor(Math.random() * 6) + 1;
+    }
+
+    function updateHUD(){
+      timeEl.textContent = timeLeft;
+      playTimeEl.textContent = timeLeft;
+      scoreEl.textContent = score;
+      comboEl.textContent = combo;
+    }
+
+    function setInputsEnabled(enabled){
+      ansEl.disabled = !enabled;
+      submitBtn.disabled = !enabled;
+      if(enabled){
+        ansEl.focus();
+      }
+    }
+
+    function clearDice(){
+      diceValues = [];
+      diceRow.innerHTML = '';
+    }
+
+    function newRoll(){
+      diceValues = [];
+      diceRow.innerHTML = '';
+
+      for(let i = 0; i < diceCount; i++){
+        const v = randDice();
+        diceValues.push(v);
+
+        const img = document.createElement('img');
+        img.src = `../assets/dice${v}.png`;
+        img.alt = `Dice ${v}`;
+        diceRow.appendChild(img);
       }
 
-      msgEl.className = 'msg good';
+      ansEl.value = '';
+      ansEl.focus();
+    }
+
+    function showCountdownOverlay(text){
+      let overlay = document.getElementById('countdownOverlay');
+
+      if(!overlay){
+        overlay = document.createElement('div');
+        overlay.id = 'countdownOverlay';
+        overlay.className = 'countdown-overlay';
+        overlay.innerHTML = '<div class="countdown-text" id="countdownText"></div>';
+        gameCard.appendChild(overlay);
+      }
+
+      const textEl = document.getElementById('countdownText');
+      textEl.textContent = text;
+    }
+
+    function hideCountdownOverlay(){
+      const overlay = document.getElementById('countdownOverlay');
+      if(overlay) overlay.remove();
+    }
+
+    async function runCountdown(){
+      countdownRunning = true;
+      gameReadyForInput = false;
+      clearDice();
+      setInputsEnabled(false);
+      msgEl.textContent = '';
+      msgEl.className = 'msg';
+
+      const steps = ['3', '2', '1', 'Go'];
+      const durations = [700, 700, 700, 500];
+
+      for(let i = 0; i < steps.length; i++){
+        showCountdownOverlay(steps[i]);
+        await new Promise(resolve => setTimeout(resolve, durations[i]));
+      }
+
+      hideCountdownOverlay();
+      countdownRunning = false;
+    }
+
+    async function startSelectedDifficulty(level){
+      initAudio();
+      currentDifficulty = level;
+      diceCount = level === 'hard' ? 3 : 2;
+      started = true;
+      ended = false;
+
+      await runCountdown();
+
       newRoll();
-    } else {
-      playWrongSound();
-      combo = 0;
-      score = Math.max(0, score - 10);
-      msgEl.textContent = 'Oops! Try again 🙂';
-      msgEl.className = 'msg bad';
+      setInputsEnabled(true);
+      gameReadyForInput = true;
+      startTimer();
     }
 
-    updateHUD();
+    async function beginFromIntro(level){
+      if(countdownRunning) return;
+      introOverlay.style.display = 'none';
+      gameShell.classList.remove('blur-active');
+      await startSelectedDifficulty(level);
+    }
 
-    setTimeout(() => {
-      if(!ended){
-        msgEl.textContent = '';
-        msgEl.className = 'msg';
+    function startTimer(){
+      clearInterval(timer);
+      timer = setInterval(() => {
+        timeLeft--;
+        updateHUD();
+
+        if(timeLeft <= 0){
+          endGame();
+        }
+      }, 1000);
+    }
+
+    function saveHighScore(){
+      let highScore = Number(localStorage.getItem('game1HighScore')) || 0;
+
+      if(score > highScore){
+        localStorage.setItem('game1HighScore', score);
+        highScore = score;
+        playHighScoreSound();
+        celebrateHighScore();
       }
-    }, 700);
-  }
 
-  function saveHighScore(){
-    let highScore = Number(localStorage.getItem('game1HighScore')) || 0;
-
-    if(score > highScore){
-      localStorage.setItem('game1HighScore', score);
-      highScore = score;
-      playHighScoreSound();
-      celebrateHighScore();
+      return highScore;
     }
 
-    return highScore;
-  }
+    async function endGame(){
+      if(ended) return;
 
-  function startTimer(){
-    timer = setInterval(() => {
-      timeLeft--;
+      clearInterval(timer);
+      ended = true;
+      gameReadyForInput = false;
+      timeLeft = 0;
       updateHUD();
 
-      if(timeLeft <= 0){
-        endGame();
+      setInputsEnabled(false);
+
+      const highScore = saveHighScore();
+
+      try{
+        await submitScore(1, score);
+      }catch(error){
+        console.error("Submit score failed:", error);
       }
-    }, 1000);
-  }
 
-  async function endGame(){
-    if(ended) return;
+      msgEl.textContent = `⏰ Time’s up! Final Score: ${score} | High Score: ${highScore}`;
+      msgEl.className = 'msg';
+    }
 
-    clearInterval(timer);
-    ended = true;
-    timeLeft = 0;
+    function resetRoundState(){
+      clearInterval(timer);
+      timer = null;
+      timeLeft = 30;
+      score = 0;
+      combo = 0;
+      diceValues = [];
+      started = false;
+      ended = false;
+      gameReadyForInput = false;
+      countdownRunning = false;
+      ansEl.value = '';
+      clearDice();
+      hideCountdownOverlay();
+      msgEl.textContent = '';
+      msgEl.className = 'msg';
+      updateHUD();
+      setInputsEnabled(false);
+    }
+
+    async function restartGame(){
+      const restart = confirm("Are you sure?");
+      if(!restart) return;
+
+      initAudio();
+
+      const difficultyToKeep = currentDifficulty;
+      resetRoundState();
+
+      if(difficultyToKeep){
+        currentDifficulty = difficultyToKeep;
+        await startSelectedDifficulty(difficultyToKeep);
+      }else{
+        introOverlay.style.display = 'flex';
+        gameShell.classList.add('blur-active');
+      }
+    }
+
+    function quitGame(){
+      const leave = confirm("Quit the game and go back to Home?");
+      if(leave){
+        window.location.href = "../home.html";
+      }
+    }
+
+    function checkAnswer(){
+      if(!started || ended || !gameReadyForInput || timeLeft <= 0) return;
+
+      const user = Number(ansEl.value);
+      const correct = diceValues.reduce((a, b) => a + b, 0);
+
+      if(user === correct){
+        playCorrectSound();
+        combo++;
+        score += 10;
+
+        if(combo > 0 && combo % 5 === 0){
+          score += 20;
+          msgEl.textContent = `Correct! Bonus +20 🎉`;
+        } else {
+          msgEl.textContent = `Correct! 🎉`;
+        }
+
+        msgEl.className = 'msg good';
+        newRoll();
+      } else {
+        playWrongSound();
+        combo = 0;
+        score = Math.max(0, score - 10);
+        msgEl.textContent = 'Oops! Try again 🙂';
+        msgEl.className = 'msg bad';
+
+        if(ansEl.value.length > 0){
+          ansEl.value = ansEl.value.slice(0, -1);
+        }
+        ansEl.focus();
+      }
+
+      updateHUD();
+
+      setTimeout(() => {
+        if(!ended){
+          msgEl.textContent = '';
+          msgEl.className = 'msg';
+        }
+      }, 700);
+    }
+
+    ansEl.addEventListener('keydown', function(e){
+      if(e.key === 'Enter'){
+        checkAnswer();
+      }
+    });
+
     updateHUD();
-
-    ansEl.disabled = true;
-    submitBtn.disabled = true;
-
-    const highScore = saveHighScore();
-
-    try{
-      await submitScore(1, score);
-    }catch(error){
-      console.error("Submit score failed:", error);
-    }
-
-    msgEl.textContent = `⏰ Time’s up! Final Score: ${score} | High Score: ${highScore}`;
-    msgEl.className = 'msg';
-  }
-
-  function quitGame(){
-    const leave = confirm("Quit the game and go back to Home?");
-    if(leave){
-      window.location.href = "../home.html";
-    }
-  }
-
-  function restartGame(){
-    location.reload();
-  }
-
-  ansEl.addEventListener('keydown', function(e){
-    if(e.key === 'Enter'){
-      checkAnswer();
-    }
-  });
-
-  updateHUD();
-</script>
+    setInputsEnabled(false);
+  </script>
 
 </body>
 </html>

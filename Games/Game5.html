@@ -30,6 +30,29 @@ body{
   display:flex;
   flex-direction:column;
   gap:14px;
+  overflow-x:hidden;
+}
+
+.game-shell{
+  position:relative;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.game-shell.blur-active .game-content{
+  filter:blur(10px);
+  pointer-events:none;
+  user-select:none;
+}
+
+.game-content{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  flex:1;
+  transition:filter .25s ease;
 }
 
 main{
@@ -45,32 +68,25 @@ main{
   box-shadow:var(--shadow);
   padding:16px;
   text-align:center;
+  position:relative;
+  overflow:hidden;
 }
 
-.difficulty{
+.play-timer-wrap{
   display:flex;
   justify-content:center;
-  gap:8px;
-  margin-top:12px;
-  flex-wrap:wrap;
+  margin-bottom:10px;
 }
 
-.difficulty button{
-  border:none;
+.play-timer{
+  background:#f6f6f6;
+  padding:10px 16px;
   border-radius:999px;
-  padding:10px 14px;
+  font-size:16px;
   font-weight:1000;
-  cursor:pointer;
-  background:#eee;
-}
-
-.difficulty .active{
-  background:var(--c1);
-}
-
-.difficulty .locked{
-  opacity:.5;
-  pointer-events:none;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
 }
 
 .rectangle{
@@ -119,6 +135,11 @@ input:focus{
   cursor:pointer;
 }
 
+.submit:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
 .msg{
   margin-top:12px;
   min-height:26px;
@@ -129,9 +150,17 @@ input:focus{
 .bad{ color:#b51e1e; }
 
 .hint{
-  margin-top:8px;
-  color:var(--muted);
+  margin:10px auto 14px;
+  padding:10px 14px;
+  width:fit-content;
+  max-width:100%;
+  border-radius:999px;
+  background:#f6f6f6;
+  color:#444;
   font-size:13px;
+  font-weight:1000;
+  line-height:1.3;
+  text-align:center;
 }
 
 .game-topbar{
@@ -208,6 +237,155 @@ input:focus{
   filter:brightness(.96);
 }
 
+.bottom-actions{
+  margin-top:18px;
+  display:flex;
+  justify-content:center;
+}
+
+.intro-overlay{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(2px);
+}
+
+.intro-card{
+  width:min(92vw, 560px);
+  background:rgba(255,255,255,.96);
+  border-radius:24px;
+  box-shadow:0 16px 40px rgba(0,0,0,.15);
+  padding:24px 22px;
+  text-align:center;
+  border:1px solid rgba(0,0,0,.06);
+}
+
+.intro-kicker{
+  display:inline-block;
+  padding:7px 12px;
+  border-radius:999px;
+  background:#f2f2f2;
+  font-size:12px;
+  font-weight:1000;
+  letter-spacing:.04em;
+  margin-bottom:12px;
+}
+
+.intro-title{
+  font-size:32px;
+  line-height:1.1;
+  font-weight:1000;
+  margin:0 0 10px;
+}
+
+.intro-desc{
+  margin:0 auto 16px;
+  max-width:44ch;
+  font-size:15px;
+  line-height:1.55;
+  color:var(--muted);
+  font-weight:700;
+}
+
+.intro-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:16px 0 18px;
+  text-align:left;
+}
+
+.intro-box{
+  background:#f8f8f8;
+  border-radius:18px;
+  padding:14px;
+}
+
+.intro-box h3{
+  margin:0 0 8px;
+  font-size:14px;
+  font-weight:1000;
+}
+
+.intro-box p{
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
+  font-weight:700;
+}
+
+.intro-actions{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:8px;
+}
+
+.mode-btn{
+  border:none;
+  border-radius:999px;
+  padding:12px 18px;
+  font-size:15px;
+  font-weight:1000;
+  cursor:pointer;
+  min-width:140px;
+  transition:transform .12s ease, filter .12s ease;
+}
+
+.mode-btn:hover{
+  transform:translateY(-1px);
+  filter:brightness(.98);
+}
+
+.mode-easy{
+  background:var(--c2);
+  color:#10321b;
+}
+
+.mode-hard{
+  background:var(--c3);
+  color:#3d2a00;
+}
+
+.countdown-overlay{
+  position:absolute;
+  inset:0;
+  z-index:20;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:22px;
+  background:rgba(255,255,255,.78);
+  backdrop-filter:blur(2px);
+}
+
+.countdown-text{
+  font-size:72px;
+  font-weight:1000;
+  line-height:1;
+  color:#1b1b1b;
+  text-shadow:0 4px 18px rgba(0,0,0,.08);
+  animation:popIn .25s ease;
+}
+
+@keyframes popIn{
+  from{
+    transform:scale(.78);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
 @media (max-width: 900px){
   .game-topbar{
     grid-template-columns: 1fr;
@@ -226,63 +404,114 @@ input:focus{
     justify-content:center;
   }
 }
+
+@media (max-width: 640px){
+  .intro-grid{
+    grid-template-columns:1fr;
+  }
+
+  .intro-title{
+    font-size:28px;
+  }
+
+  .countdown-text{
+    font-size:60px;
+  }
+}
 </style>
 </head>
 <body>
 
-<header class="game-topbar">
-  <div class="top-left">
-    <div class="game-title" id="gameTitle">🟩 Game 5: Area Attack</div>
-    <div class="game-subtitle" id="gameSubtitle">Solve the area before time runs out!</div>
+<div class="game-shell blur-active" id="gameShell">
+  <div class="game-content">
+    <header class="game-topbar">
+      <div class="top-left">
+        <div class="game-title" id="gameTitle">🟩 Game 5: Area Attack</div>
+        <div class="game-subtitle" id="gameSubtitle">Solve the area before time runs out!</div>
+      </div>
+
+      <div class="top-center">
+        <div class="top-pill">⏱ Time: <span id="time">30</span>s</div>
+        <div class="top-pill">⭐ Score: <span id="score">0</span></div>
+        <div class="top-pill">🔥 Combo: <span id="combo">0</span></div>
+      </div>
+
+      <div class="top-right">
+        <button class="top-btn restart-btn" onclick="restartGame()">Restart</button>
+        <button class="top-btn quit-btn" onclick="quitGame()">Quit</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="card" id="gameCard">
+        <div class="play-timer-wrap">
+          <div class="play-timer">⏱ Time Left: <span id="playTime">30</span>s</div>
+        </div>
+
+        <div class="hint">+10 correct • −10 wrong • +5 fast • +25 every 5 combo</div>
+
+        <div id="rectContainer">
+          <div id="rectangle" class="rectangle"></div>
+          <div class="dimension" id="dimensionText">Get ready…</div>
+
+          <div class="answer">
+            <input id="answer" type="number" placeholder="Area" disabled />
+            <button class="submit" id="submitBtn" onclick="check()" disabled>✔</button>
+          </div>
+        </div>
+
+        <div class="msg" id="msg"></div>
+
+        <div class="bottom-actions">
+          <button class="top-btn restart-btn" onclick="restartGame()">Restart</button>
+        </div>
+      </section>
+    </main>
   </div>
 
-  <div class="top-center">
-    <div class="top-pill">⏱ Time: <span id="time">30</span>s</div>
-    <div class="top-pill">⭐ Score: <span id="score">0</span></div>
-    <div class="top-pill">🔥 Combo: <span id="combo">0</span></div>
-  </div>
+  <div class="intro-overlay" id="introOverlay">
+    <div class="intro-card">
+      <div class="intro-kicker">MATHIVE • GAME INTRO</div>
+      <h1 class="intro-title">Area Attack</h1>
+      <p class="intro-desc">
+        Look at the rectangle, use the side lengths, and calculate the area before time runs out.
+      </p>
 
-  <div class="top-right">
-    <button class="top-btn restart-btn" onclick="restartGame()">Restart</button>
-    <button class="top-btn quit-btn" onclick="quitGame()">Quit</button>
-  </div>
-</header>
+      <div class="hint">+10 correct • −10 wrong • +5 fast • +25 every 5 combo</div>
 
-<main>
-<section class="card">
+      <div class="intro-grid">
+        <div class="intro-box">
+          <h3>How to Play</h3>
+          <p>Look at the rectangle dimensions, multiply the width by the height, then type the area and submit.</p>
+        </div>
+        <div class="intro-box">
+          <h3>Points</h3>
+          <p>Correct answers give points, fast answers give bonus points, and every 5-answer streak gives a combo reward.</p>
+        </div>
+        <div class="intro-box">
+          <h3>Controls</h3>
+          <p>Type your answer in the input box and press Enter or tap the check button to submit.</p>
+        </div>
+        <div class="intro-box">
+          <h3>Difficulty</h3>
+          <p>Easy uses smaller dimensions. Hard gives larger dimensions for quicker mental math pressure.</p>
+        </div>
+      </div>
 
-  <div id="startText" style="margin-top:10px; font-weight:1000;">
-    Choose difficulty to start
-  </div>
-
-  <div class="difficulty">
-    <button id="easyBtn" onclick="setDifficulty('easy')">Easy</button>
-    <button id="hardBtn" onclick="setDifficulty('hard')">Hard</button>
-  </div>
-
-  <div id="rectContainer" style="display:none;">
-    <div id="rectangle" class="rectangle"></div>
-    <div class="dimension" id="dimensionText"></div>
-
-    <div class="answer">
-      <input id="answer" type="number" placeholder="Area" disabled />
-      <button class="submit" id="submitBtn" onclick="check()" disabled>✔</button>
+      <div class="intro-actions">
+        <button class="mode-btn mode-easy" onclick="beginFromIntro('easy')">Easy</button>
+        <button class="mode-btn mode-hard" onclick="beginFromIntro('hard')">Hard</button>
+      </div>
     </div>
   </div>
-
-  <div class="hint">+10 correct • −10 wrong • +5 fast • +25 every 5 combo</div>
-  <div class="msg" id="msg"></div>
-
-</section>
-</main>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../js/supabase.js"></script>
 
 <script>
-
-  let audioStarted = false;
+let audioStarted = false;
 
 function initAudio(){
   if(audioStarted) return;
@@ -303,14 +532,12 @@ function playTone(freq, duration, type = 'sine', volume = 0.05){
 
   osc.type = type;
   osc.frequency.value = freq;
-
   gain.gain.value = volume;
 
   osc.connect(gain);
   gain.connect(ctx.destination);
 
   osc.start();
-
   gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
   osc.stop(ctx.currentTime + duration);
 }
@@ -374,6 +601,7 @@ if(!readProfile()){
 let started = false;
 let ended = false;
 let mode = null;
+let currentDifficulty = null;
 let timeLeft = 30;
 let score = 0;
 let combo = 0;
@@ -381,19 +609,21 @@ let timer = null;
 let width = 0;
 let height = 0;
 let roundStart = 0;
+let countdownRunning = false;
+let gameReady = false;
 
 const timeEl = document.getElementById('time');
+const playTimeEl = document.getElementById('playTime');
 const scoreEl = document.getElementById('score');
 const comboEl = document.getElementById('combo');
 const rect = document.getElementById('rectangle');
 const dimensionText = document.getElementById('dimensionText');
-const rectContainer = document.getElementById('rectContainer');
 const msgEl = document.getElementById('msg');
 const ansEl = document.getElementById('answer');
 const submitBtn = document.getElementById('submitBtn');
-const easyBtn = document.getElementById('easyBtn');
-const hardBtn = document.getElementById('hardBtn');
-const startText = document.getElementById('startText');
+const introOverlay = document.getElementById('introOverlay');
+const gameShell = document.getElementById('gameShell');
+const gameCard = document.getElementById('gameCard');
 
 function rand(min, max){
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -401,32 +631,23 @@ function rand(min, max){
 
 function updateHUD(){
   timeEl.textContent = timeLeft;
+  playTimeEl.textContent = timeLeft;
   scoreEl.textContent = score;
   comboEl.textContent = combo;
 }
 
-function setDifficulty(level){
-  initAudio();
-  if(started) return;
+function setInputsEnabled(enabled){
+  ansEl.disabled = !enabled;
+  submitBtn.disabled = !enabled;
+  if(enabled){
+    ansEl.focus();
+  }
+}
 
-  started = true;
-  ended = false;
-  mode = level;
-
-  easyBtn.classList.toggle('active', level === 'easy');
-  hardBtn.classList.toggle('active', level === 'hard');
-  easyBtn.classList.add('locked');
-  hardBtn.classList.add('locked');
-
-  startText.textContent = 'Solve as many as you can!';
-  rectContainer.style.display = 'block';
-
-  ansEl.disabled = false;
-  submitBtn.disabled = false;
-
-  newRectangle();
-  startTimer();
-  updateHUD();
+function clearRectangle(){
+  rect.style.width = '0px';
+  rect.style.height = '0px';
+  dimensionText.textContent = 'Get ready…';
 }
 
 function newRectangle(){
@@ -448,7 +669,7 @@ function newRectangle(){
 }
 
 function check(){
-  if(!started || ended || timeLeft <= 0) return;
+  if(!started || ended || !gameReady || timeLeft <= 0) return;
 
   const correct = width * height;
   const user = Number(ansEl.value);
@@ -459,25 +680,25 @@ function check(){
     score += 10;
     combo += 1;
 
+    let message = '✅ Correct! +10';
+
     if(secs <= 3){
       score += 5;
-      msgEl.textContent = '✅ Correct! +10 (Fast +5)';
-      msgEl.className = 'msg good';
-    } else {
-      msgEl.textContent = '✅ Correct!';
-      msgEl.className = 'msg good';
+      message = '✅ Correct! +10 (Fast +5)';
     }
 
     if(combo % 5 === 0){
       score += 25;
-      msgEl.textContent = '🔥 Combo Bonus! +25';
-      msgEl.className = 'msg good';
+      message += ' • Combo +25';
     }
+
+    msgEl.textContent = message;
+    msgEl.className = 'msg good';
   } else {
     playWrongSound();
     score = Math.max(0, score - 10);
     combo = 0;
-    msgEl.textContent = '❌ Wrong!';
+    msgEl.textContent = '❌ Wrong! −10';
     msgEl.className = 'msg bad';
   }
 
@@ -504,6 +725,7 @@ function saveHighScore(){
 }
 
 function startTimer(){
+  clearInterval(timer);
   timeLeft = 30;
   updateHUD();
 
@@ -521,14 +743,14 @@ async function endGame(){
   if(ended) return;
 
   ended = true;
+  gameReady = false;
   timeLeft = 0;
   updateHUD();
 
   clearInterval(timer);
   timer = null;
 
-  ansEl.disabled = true;
-  submitBtn.disabled = true;
+  setInputsEnabled(false);
 
   const highScore = saveHighScore();
 
@@ -540,6 +762,92 @@ async function endGame(){
 
   msgEl.textContent = `⏰ Time’s up! Final Score: ${score} | High Score: ${highScore}`;
   msgEl.className = 'msg';
+}
+
+function showCountdownOverlay(text){
+  let overlay = document.getElementById('countdownOverlay');
+
+  if(!overlay){
+    overlay = document.createElement('div');
+    overlay.id = 'countdownOverlay';
+    overlay.className = 'countdown-overlay';
+    overlay.innerHTML = '<div class="countdown-text" id="countdownText"></div>';
+    gameCard.appendChild(overlay);
+  }
+
+  document.getElementById('countdownText').textContent = text;
+}
+
+function hideCountdownOverlay(){
+  const overlay = document.getElementById('countdownOverlay');
+  if(overlay) overlay.remove();
+}
+
+async function runCountdown(){
+  countdownRunning = true;
+  gameReady = false;
+  clearRectangle();
+  setInputsEnabled(false);
+  msgEl.textContent = '';
+  msgEl.className = 'msg';
+
+  const steps = ['3', '2', '1', 'Go'];
+  const durations = [700, 700, 700, 500];
+
+  for(let i = 0; i < steps.length; i++){
+    showCountdownOverlay(steps[i]);
+    await new Promise(resolve => setTimeout(resolve, durations[i]));
+  }
+
+  hideCountdownOverlay();
+  countdownRunning = false;
+}
+
+async function startSelectedDifficulty(level){
+  currentDifficulty = level;
+  mode = level;
+  started = true;
+  ended = false;
+
+  await runCountdown();
+
+  newRectangle();
+  setInputsEnabled(true);
+  gameReady = true;
+  startTimer();
+  updateHUD();
+}
+
+async function beginFromIntro(level){
+  if(countdownRunning) return;
+  initAudio();
+  introOverlay.style.display = 'none';
+  gameShell.classList.remove('blur-active');
+  await startSelectedDifficulty(level);
+}
+
+function resetRoundState(){
+  clearInterval(timer);
+  timer = null;
+  started = false;
+  ended = false;
+  mode = null;
+  timeLeft = 30;
+  score = 0;
+  combo = 0;
+  width = 0;
+  height = 0;
+  roundStart = 0;
+  countdownRunning = false;
+  gameReady = false;
+
+  hideCountdownOverlay();
+  clearRectangle();
+  ansEl.value = '';
+  msgEl.textContent = '';
+  msgEl.className = 'msg';
+  updateHUD();
+  setInputsEnabled(false);
 }
 
 ansEl.addEventListener('keydown', e => {
@@ -555,11 +863,28 @@ function quitGame(){
   }
 }
 
-function restartGame(){
-  location.reload();
+async function restartGame(){
+  const restart = confirm("Are you sure?");
+  if(!restart) return;
+
+  initAudio();
+
+  const difficultyToKeep = currentDifficulty;
+  resetRoundState();
+
+  if(difficultyToKeep){
+    introOverlay.style.display = 'none';
+    gameShell.classList.remove('blur-active');
+    await startSelectedDifficulty(difficultyToKeep);
+  } else {
+    introOverlay.style.display = 'flex';
+    gameShell.classList.add('blur-active');
+  }
 }
 
 updateHUD();
+setInputsEnabled(false);
+clearRectangle();
 </script>
 
 </body>

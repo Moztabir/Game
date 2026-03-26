@@ -632,6 +632,32 @@
         if (e.key === "Enter") validateSignup();
       });
     });
+
+    // ===== TEST SUPABASE CONNECTION =====
+async function testConnection() {
+  const { data, error } = await supabaseClient.from("players").select("*");
+
+  console.log("TEST CONNECTION DATA:", data);
+  console.log("TEST CONNECTION ERROR:", error);
+}
+
+// ===== TEST INSERT =====
+async function testInsert() {
+  const { data, error } = await supabaseClient
+    .from("players")
+    .insert([
+      {
+        id: crypto.randomUUID(),
+        username: "testuser123",
+        class_code: "TEST"
+      }
+    ]);
+
+  console.log("TEST INSERT DATA:", data);
+  console.log("TEST INSERT ERROR:", error);
+}
+
+
   </script>
 </body>
 </html>

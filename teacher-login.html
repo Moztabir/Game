@@ -290,12 +290,12 @@
     }
 
     try {
-      const { data, error } = await supabaseClient
+      const { data: teacher, error } = await supabaseClient
         .from("teachers")
         .select("*")
         .eq("first_name", name)
         .eq("password", password)
-        .limit(1);
+        .maybeSingle();
 
       if (error) {
         console.error("Teacher login error:", error);
@@ -303,16 +303,15 @@
         return;
       }
 
-      if (!data || data.length === 0) {
+      if (!teacher) {
         showMessage("Invalid first name or password.", "error");
         return;
       }
 
-      const teacher = data[0];
-
       const profile = {
         id: teacher.id,
         name: teacher.first_name,
+        first_name: teacher.first_name,
         role: "teacher",
         ts: Date.now()
       };
@@ -342,5 +341,6 @@
     if (e.key === "Enter") validateTeacherLogin();
   });
 </script>
+
 </body>
 </html>

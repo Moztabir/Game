@@ -1200,817 +1200,850 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
 
   <script>
-    const STORAGE_KEY = "mathiveTeacherDashboardData";
+  const STORAGE_KEY = "mathiveTeacherDashboardData";
+  const DASHBOARD_ROW_KEY = "teacher_dashboard_main";
 
-    const SUPABASE_URL = "https://ktlarcejrqsovffqhfcu.supabase.co";
-    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
-    const DASHBOARD_ROW_KEY = "teacher_dashboard_main";
+  function readTeacherProfile() {
+    const raw =
+      sessionStorage.getItem("mq_teacher_profile") ||
+      localStorage.getItem("mq_teacher_profile");
 
-    let supabaseClient = null;
-    if (window.supabase && SUPABASE_URL && SUPABASE_ANON_KEY && SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY_HERE") {
-      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    if (!raw) return null;
+
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }
+
+  const teacherProfile = readTeacherProfile();
+
+  if (!teacherProfile) {
+    window.location.replace("teacher-login.html");
+    throw new Error("No teacher profile found");
+  }
+
+  const defaultData = {
+    teacherName: teacherProfile?.name || teacherProfile?.first_name || "Teacher",
+    notes: [
+      "Review Assignment 3 by Thursday",
+      "Focus next lesson on area strategies",
+      "Check in with students below 70%"
+    ],
+    assignments: [
+      { title: "Grade Quiz 4 submissions", detail: "12 submissions waiting", status: "Today" },
+      { title: "Publish Pattern Pop challenge", detail: "Scheduled for tomorrow morning", status: "Planned" },
+      { title: "Parent progress export", detail: "Generate weekly JSON report", status: "Ready" }
+    ],
+    activities: [
+      { initials: "AL", title: "Ava finished Area Race", sub: "Scored 92% • 8 minutes ago", status: "Improved", tone: "green" },
+      { initials: "JM", title: "Jayden submitted Dice Dash", sub: "Score: 17 correct • 16 minutes ago", status: "Reviewed", tone: "default" },
+      { initials: "SK", title: "Sofia needs help on Times Table", sub: "Accuracy dropped below 65%", status: "Attention", tone: "yellow" },
+      { initials: "DL", title: "Daniel missed Assignment 3", sub: "No submission yet • due yesterday", status: "Late", tone: "red" }
+    ],
+    gamePerformance: [
+      { name: "Dice Dash", score: 91 },
+      { name: "Place Value", score: 84 },
+      { name: "Times Table", score: 78 },
+      { name: "Pattern Pop", score: 88 },
+      { name: "Area Race", score: 73 }
+    ],
+    students: [
+      { name: "Ava Lee", className: "Grade 4A", grade: "A", completed: 14, total: 15, accuracy: 92, gamesCompleted: 7, status: "Excellent", improvement: 22, streak: 14 },
+      { name: "Jayden Moore", className: "Grade 4A", grade: "B+", completed: 12, total: 15, accuracy: 84, gamesCompleted: 6, status: "On Track", improvement: 10, streak: 9 },
+      { name: "Sofia Khan", className: "Grade 4A", grade: "C+", completed: 10, total: 15, accuracy: 67, gamesCompleted: 5, status: "Needs Support", improvement: 4, streak: 4 },
+      { name: "Daniel Long", className: "Grade 4A", grade: "C", completed: 8, total: 15, accuracy: 61, gamesCompleted: 4, status: "Behind", improvement: 2, streak: 2 },
+      { name: "Noah Patel", className: "Grade 4B", grade: "A-", completed: 13, total: 15, accuracy: 89, gamesCompleted: 8, status: "Excellent", improvement: 15, streak: 12 },
+      { name: "Mia Chen", className: "Grade 4B", grade: "B", completed: 11, total: 15, accuracy: 81, gamesCompleted: 6, status: "On Track", improvement: 8, streak: 7 }
+    ]
+  };
+
+  const els = {
+    syncMathiveBtn: document.getElementById("syncMathiveBtn"),
+    importJsonBtn: document.getElementById("importJsonBtn"),
+    resetToDemoBtn: document.getElementById("resetToDemoBtn"),
+    jsonFileInput: document.getElementById("jsonFileInput"),
+    searchInput: document.getElementById("searchInput"),
+    classFilter: document.getElementById("classFilter"),
+    statusFilter: document.getElementById("statusFilter"),
+    resetFiltersBtn: document.getElementById("resetFiltersBtn"),
+    studentTableBody: document.getElementById("studentTableBody"),
+    activityList: document.getElementById("activityList"),
+    assignmentList: document.getElementById("assignmentList"),
+    notesList: document.getElementById("notesList"),
+    notesInput: document.getElementById("notesInput"),
+    saveNoteBtn: document.getElementById("saveNoteBtn"),
+    clearNotesBtn: document.getElementById("clearNotesBtn"),
+    exportBtn: document.getElementById("exportBtn"),
+    gameChart: document.getElementById("gameChart"),
+    statStudents: document.getElementById("statStudents"),
+    statAccuracy: document.getElementById("statAccuracy"),
+    statGames: document.getElementById("statGames"),
+    statPending: document.getElementById("statPending"),
+    statStudentsSub: document.getElementById("statStudentsSub"),
+    statAccuracySub: document.getElementById("statAccuracySub"),
+    statGamesSub: document.getElementById("statGamesSub"),
+    statPendingSub: document.getElementById("statPendingSub"),
+    mostImproved: document.getElementById("mostImproved"),
+    mostImprovedSub: document.getElementById("mostImprovedSub"),
+    topStreak: document.getElementById("topStreak"),
+    topStreakSub: document.getElementById("topStreakSub"),
+    welcomeTeacher: document.getElementById("welcomeTeacher"),
+    welcomeSummary: document.getElementById("welcomeSummary"),
+    navStudentsBadge: document.getElementById("navStudentsBadge"),
+    navAssignmentsBadge: document.getElementById("navAssignmentsBadge"),
+    navMessagesBadge: document.getElementById("navMessagesBadge"),
+    openStudentModal: document.getElementById("openStudentModal"),
+    openStudentModal2: document.getElementById("openStudentModal2"),
+    openAssignmentModal: document.getElementById("openAssignmentModal"),
+    openAssignmentFromSidebar: document.getElementById("openAssignmentFromSidebar"),
+    studentModal: document.getElementById("studentModal"),
+    assignmentModal: document.getElementById("assignmentModal"),
+    studentForm: document.getElementById("studentForm"),
+    assignmentForm: document.getElementById("assignmentForm"),
+    addMockActivityBtn: document.getElementById("addMockActivityBtn"),
+    addMockActivityBtn2: document.getElementById("addMockActivityBtn2")
+  };
+
+  let dashboardData = cloneDefaultData();
+
+  const inferredGameKeys = [
+    "game1HighScore",
+    "game2HighScore",
+    "game3HighScore",
+    "game4HighScore",
+    "game5HighScore",
+    "game6HighScore"
+  ];
+
+  function cloneDefaultData() {
+    return JSON.parse(JSON.stringify(defaultData));
+  }
+
+  function safeParseJson(value) {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return null;
+    }
+  }
+
+  function getInitials(name) {
+    return String(name || "")
+      .split(" ")
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(part => part[0].toUpperCase())
+      .join("");
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function getToneClass(status) {
+    const s = String(status || "").toLowerCase();
+    if (s.includes("excellent") || s.includes("ready") || s.includes("improved")) return "green";
+    if (s.includes("support") || s.includes("today") || s.includes("attention") || s.includes("planned")) return "yellow";
+    if (s.includes("behind") || s.includes("late")) return "red";
+    return "";
+  }
+
+  function normalizeStudent(raw) {
+    if (!raw || typeof raw !== "object") return null;
+
+    const name = raw.name || raw.studentName || raw.fullName || raw.username || raw.playerName;
+    if (!name) return null;
+
+    const className = raw.className || raw.class || raw.classroom || raw.gradeGroup || "Grade 4A";
+    const grade = raw.grade || raw.letterGrade || raw.level || "B";
+    const completed = Number(raw.completed ?? raw.completedTasks ?? raw.assignmentsCompleted ?? 0);
+    const total = Math.max(1, Number(raw.total ?? raw.totalTasks ?? raw.assignmentsTotal ?? 15));
+    const accuracy = Math.max(0, Math.min(100, Number(raw.accuracy ?? raw.averageAccuracy ?? raw.avgAccuracy ?? raw.score ?? 0)));
+    const gamesCompleted = Number(raw.gamesCompleted ?? raw.gameCount ?? raw.completedGames ?? 0);
+    const improvement = Number(raw.improvement ?? raw.weeklyImprovement ?? raw.scoreChange ?? 0);
+    const streak = Number(raw.streak ?? raw.currentStreak ?? raw.loginStreak ?? 0);
+
+    let status = raw.status || "On Track";
+    if (!raw.status) {
+      if (accuracy >= 88) status = "Excellent";
+      else if (accuracy >= 75) status = "On Track";
+      else if (accuracy >= 65) status = "Needs Support";
+      else status = "Behind";
     }
 
-    const defaultData = {
-      teacherName: "Ms. Parker",
-      notes: [
-        "Review Assignment 3 by Thursday",
-        "Focus next lesson on area strategies",
-        "Check in with students below 70%"
-      ],
-      assignments: [
-        { title: "Grade Quiz 4 submissions", detail: "12 submissions waiting", status: "Today" },
-        { title: "Publish Pattern Pop challenge", detail: "Scheduled for tomorrow morning", status: "Planned" },
-        { title: "Parent progress export", detail: "Generate weekly JSON report", status: "Ready" }
-      ],
-      activities: [
-        { initials: "AL", title: "Ava finished Area Race", sub: "Scored 92% • 8 minutes ago", status: "Improved", tone: "green" },
-        { initials: "JM", title: "Jayden submitted Dice Dash", sub: "Score: 17 correct • 16 minutes ago", status: "Reviewed", tone: "default" },
-        { initials: "SK", title: "Sofia needs help on Times Table", sub: "Accuracy dropped below 65%", status: "Attention", tone: "yellow" },
-        { initials: "DL", title: "Daniel missed Assignment 3", sub: "No submission yet • due yesterday", status: "Late", tone: "red" }
-      ],
-      gamePerformance: [
-        { name: "Dice Dash", score: 91 },
-        { name: "Place Value", score: 84 },
-        { name: "Times Table", score: 78 },
-        { name: "Pattern Pop", score: 88 },
-        { name: "Area Race", score: 73 }
-      ],
-      students: [
-        { name: "Ava Lee", className: "Grade 4A", grade: "A", completed: 14, total: 15, accuracy: 92, gamesCompleted: 7, status: "Excellent", improvement: 22, streak: 14 },
-        { name: "Jayden Moore", className: "Grade 4A", grade: "B+", completed: 12, total: 15, accuracy: 84, gamesCompleted: 6, status: "On Track", improvement: 10, streak: 9 },
-        { name: "Sofia Khan", className: "Grade 4A", grade: "C+", completed: 10, total: 15, accuracy: 67, gamesCompleted: 5, status: "Needs Support", improvement: 4, streak: 4 },
-        { name: "Daniel Long", className: "Grade 4A", grade: "C", completed: 8, total: 15, accuracy: 61, gamesCompleted: 4, status: "Behind", improvement: 2, streak: 2 },
-        { name: "Noah Patel", className: "Grade 4B", grade: "A-", completed: 13, total: 15, accuracy: 89, gamesCompleted: 8, status: "Excellent", improvement: 15, streak: 12 },
-        { name: "Mia Chen", className: "Grade 4B", grade: "B", completed: 11, total: 15, accuracy: 81, gamesCompleted: 6, status: "On Track", improvement: 8, streak: 7 }
-      ]
-    };
+    return { name, className, grade, completed, total, accuracy, gamesCompleted, improvement, streak, status };
+  }
 
-    const els = {
-      syncMathiveBtn: document.getElementById("syncMathiveBtn"),
-      importJsonBtn: document.getElementById("importJsonBtn"),
-      resetToDemoBtn: document.getElementById("resetToDemoBtn"),
-      jsonFileInput: document.getElementById("jsonFileInput"),
-      searchInput: document.getElementById("searchInput"),
-      classFilter: document.getElementById("classFilter"),
-      statusFilter: document.getElementById("statusFilter"),
-      resetFiltersBtn: document.getElementById("resetFiltersBtn"),
-      studentTableBody: document.getElementById("studentTableBody"),
-      activityList: document.getElementById("activityList"),
-      assignmentList: document.getElementById("assignmentList"),
-      notesList: document.getElementById("notesList"),
-      notesInput: document.getElementById("notesInput"),
-      saveNoteBtn: document.getElementById("saveNoteBtn"),
-      clearNotesBtn: document.getElementById("clearNotesBtn"),
-      exportBtn: document.getElementById("exportBtn"),
-      gameChart: document.getElementById("gameChart"),
-      statStudents: document.getElementById("statStudents"),
-      statAccuracy: document.getElementById("statAccuracy"),
-      statGames: document.getElementById("statGames"),
-      statPending: document.getElementById("statPending"),
-      statStudentsSub: document.getElementById("statStudentsSub"),
-      statAccuracySub: document.getElementById("statAccuracySub"),
-      statGamesSub: document.getElementById("statGamesSub"),
-      statPendingSub: document.getElementById("statPendingSub"),
-      mostImproved: document.getElementById("mostImproved"),
-      mostImprovedSub: document.getElementById("mostImprovedSub"),
-      topStreak: document.getElementById("topStreak"),
-      topStreakSub: document.getElementById("topStreakSub"),
-      welcomeTeacher: document.getElementById("welcomeTeacher"),
-      welcomeSummary: document.getElementById("welcomeSummary"),
-      navStudentsBadge: document.getElementById("navStudentsBadge"),
-      navAssignmentsBadge: document.getElementById("navAssignmentsBadge"),
-      navMessagesBadge: document.getElementById("navMessagesBadge"),
-      openStudentModal: document.getElementById("openStudentModal"),
-      openStudentModal2: document.getElementById("openStudentModal2"),
-      openAssignmentModal: document.getElementById("openAssignmentModal"),
-      openAssignmentFromSidebar: document.getElementById("openAssignmentFromSidebar"),
-      studentModal: document.getElementById("studentModal"),
-      assignmentModal: document.getElementById("assignmentModal"),
-      studentForm: document.getElementById("studentForm"),
-      assignmentForm: document.getElementById("assignmentForm"),
-      addMockActivityBtn: document.getElementById("addMockActivityBtn"),
-      addMockActivityBtn2: document.getElementById("addMockActivityBtn2")
-    };
+  function normalizeAssignment(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    const title = raw.title || raw.name || raw.assignmentTitle || raw.task;
+    const detail = raw.detail || raw.description || raw.assignmentDetail || raw.subtitle || "No details yet";
+    const status = raw.status || raw.state || raw.label || "Planned";
+    if (!title) return null;
+    return { title, detail, status };
+  }
 
-    let dashboardData = cloneDefaultData();
+  function normalizeActivity(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    const title = raw.title || raw.message || raw.activityTitle || raw.event;
+    const sub = raw.sub || raw.detail || raw.description || raw.time || "Recent activity";
+    const initials = raw.initials || getInitials(raw.name || raw.studentName || raw.actor || title || "M");
+    const status = raw.status || raw.label || "Reviewed";
+    const tone = raw.tone || getToneClass(status) || "default";
+    if (!title) return null;
+    return { initials, title, sub, status, tone };
+  }
 
-    const inferredGameKeys = [
-      "game1HighScore",
-      "game2HighScore",
-      "game3HighScore",
-      "game4HighScore",
-      "game5HighScore",
-      "game6HighScore"
-    ];
+  function normalizeGamePerformance(raw, fallbackName) {
+    if (typeof raw === "number") {
+      return { name: fallbackName || "Game", score: Math.max(0, Math.min(100, raw)) };
+    }
+    if (!raw || typeof raw !== "object") return null;
+    const name = raw.name || raw.game || raw.title || fallbackName || "Game";
+    const score = Number(raw.score ?? raw.average ?? raw.avg ?? raw.highScore ?? 0);
+    return { name, score: Math.max(0, Math.min(100, score)) };
+  }
 
-    function cloneDefaultData() {
-      return JSON.parse(JSON.stringify(defaultData));
+  function openModal(modal) {
+    if (!modal) return;
+    modal.classList.add("show");
+    modal.setAttribute("aria-hidden", "false");
+  }
+
+  function closeModal(modal) {
+    if (!modal) return;
+    modal.classList.remove("show");
+    modal.setAttribute("aria-hidden", "true");
+  }
+
+  function on(el, event, handler) {
+    if (el) el.addEventListener(event, handler);
+  }
+
+  function downloadJsonFile(filename, data) {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function getFilteredStudents() {
+    const query = els.searchInput.value.trim().toLowerCase();
+    const selectedClass = els.classFilter.value;
+    const selectedStatus = els.statusFilter.value;
+
+    return dashboardData.students.filter(student => {
+      const matchesQuery = !query || [student.name, student.className, student.grade, student.status].join(" ").toLowerCase().includes(query);
+      const matchesClass = selectedClass === "all" || student.className === selectedClass;
+      const matchesStatus = selectedStatus === "all" || student.status.toLowerCase() === selectedStatus;
+      return matchesQuery && matchesClass && matchesStatus;
+    });
+  }
+
+  function populateClassFilter() {
+    const classes = [...new Set(dashboardData.students.map(student => student.className))].sort();
+    const current = els.classFilter.value || "all";
+
+    els.classFilter.innerHTML =
+      '<option value="all">All Classes</option>' +
+      classes.map(className => `<option value="${escapeHtml(className)}">${escapeHtml(className)}</option>`).join("");
+
+    els.classFilter.value = classes.includes(current) ? current : "all";
+  }
+
+  function renderStudents() {
+    const students = getFilteredStudents();
+
+    if (!students.length) {
+      els.studentTableBody.innerHTML = `<tr><td colspan="6"><div class="empty-state">No students match the current search or filters.</div></td></tr>`;
+      return;
     }
 
-    function safeParseJson(value) {
-      try {
-        return JSON.parse(value);
-      } catch {
-        return null;
-      }
-    }
-
-    function getInitials(name) {
-      return String(name || "")
-        .split(" ")
-        .filter(Boolean)
-        .slice(0, 2)
-        .map(part => part[0].toUpperCase())
-        .join("");
-    }
-
-    function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
-    }
-
-    function getToneClass(status) {
-      const s = String(status || "").toLowerCase();
-      if (s.includes("excellent") || s.includes("ready") || s.includes("improved")) return "green";
-      if (s.includes("support") || s.includes("today") || s.includes("attention") || s.includes("planned")) return "yellow";
-      if (s.includes("behind") || s.includes("late")) return "red";
-      return "";
-    }
-
-    function normalizeStudent(raw) {
-      if (!raw || typeof raw !== "object") return null;
-      const name = raw.name || raw.studentName || raw.fullName || raw.username || raw.playerName;
-      if (!name) return null;
-
-      const className = raw.className || raw.class || raw.classroom || raw.gradeGroup || "Grade 4A";
-      const grade = raw.grade || raw.letterGrade || raw.level || "B";
-      const completed = Number(raw.completed ?? raw.completedTasks ?? raw.assignmentsCompleted ?? 0);
-      const total = Math.max(1, Number(raw.total ?? raw.totalTasks ?? raw.assignmentsTotal ?? 15));
-      const accuracy = Math.max(0, Math.min(100, Number(raw.accuracy ?? raw.averageAccuracy ?? raw.avgAccuracy ?? raw.score ?? 0)));
-      const gamesCompleted = Number(raw.gamesCompleted ?? raw.gameCount ?? raw.completedGames ?? 0);
-      const improvement = Number(raw.improvement ?? raw.weeklyImprovement ?? raw.scoreChange ?? 0);
-      const streak = Number(raw.streak ?? raw.currentStreak ?? raw.loginStreak ?? 0);
-
-      let status = raw.status || "On Track";
-      if (!raw.status) {
-        if (accuracy >= 88) status = "Excellent";
-        else if (accuracy >= 75) status = "On Track";
-        else if (accuracy >= 65) status = "Needs Support";
-        else status = "Behind";
-      }
-
-      return { name, className, grade, completed, total, accuracy, gamesCompleted, improvement, streak, status };
-    }
-
-    function normalizeAssignment(raw) {
-      if (!raw || typeof raw !== "object") return null;
-      const title = raw.title || raw.name || raw.assignmentTitle || raw.task;
-      const detail = raw.detail || raw.description || raw.assignmentDetail || raw.subtitle || "No details yet";
-      const status = raw.status || raw.state || raw.label || "Planned";
-      if (!title) return null;
-      return { title, detail, status };
-    }
-
-    function normalizeActivity(raw) {
-      if (!raw || typeof raw !== "object") return null;
-      const title = raw.title || raw.message || raw.activityTitle || raw.event;
-      const sub = raw.sub || raw.detail || raw.description || raw.time || "Recent activity";
-      const initials = raw.initials || getInitials(raw.name || raw.studentName || raw.actor || title || "M");
-      const status = raw.status || raw.label || "Reviewed";
-      const tone = raw.tone || getToneClass(status) || "default";
-      if (!title) return null;
-      return { initials, title, sub, status, tone };
-    }
-
-    function normalizeGamePerformance(raw, fallbackName) {
-      if (typeof raw === "number") {
-        return { name: fallbackName || "Game", score: Math.max(0, Math.min(100, raw)) };
-      }
-      if (!raw || typeof raw !== "object") return null;
-      const name = raw.name || raw.game || raw.title || fallbackName || "Game";
-      const score = Number(raw.score ?? raw.average ?? raw.avg ?? raw.highScore ?? 0);
-      return { name, score: Math.max(0, Math.min(100, score)) };
-    }
-
-    function openModal(modal) {
-      if (!modal) return;
-      modal.classList.add("show");
-      modal.setAttribute("aria-hidden", "false");
-    }
-
-    function closeModal(modal) {
-      if (!modal) return;
-      modal.classList.remove("show");
-      modal.setAttribute("aria-hidden", "true");
-    }
-
-    function on(el, event, handler) {
-      if (el) el.addEventListener(event, handler);
-    }
-
-    function downloadJsonFile(filename, data) {
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    function getFilteredStudents() {
-      const query = els.searchInput.value.trim().toLowerCase();
-      const selectedClass = els.classFilter.value;
-      const selectedStatus = els.statusFilter.value;
-
-      return dashboardData.students.filter(student => {
-        const matchesQuery = !query || [student.name, student.className, student.grade, student.status].join(" ").toLowerCase().includes(query);
-        const matchesClass = selectedClass === "all" || student.className === selectedClass;
-        const matchesStatus = selectedStatus === "all" || student.status.toLowerCase() === selectedStatus;
-        return matchesQuery && matchesClass && matchesStatus;
-      });
-    }
-
-    function populateClassFilter() {
-      const classes = [...new Set(dashboardData.students.map(student => student.className))].sort();
-      const current = els.classFilter.value || "all";
-
-      els.classFilter.innerHTML =
-        '<option value="all">All Classes</option>' +
-        classes.map(className => `<option value="${escapeHtml(className)}">${escapeHtml(className)}</option>`).join("");
-
-      els.classFilter.value = classes.includes(current) ? current : "all";
-    }
-
-    function renderStudents() {
-      const students = getFilteredStudents();
-
-      if (!students.length) {
-        els.studentTableBody.innerHTML = `<tr><td colspan="6"><div class="empty-state">No students match the current search or filters.</div></td></tr>`;
-        return;
-      }
-
-      els.studentTableBody.innerHTML = students.map(student => {
-        const progress = Math.round((student.completed / student.total) * 100);
-        return `
-          <tr>
-            <td>
-              <div class="student-cell">
-                <div class="student-mini">${escapeHtml(getInitials(student.name))}</div>
-                <div>
-                  <strong>${escapeHtml(student.name)}</strong><br>
-                  <span class="small">${escapeHtml(student.className)}</span>
-                </div>
+    els.studentTableBody.innerHTML = students.map(student => {
+      const progress = Math.round((student.completed / student.total) * 100);
+      return `
+        <tr>
+          <td>
+            <div class="student-cell">
+              <div class="student-mini">${escapeHtml(getInitials(student.name))}</div>
+              <div>
+                <strong>${escapeHtml(student.name)}</strong><br>
+                <span class="small">${escapeHtml(student.className)}</span>
               </div>
-            </td>
-            <td>${escapeHtml(student.grade)}</td>
-            <td>${student.completed} / ${student.total}</td>
-            <td>${student.accuracy}%</td>
-            <td>
-              <div class="progress"><span style="width:${progress}%"></span></div>
-              <span class="small">${progress}% complete</span>
-            </td>
-            <td><span class="pill ${getToneClass(student.status)}">${escapeHtml(student.status)}</span></td>
-          </tr>
-        `;
-      }).join("");
+            </div>
+          </td>
+          <td>${escapeHtml(student.grade)}</td>
+          <td>${student.completed} / ${student.total}</td>
+          <td>${student.accuracy}%</td>
+          <td>
+            <div class="progress"><span style="width:${progress}%"></span></div>
+            <span class="small">${progress}% complete</span>
+          </td>
+          <td><span class="pill ${getToneClass(student.status)}">${escapeHtml(student.status)}</span></td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function renderActivities() {
+    const query = els.searchInput.value.trim().toLowerCase();
+    const activities = dashboardData.activities.filter(activity => {
+      return !query || [activity.title, activity.sub, activity.status].join(" ").toLowerCase().includes(query);
+    });
+
+    if (!activities.length) {
+      els.activityList.innerHTML = `<div class="empty-state">No activity matched your search.</div>`;
+      return;
     }
 
-    function renderActivities() {
-      const query = els.searchInput.value.trim().toLowerCase();
-      const activities = dashboardData.activities.filter(activity => {
-        return !query || [activity.title, activity.sub, activity.status].join(" ").toLowerCase().includes(query);
-      });
-
-      if (!activities.length) {
-        els.activityList.innerHTML = `<div class="empty-state">No activity matched your search.</div>`;
-        return;
-      }
-
-      els.activityList.innerHTML = activities.map(activity => `
-        <div class="list-row">
-          <div class="avatar">${escapeHtml(activity.initials)}</div>
-          <div>
-            <div class="item-title">${escapeHtml(activity.title)}</div>
-            <div class="item-sub">${escapeHtml(activity.sub)}</div>
-          </div>
-          <div class="pill ${activity.tone === "default" ? "" : escapeHtml(activity.tone)}">${escapeHtml(activity.status)}</div>
+    els.activityList.innerHTML = activities.map(activity => `
+      <div class="list-row">
+        <div class="avatar">${escapeHtml(activity.initials)}</div>
+        <div>
+          <div class="item-title">${escapeHtml(activity.title)}</div>
+          <div class="item-sub">${escapeHtml(activity.sub)}</div>
         </div>
-      `).join("");
+        <div class="pill ${activity.tone === "default" ? "" : escapeHtml(activity.tone)}">${escapeHtml(activity.status)}</div>
+      </div>
+    `).join("");
+  }
+
+  function renderAssignments() {
+    const query = els.searchInput.value.trim().toLowerCase();
+    const assignments = dashboardData.assignments.filter(item => {
+      return !query || [item.title, item.detail, item.status].join(" ").toLowerCase().includes(query);
+    });
+
+    if (!assignments.length) {
+      els.assignmentList.innerHTML = `<div class="empty-state">No assignments matched your search.</div>`;
+      return;
     }
 
-    function renderAssignments() {
-      const query = els.searchInput.value.trim().toLowerCase();
-      const assignments = dashboardData.assignments.filter(item => {
-        return !query || [item.title, item.detail, item.status].join(" ").toLowerCase().includes(query);
-      });
-
-      if (!assignments.length) {
-        els.assignmentList.innerHTML = `<div class="empty-state">No assignments matched your search.</div>`;
-        return;
-      }
-
-      els.assignmentList.innerHTML = assignments.map((item, index) => `
-        <div class="list-row">
-          <div class="avatar">${index + 1}</div>
-          <div>
-            <div class="item-title">${escapeHtml(item.title)}</div>
-            <div class="item-sub">${escapeHtml(item.detail)}</div>
-          </div>
-          <div class="pill ${getToneClass(item.status)}">${escapeHtml(item.status)}</div>
+    els.assignmentList.innerHTML = assignments.map((item, index) => `
+      <div class="list-row">
+        <div class="avatar">${index + 1}</div>
+        <div>
+          <div class="item-title">${escapeHtml(item.title)}</div>
+          <div class="item-sub">${escapeHtml(item.detail)}</div>
         </div>
-      `).join("");
+        <div class="pill ${getToneClass(item.status)}">${escapeHtml(item.status)}</div>
+      </div>
+    `).join("");
+  }
+
+  function renderNotes() {
+    if (!dashboardData.notes.length) {
+      els.notesList.innerHTML = `<li>No notes yet. Add your first one below.</li>`;
+      return;
     }
 
-    function renderNotes() {
-      if (!dashboardData.notes.length) {
-        els.notesList.innerHTML = `<li>No notes yet. Add your first one below.</li>`;
-        return;
-      }
-      els.notesList.innerHTML = dashboardData.notes.map(note => `<li>${escapeHtml(note)}</li>`).join("");
+    els.notesList.innerHTML = dashboardData.notes.map(note => `<li>${escapeHtml(note)}</li>`).join("");
+  }
+
+  function renderGameChart() {
+    const rows = dashboardData.gamePerformance.map(game => `
+      <div class="chart-row">
+        <span>${escapeHtml(game.name)}</span>
+        <div class="bar-track"><div class="bar-fill" style="width:${game.score}%"></div></div>
+        <strong>${game.score}%</strong>
+      </div>
+    `).join("");
+
+    els.gameChart.innerHTML = rows || `<div class="empty-state">No game data available.</div>`;
+  }
+
+  function renderStats() {
+    const students = getFilteredStudents();
+    const totalStudents = students.length;
+    const avgAccuracy = totalStudents
+      ? Math.round(students.reduce((sum, student) => sum + student.accuracy, 0) / totalStudents)
+      : 0;
+    const totalGames = students.reduce((sum, student) => sum + student.gamesCompleted, 0);
+    const pendingReviews = dashboardData.assignments.filter(item => item.status.toLowerCase() !== "ready").length;
+    const improved = [...dashboardData.students].sort((a, b) => b.improvement - a.improvement)[0];
+    const streak = [...dashboardData.students].sort((a, b) => b.streak - a.streak)[0];
+
+    els.statStudents.textContent = totalStudents;
+    els.statAccuracy.textContent = `${avgAccuracy}%`;
+    els.statGames.textContent = totalGames;
+    els.statPending.textContent = pendingReviews;
+
+    els.statStudentsSub.textContent = totalStudents === dashboardData.students.length
+      ? "All students shown"
+      : `Filtered from ${dashboardData.students.length}`;
+
+    els.statAccuracySub.textContent = totalStudents ? "Across filtered students" : "No matching students";
+    els.statGamesSub.textContent = totalStudents ? "Across filtered students" : "No matching students";
+    els.statPendingSub.textContent = `${dashboardData.assignments.length} total assignments`;
+
+    els.mostImproved.textContent = improved ? improved.name : "—";
+    els.mostImprovedSub.textContent = improved ? `+${improved.improvement}% this week` : "No change data yet";
+
+    els.topStreak.textContent = streak ? `${streak.streak} days` : "—";
+    els.topStreakSub.textContent = streak ? `${streak.name} has the top streak` : "Streak updates live";
+
+    els.navStudentsBadge.textContent = dashboardData.students.length;
+    els.navAssignmentsBadge.textContent = dashboardData.assignments.length;
+    els.navMessagesBadge.textContent = dashboardData.activities.length;
+
+    els.welcomeTeacher.textContent = `Welcome back, ${dashboardData.teacherName}`;
+    els.welcomeSummary.textContent = `You have ${pendingReviews} assignments to review and ${dashboardData.students.filter(student => student.improvement >= 8).length} students who improved their score this week.`;
+  }
+
+  function renderAll() {
+    populateClassFilter();
+    renderStudents();
+    renderActivities();
+    renderAssignments();
+    renderNotes();
+    renderGameChart();
+    renderStats();
+  }
+
+  function loadDataFromLocal() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : cloneDefaultData();
+    } catch (error) {
+      console.warn("Failed to load local dashboard data:", error);
+      return cloneDefaultData();
+    }
+  }
+
+  function saveDataToLocal() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(dashboardData));
+  }
+
+  async function loadDataFromSupabase() {
+    if (!window.supabaseClient) return null;
+
+    const { data, error } = await window.supabaseClient
+      .from("teacher_dashboards")
+      .select("*")
+      .eq("dashboard_key", DASHBOARD_ROW_KEY)
+      .single();
+
+    if (error && error.code !== "PGRST116") {
+      console.error("Supabase load error:", error);
+      return null;
     }
 
-    function renderGameChart() {
-      const rows = dashboardData.gamePerformance.map(game => `
-        <div class="chart-row">
-          <span>${escapeHtml(game.name)}</span>
-          <div class="bar-track"><div class="bar-fill" style="width:${game.score}%"></div></div>
-          <strong>${game.score}%</strong>
-        </div>
-      `).join("");
+    if (!data) {
+      const starter = cloneDefaultData();
 
-      els.gameChart.innerHTML = rows || `<div class="empty-state">No game data available.</div>`;
-    }
-
-    function renderStats() {
-      const students = getFilteredStudents();
-      const totalStudents = students.length;
-      const avgAccuracy = totalStudents
-        ? Math.round(students.reduce((sum, student) => sum + student.accuracy, 0) / totalStudents)
-        : 0;
-      const totalGames = students.reduce((sum, student) => sum + student.gamesCompleted, 0);
-      const pendingReviews = dashboardData.assignments.filter(item => item.status.toLowerCase() !== "ready").length;
-      const improved = [...dashboardData.students].sort((a, b) => b.improvement - a.improvement)[0];
-      const streak = [...dashboardData.students].sort((a, b) => b.streak - a.streak)[0];
-
-      els.statStudents.textContent = totalStudents;
-      els.statAccuracy.textContent = `${avgAccuracy}%`;
-      els.statGames.textContent = totalGames;
-      els.statPending.textContent = pendingReviews;
-
-      els.statStudentsSub.textContent = totalStudents === dashboardData.students.length
-        ? "All students shown"
-        : `Filtered from ${dashboardData.students.length}`;
-
-      els.statAccuracySub.textContent = totalStudents ? "Across filtered students" : "No matching students";
-      els.statGamesSub.textContent = totalStudents ? "Across filtered students" : "No matching students";
-      els.statPendingSub.textContent = `${dashboardData.assignments.length} total assignments`;
-
-      els.mostImproved.textContent = improved ? improved.name : "—";
-      els.mostImprovedSub.textContent = improved ? `+${improved.improvement}% this week` : "No change data yet";
-
-      els.topStreak.textContent = streak ? `${streak.streak} days` : "—";
-      els.topStreakSub.textContent = streak ? `${streak.name} has the top streak` : "Streak updates live";
-
-      els.navStudentsBadge.textContent = dashboardData.students.length;
-      els.navAssignmentsBadge.textContent = dashboardData.assignments.length;
-      els.navMessagesBadge.textContent = dashboardData.activities.length;
-
-      els.welcomeTeacher.textContent = `Welcome back, ${dashboardData.teacherName}`;
-      els.welcomeSummary.textContent = `You have ${pendingReviews} assignments to review and ${dashboardData.students.filter(student => student.improvement >= 8).length} students who improved their score this week.`;
-    }
-
-    function renderAll() {
-      populateClassFilter();
-      renderStudents();
-      renderActivities();
-      renderAssignments();
-      renderNotes();
-      renderGameChart();
-      renderStats();
-    }
-
-    function loadDataFromLocal() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        return raw ? JSON.parse(raw) : cloneDefaultData();
-      } catch (error) {
-        console.warn("Failed to load local dashboard data:", error);
-        return cloneDefaultData();
-      }
-    }
-
-    function saveDataToLocal() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(dashboardData));
-    }
-
-    async function loadDataFromSupabase() {
-      if (!supabaseClient) return null;
-
-      const { data, error } = await supabaseClient
+      const { error: insertError } = await window.supabaseClient
         .from("teacher_dashboards")
-        .select("*")
-        .eq("dashboard_key", DASHBOARD_ROW_KEY)
-        .single();
+        .upsert({
+          dashboard_key: DASHBOARD_ROW_KEY,
+          teacher_name: starter.teacherName,
+          notes: starter.notes,
+          assignments: starter.assignments,
+          activities: starter.activities,
+          game_performance: starter.gamePerformance,
+          students: starter.students,
+          updated_at: new Date().toISOString()
+        }, { onConflict: "dashboard_key" });
 
-      if (error && error.code !== "PGRST116") {
-        console.error("Supabase load error:", error);
+      if (insertError) {
+        console.error("Supabase starter row error:", insertError);
         return null;
       }
 
-      if (!data) {
-        const starter = cloneDefaultData();
-        const { error: insertError } = await supabaseClient
-          .from("teacher_dashboards")
-          .upsert({
-            dashboard_key: DASHBOARD_ROW_KEY,
-            teacher_name: starter.teacherName,
-            notes: starter.notes,
-            assignments: starter.assignments,
-            activities: starter.activities,
-            game_performance: starter.gamePerformance,
-            students: starter.students,
-            updated_at: new Date().toISOString()
-          }, { onConflict: "dashboard_key" });
-
-        if (insertError) {
-          console.error("Supabase starter row error:", insertError);
-          return null;
-        }
-
-        return starter;
-      }
-
-      return {
-        teacherName: data.teacher_name || defaultData.teacherName,
-        notes: Array.isArray(data.notes) ? data.notes.map(String) : cloneDefaultData().notes,
-        assignments: Array.isArray(data.assignments) ? data.assignments.map(normalizeAssignment).filter(Boolean) : cloneDefaultData().assignments,
-        activities: Array.isArray(data.activities) ? data.activities.map(normalizeActivity).filter(Boolean) : cloneDefaultData().activities,
-        gamePerformance: Array.isArray(data.game_performance) ? data.game_performance.map((item, index) => normalizeGamePerformance(item, `Game ${index + 1}`)).filter(Boolean) : cloneDefaultData().gamePerformance,
-        students: Array.isArray(data.students) ? data.students.map(normalizeStudent).filter(Boolean) : cloneDefaultData().students
-      };
+      return starter;
     }
 
-    async function saveDataToSupabase() {
-      if (!supabaseClient) {
-        saveDataToLocal();
-        return;
-      }
+    return {
+      teacherName: data.teacher_name || defaultData.teacherName,
+      notes: Array.isArray(data.notes) ? data.notes.map(String) : cloneDefaultData().notes,
+      assignments: Array.isArray(data.assignments) ? data.assignments.map(normalizeAssignment).filter(Boolean) : cloneDefaultData().assignments,
+      activities: Array.isArray(data.activities) ? data.activities.map(normalizeActivity).filter(Boolean) : cloneDefaultData().activities,
+      gamePerformance: Array.isArray(data.game_performance) ? data.game_performance.map((item, index) => normalizeGamePerformance(item, `Game ${index + 1}`)).filter(Boolean) : cloneDefaultData().gamePerformance,
+      students: Array.isArray(data.students) ? data.students.map(normalizeStudent).filter(Boolean) : cloneDefaultData().students
+    };
+  }
 
-      const payload = {
-        dashboard_key: DASHBOARD_ROW_KEY,
-        teacher_name: dashboardData.teacherName,
-        notes: dashboardData.notes,
-        assignments: dashboardData.assignments,
-        activities: dashboardData.activities,
-        game_performance: dashboardData.gamePerformance,
-        students: dashboardData.students,
-        updated_at: new Date().toISOString()
-      };
-
-      const { error } = await supabaseClient
-        .from("teacher_dashboards")
-        .upsert(payload, { onConflict: "dashboard_key" });
-
-      if (error) {
-        console.error("Supabase save error:", error);
-        saveDataToLocal();
-      }
+  async function saveDataToSupabase() {
+    if (!window.supabaseClient) {
+      saveDataToLocal();
+      return;
     }
 
-    async function saveDashboardData() {
-      await saveDataToSupabase();
+    const payload = {
+      dashboard_key: DASHBOARD_ROW_KEY,
+      teacher_name: dashboardData.teacherName,
+      notes: dashboardData.notes,
+      assignments: dashboardData.assignments,
+      activities: dashboardData.activities,
+      game_performance: dashboardData.gamePerformance,
+      students: dashboardData.students,
+      updated_at: new Date().toISOString()
+    };
+
+    const { error } = await window.supabaseClient
+      .from("teacher_dashboards")
+      .upsert(payload, { onConflict: "dashboard_key" });
+
+    if (error) {
+      console.error("Supabase save error:", error);
       saveDataToLocal();
     }
+  }
 
-    async function syncFromMathiveLocalStorage() {
-      const merged = cloneDefaultData();
-      const found = { students:false, assignments:false, activities:false, games:false, notes:false, teacher:false };
+  async function saveDashboardData() {
+    await saveDataToSupabase();
+    saveDataToLocal();
+  }
 
-      const studentCandidates = ["mathiveStudents", "mathive_students", "mq_students", "students", "mathiveClassroomData", "mathive_student_records"];
-      for (const key of studentCandidates) {
-        const parsed = safeParseJson(localStorage.getItem(key));
-        if (Array.isArray(parsed)) {
-          const normalized = parsed.map(normalizeStudent).filter(Boolean);
-          if (normalized.length) {
-            merged.students = normalized;
-            found.students = true;
-            break;
-          }
-        }
-      }
+  async function syncFromMathiveLocalStorage() {
+    const merged = cloneDefaultData();
+    const found = { students:false, assignments:false, activities:false, games:false, notes:false, teacher:false };
 
-      const assignmentCandidates = ["mathiveAssignments", "mathive_assignments", "mq_assignments", "assignments", "mathive_tasks"];
-      for (const key of assignmentCandidates) {
-        const parsed = safeParseJson(localStorage.getItem(key));
-        if (Array.isArray(parsed)) {
-          const normalized = parsed.map(normalizeAssignment).filter(Boolean);
-          if (normalized.length) {
-            merged.assignments = normalized;
-            found.assignments = true;
-            break;
-          }
-        }
-      }
-
-      const activityCandidates = ["mathiveActivities", "mathive_activity", "mq_activity", "recentActivity", "mathive_logs"];
-      for (const key of activityCandidates) {
-        const parsed = safeParseJson(localStorage.getItem(key));
-        if (Array.isArray(parsed)) {
-          const normalized = parsed.map(normalizeActivity).filter(Boolean);
-          if (normalized.length) {
-            merged.activities = normalized;
-            found.activities = true;
-            break;
-          }
-        }
-      }
-
-      const notesCandidates = ["mathiveTeacherNotes", "mathive_teacher_notes", "teacherNotes", "mq_teacher_notes"];
-      for (const key of notesCandidates) {
-        const parsed = safeParseJson(localStorage.getItem(key));
-        if (Array.isArray(parsed) && parsed.length) {
-          merged.notes = parsed.map(String);
-          found.notes = true;
+    const studentCandidates = ["mathiveStudents", "mathive_students", "mq_students", "students", "mathiveClassroomData", "mathive_student_records"];
+    for (const key of studentCandidates) {
+      const parsed = safeParseJson(localStorage.getItem(key));
+      if (Array.isArray(parsed)) {
+        const normalized = parsed.map(normalizeStudent).filter(Boolean);
+        if (normalized.length) {
+          merged.students = normalized;
+          found.students = true;
           break;
         }
       }
+    }
 
-      const gameCandidates = ["mathiveGamePerformance", "mathive_game_performance", "mq_game_scores", "gamePerformance"];
-      for (const key of gameCandidates) {
-        const parsed = safeParseJson(localStorage.getItem(key));
-        if (Array.isArray(parsed)) {
-          const normalized = parsed.map((item, index) => normalizeGamePerformance(item, `Game ${index + 1}`)).filter(Boolean);
-          if (normalized.length) {
-            merged.gamePerformance = normalized;
-            found.games = true;
-            break;
-          }
+    const assignmentCandidates = ["mathiveAssignments", "mathive_assignments", "mq_assignments", "assignments", "mathive_tasks"];
+    for (const key of assignmentCandidates) {
+      const parsed = safeParseJson(localStorage.getItem(key));
+      if (Array.isArray(parsed)) {
+        const normalized = parsed.map(normalizeAssignment).filter(Boolean);
+        if (normalized.length) {
+          merged.assignments = normalized;
+          found.assignments = true;
+          break;
         }
       }
+    }
 
-      if (!found.games) {
-        const inferredGames = inferredGameKeys.map((key, index) => {
-          const raw = Number(localStorage.getItem(key));
-          if (Number.isNaN(raw) || raw <= 0) return null;
-          const names = ["Dice Dash", "Place Value", "Times Table", "Pattern Pop", "Area Race", "Symmetry Sprint"];
-          return { name: names[index] || `Game ${index + 1}`, score: Math.max(0, Math.min(100, raw)) };
-        }).filter(Boolean);
+    const activityCandidates = ["mathiveActivities", "mathive_activity", "mq_activity", "recentActivity", "mathive_logs"];
+    for (const key of activityCandidates) {
+      const parsed = safeParseJson(localStorage.getItem(key));
+      if (Array.isArray(parsed)) {
+        const normalized = parsed.map(normalizeActivity).filter(Boolean);
+        if (normalized.length) {
+          merged.activities = normalized;
+          found.activities = true;
+          break;
+        }
+      }
+    }
 
-        if (inferredGames.length) {
-          merged.gamePerformance = inferredGames;
+    const notesCandidates = ["mathiveTeacherNotes", "mathive_teacher_notes", "teacherNotes", "mq_teacher_notes"];
+    for (const key of notesCandidates) {
+      const parsed = safeParseJson(localStorage.getItem(key));
+      if (Array.isArray(parsed) && parsed.length) {
+        merged.notes = parsed.map(String);
+        found.notes = true;
+        break;
+      }
+    }
+
+    const gameCandidates = ["mathiveGamePerformance", "mathive_game_performance", "mq_game_scores", "gamePerformance"];
+    for (const key of gameCandidates) {
+      const parsed = safeParseJson(localStorage.getItem(key));
+      if (Array.isArray(parsed)) {
+        const normalized = parsed.map((item, index) => normalizeGamePerformance(item, `Game ${index + 1}`)).filter(Boolean);
+        if (normalized.length) {
+          merged.gamePerformance = normalized;
           found.games = true;
+          break;
         }
       }
-
-      const profile = safeParseJson(localStorage.getItem("mq_profile")) || safeParseJson(localStorage.getItem("mathiveProfile"));
-      if (profile) {
-        merged.teacherName = profile.teacherName || profile.teacher || profile.name || merged.teacherName;
-        found.teacher = true;
-      }
-
-      if (!found.students) {
-        const playerName = profile?.playerName || profile?.name || localStorage.getItem("mq_player_name");
-        if (playerName) {
-          const avgGameScore = merged.gamePerformance.length
-            ? Math.round(merged.gamePerformance.reduce((sum, game) => sum + Number(game.score || 0), 0) / merged.gamePerformance.length)
-            : 0;
-
-          merged.students = [{
-            name: playerName,
-            className: profile?.className || "Grade 4A",
-            grade: avgGameScore >= 88 ? "A" : avgGameScore >= 75 ? "B" : avgGameScore >= 65 ? "C+" : "C",
-            completed: profile?.completed ?? merged.assignments.length,
-            total: profile?.total ?? Math.max(merged.assignments.length, 1),
-            accuracy: avgGameScore,
-            gamesCompleted: merged.gamePerformance.length,
-            status: avgGameScore >= 88 ? "Excellent" : avgGameScore >= 75 ? "On Track" : avgGameScore >= 65 ? "Needs Support" : "Behind",
-            improvement: 0,
-            streak: Number(profile?.streak ?? 0)
-          }];
-          found.students = true;
-        }
-      }
-
-      dashboardData = merged;
-      await saveDashboardData();
-      renderAll();
-
-      const foundCount = Object.values(found).filter(Boolean).length;
-      alert(
-        foundCount
-          ? `Mathive sync complete. Connected ${foundCount} data section${foundCount === 1 ? "" : "s"}.`
-          : "No existing Mathive localStorage keys were found, so the page stayed on demo data."
-      );
     }
 
-    function importDashboardJson(file) {
-      const reader = new FileReader();
+    if (!found.games) {
+      const inferredGames = inferredGameKeys.map((key, index) => {
+        const raw = Number(localStorage.getItem(key));
+        if (Number.isNaN(raw) || raw <= 0) return null;
+        const names = ["Dice Dash", "Place Value", "Times Table", "Pattern Pop", "Area Race", "Symmetry Sprint"];
+        return { name: names[index] || `Game ${index + 1}`, score: Math.max(0, Math.min(100, raw)) };
+      }).filter(Boolean);
 
-      reader.onload = async () => {
-        const parsed = safeParseJson(reader.result);
-
-        if (!parsed || typeof parsed !== "object") {
-          alert("That file is not valid dashboard JSON.");
-          return;
-        }
-
-        const next = cloneDefaultData();
-
-        if (Array.isArray(parsed.students)) next.students = parsed.students.map(normalizeStudent).filter(Boolean);
-        if (Array.isArray(parsed.assignments)) next.assignments = parsed.assignments.map(normalizeAssignment).filter(Boolean);
-        if (Array.isArray(parsed.activities)) next.activities = parsed.activities.map(normalizeActivity).filter(Boolean);
-        if (Array.isArray(parsed.gamePerformance)) next.gamePerformance = parsed.gamePerformance.map((item, index) => normalizeGamePerformance(item, `Game ${index + 1}`)).filter(Boolean);
-        if (Array.isArray(parsed.notes)) next.notes = parsed.notes.map(String);
-        if (parsed.teacherName) next.teacherName = String(parsed.teacherName);
-
-        dashboardData = next;
-        await saveDashboardData();
-        renderAll();
-        alert("Dashboard JSON imported successfully.");
-      };
-
-      reader.readAsText(file);
-    }
-
-    function addRandomActivity() {
-      const samples = [
-        { initials: "NP", title: "Noah improved on Place Value", sub: "Score increased to 90% • just now", status: "Improved", tone: "green" },
-        { initials: "MC", title: "Mia finished Pattern Pop", sub: "Accuracy 86% • just now", status: "Reviewed", tone: "default" },
-        { initials: "SK", title: "Sofia requested help", sub: "Asked for support on multiplication • just now", status: "Attention", tone: "yellow" }
-      ];
-
-      dashboardData.activities.unshift(samples[Math.floor(Math.random() * samples.length)]);
-      saveDashboardData().then(() => {
-        renderActivities();
-        renderStats();
-      });
-    }
-
-    on(els.searchInput, "input", renderAll);
-    on(els.classFilter, "change", renderAll);
-    on(els.statusFilter, "change", renderAll);
-
-    on(els.syncMathiveBtn, "click", async () => {
-      await syncFromMathiveLocalStorage();
-    });
-
-    on(els.importJsonBtn, "click", () => els.jsonFileInput.click());
-
-    on(els.resetToDemoBtn, "click", async () => {
-      dashboardData = cloneDefaultData();
-      await saveDashboardData();
-      renderAll();
-    });
-
-    on(els.jsonFileInput, "change", event => {
-      const file = event.target.files?.[0];
-      if (file) importDashboardJson(file);
-      event.target.value = "";
-    });
-
-    on(els.resetFiltersBtn, "click", () => {
-      els.searchInput.value = "";
-      els.classFilter.value = "all";
-      els.statusFilter.value = "all";
-      renderAll();
-    });
-
-    on(els.saveNoteBtn, "click", async () => {
-      const value = els.notesInput.value.trim();
-      if (!value) return;
-
-      dashboardData.notes.unshift(value);
-      els.notesInput.value = "";
-      await saveDashboardData();
-      renderNotes();
-    });
-
-    on(els.clearNotesBtn, "click", async () => {
-      dashboardData.notes = [];
-      await saveDashboardData();
-      renderNotes();
-    });
-
-    on(els.exportBtn, "click", () => {
-      downloadJsonFile("mathive-teacher-dashboard-data.json", dashboardData);
-    });
-
-    on(els.openStudentModal, "click", () => openModal(els.studentModal));
-    on(els.openStudentModal2, "click", () => openModal(els.studentModal));
-    on(els.openAssignmentModal, "click", () => openModal(els.assignmentModal));
-    on(els.openAssignmentFromSidebar, "click", () => openModal(els.assignmentModal));
-
-    document.querySelectorAll("[data-close]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const modal = document.getElementById(btn.dataset.close);
-        if (modal) closeModal(modal);
-      });
-    });
-
-    [els.studentModal, els.assignmentModal].forEach(modal => {
-      if (!modal) return;
-      modal.addEventListener("click", event => {
-        if (event.target === modal) closeModal(modal);
-      });
-    });
-
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") {
-        closeModal(els.studentModal);
-        closeModal(els.assignmentModal);
+      if (inferredGames.length) {
+        merged.gamePerformance = inferredGames;
+        found.games = true;
       }
-    });
+    }
 
-    on(els.studentForm, "submit", async event => {
-      event.preventDefault();
+    const teacherStoredProfile =
+      safeParseJson(sessionStorage.getItem("mq_teacher_profile")) ||
+      safeParseJson(localStorage.getItem("mq_teacher_profile"));
 
-      const student = {
-        name: document.getElementById("studentName").value.trim(),
-        className: document.getElementById("studentClass").value.trim(),
-        grade: document.getElementById("studentGrade").value.trim(),
-        completed: Number(document.getElementById("studentCompleted").value),
-        total: Number(document.getElementById("studentTotal").value),
-        accuracy: Number(document.getElementById("studentAccuracy").value),
-        gamesCompleted: Number(document.getElementById("studentGamesCompleted").value),
-        improvement: Number(document.getElementById("studentImprovement").value),
-        streak: Number(document.getElementById("studentStreak").value),
-        status: "On Track"
-      };
+    if (teacherStoredProfile) {
+      merged.teacherName =
+        teacherStoredProfile.first_name ||
+        teacherStoredProfile.teacherName ||
+        teacherStoredProfile.name ||
+        merged.teacherName;
+      found.teacher = true;
+    }
 
-      if (!student.name || !student.className || !student.grade || student.total <= 0) return;
+    if (!found.students) {
+      const studentProfile =
+        safeParseJson(sessionStorage.getItem("mq_profile")) ||
+        safeParseJson(localStorage.getItem("mq_profile"));
 
-      if (student.accuracy >= 88) student.status = "Excellent";
-      else if (student.accuracy >= 75) student.status = "On Track";
-      else if (student.accuracy >= 65) student.status = "Needs Support";
-      else student.status = "Behind";
+      const playerName = studentProfile?.username || studentProfile?.name || localStorage.getItem("mathiveUsername");
 
-      dashboardData.students.unshift(student);
-      dashboardData.activities.unshift({
-        initials: getInitials(student.name),
-        title: `${student.name} was added to ${student.className}`,
-        sub: `Starting accuracy ${student.accuracy}% • just now`,
-        status: "Reviewed",
-        tone: "default"
-      });
+      if (playerName) {
+        const avgGameScore = merged.gamePerformance.length
+          ? Math.round(merged.gamePerformance.reduce((sum, game) => sum + Number(game.score || 0), 0) / merged.gamePerformance.length)
+          : 0;
 
+        merged.students = [{
+          name: playerName,
+          className: studentProfile?.classCode || "Grade 4A",
+          grade: avgGameScore >= 88 ? "A" : avgGameScore >= 75 ? "B" : avgGameScore >= 65 ? "C+" : "C",
+          completed: studentProfile?.completed ?? merged.assignments.length,
+          total: studentProfile?.total ?? Math.max(merged.assignments.length, 1),
+          accuracy: avgGameScore,
+          gamesCompleted: merged.gamePerformance.length,
+          status: avgGameScore >= 88 ? "Excellent" : avgGameScore >= 75 ? "On Track" : avgGameScore >= 65 ? "Needs Support" : "Behind",
+          improvement: 0,
+          streak: Number(studentProfile?.streak ?? 0)
+        }];
+        found.students = true;
+      }
+    }
+
+    dashboardData = merged;
+    await saveDashboardData();
+    renderAll();
+
+    const foundCount = Object.values(found).filter(Boolean).length;
+    alert(
+      foundCount
+        ? `Mathive sync complete. Connected ${foundCount} data section${foundCount === 1 ? "" : "s"}.`
+        : "No existing Mathive localStorage keys were found, so the page stayed on demo data."
+    );
+  }
+
+  function importDashboardJson(file) {
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      const parsed = safeParseJson(reader.result);
+
+      if (!parsed || typeof parsed !== "object") {
+        alert("That file is not valid dashboard JSON.");
+        return;
+      }
+
+      const next = cloneDefaultData();
+
+      if (Array.isArray(parsed.students)) next.students = parsed.students.map(normalizeStudent).filter(Boolean);
+      if (Array.isArray(parsed.assignments)) next.assignments = parsed.assignments.map(normalizeAssignment).filter(Boolean);
+      if (Array.isArray(parsed.activities)) next.activities = parsed.activities.map(normalizeActivity).filter(Boolean);
+      if (Array.isArray(parsed.gamePerformance)) next.gamePerformance = parsed.gamePerformance.map((item, index) => normalizeGamePerformance(item, `Game ${index + 1}`)).filter(Boolean);
+      if (Array.isArray(parsed.notes)) next.notes = parsed.notes.map(String);
+      if (parsed.teacherName) next.teacherName = String(parsed.teacherName);
+
+      dashboardData = next;
       await saveDashboardData();
       renderAll();
-      els.studentForm.reset();
+      alert("Dashboard JSON imported successfully.");
+    };
+
+    reader.readAsText(file);
+  }
+
+  function addRandomActivity() {
+    const samples = [
+      { initials: "NP", title: "Noah improved on Place Value", sub: "Score increased to 90% • just now", status: "Improved", tone: "green" },
+      { initials: "MC", title: "Mia finished Pattern Pop", sub: "Accuracy 86% • just now", status: "Reviewed", tone: "default" },
+      { initials: "SK", title: "Sofia requested help", sub: "Asked for support on multiplication • just now", status: "Attention", tone: "yellow" }
+    ];
+
+    dashboardData.activities.unshift(samples[Math.floor(Math.random() * samples.length)]);
+    saveDashboardData().then(() => {
+      renderActivities();
+      renderStats();
+    });
+  }
+
+  on(els.searchInput, "input", renderAll);
+  on(els.classFilter, "change", renderAll);
+  on(els.statusFilter, "change", renderAll);
+
+  on(els.syncMathiveBtn, "click", async () => {
+    await syncFromMathiveLocalStorage();
+  });
+
+  on(els.importJsonBtn, "click", () => els.jsonFileInput.click());
+
+  on(els.resetToDemoBtn, "click", async () => {
+    dashboardData = cloneDefaultData();
+    dashboardData.teacherName = teacherProfile?.name || teacherProfile?.first_name || "Teacher";
+    await saveDashboardData();
+    renderAll();
+  });
+
+  on(els.jsonFileInput, "change", event => {
+    const file = event.target.files?.[0];
+    if (file) importDashboardJson(file);
+    event.target.value = "";
+  });
+
+  on(els.resetFiltersBtn, "click", () => {
+    els.searchInput.value = "";
+    els.classFilter.value = "all";
+    els.statusFilter.value = "all";
+    renderAll();
+  });
+
+  on(els.saveNoteBtn, "click", async () => {
+    const value = els.notesInput.value.trim();
+    if (!value) return;
+
+    dashboardData.notes.unshift(value);
+    els.notesInput.value = "";
+    await saveDashboardData();
+    renderNotes();
+  });
+
+  on(els.clearNotesBtn, "click", async () => {
+    dashboardData.notes = [];
+    await saveDashboardData();
+    renderNotes();
+  });
+
+  on(els.exportBtn, "click", () => {
+    downloadJsonFile("mathive-teacher-dashboard-data.json", dashboardData);
+  });
+
+  on(els.openStudentModal, "click", () => openModal(els.studentModal));
+  on(els.openStudentModal2, "click", () => openModal(els.studentModal));
+  on(els.openAssignmentModal, "click", () => openModal(els.assignmentModal));
+  on(els.openAssignmentFromSidebar, "click", () => openModal(els.assignmentModal));
+
+  document.querySelectorAll("[data-close]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const modal = document.getElementById(btn.dataset.close);
+      if (modal) closeModal(modal);
+    });
+  });
+
+  [els.studentModal, els.assignmentModal].forEach(modal => {
+    if (!modal) return;
+    modal.addEventListener("click", event => {
+      if (event.target === modal) closeModal(modal);
+    });
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
       closeModal(els.studentModal);
-    });
-
-    on(els.assignmentForm, "submit", async event => {
-      event.preventDefault();
-
-      const assignment = {
-        title: document.getElementById("assignmentTitle").value.trim(),
-        detail: document.getElementById("assignmentDetail").value.trim(),
-        status: document.getElementById("assignmentStatus").value
-      };
-
-      if (!assignment.title || !assignment.detail) return;
-
-      dashboardData.assignments.unshift(assignment);
-      dashboardData.activities.unshift({
-        initials: "MS",
-        title: `New assignment created: ${assignment.title}`,
-        sub: `${assignment.detail} • just now`,
-        status: assignment.status,
-        tone: getToneClass(assignment.status) || "default"
-      });
-
-      await saveDashboardData();
-      renderAll();
-      els.assignmentForm.reset();
       closeModal(els.assignmentModal);
+    }
+  });
+
+  on(els.studentForm, "submit", async event => {
+    event.preventDefault();
+
+    const student = {
+      name: document.getElementById("studentName").value.trim(),
+      className: document.getElementById("studentClass").value.trim(),
+      grade: document.getElementById("studentGrade").value.trim(),
+      completed: Number(document.getElementById("studentCompleted").value),
+      total: Number(document.getElementById("studentTotal").value),
+      accuracy: Number(document.getElementById("studentAccuracy").value),
+      gamesCompleted: Number(document.getElementById("studentGamesCompleted").value),
+      improvement: Number(document.getElementById("studentImprovement").value),
+      streak: Number(document.getElementById("studentStreak").value),
+      status: "On Track"
+    };
+
+    if (!student.name || !student.className || !student.grade || student.total <= 0) return;
+
+    if (student.accuracy >= 88) student.status = "Excellent";
+    else if (student.accuracy >= 75) student.status = "On Track";
+    else if (student.accuracy >= 65) student.status = "Needs Support";
+    else student.status = "Behind";
+
+    dashboardData.students.unshift(student);
+    dashboardData.activities.unshift({
+      initials: getInitials(student.name),
+      title: `${student.name} was added to ${student.className}`,
+      sub: `Starting accuracy ${student.accuracy}% • just now`,
+      status: "Reviewed",
+      tone: "default"
     });
 
-    on(els.addMockActivityBtn, "click", addRandomActivity);
-    on(els.addMockActivityBtn2, "click", addRandomActivity);
+    await saveDashboardData();
+    renderAll();
+    els.studentForm.reset();
+    closeModal(els.studentModal);
+  });
 
-    async function initializeDashboard() {
-      dashboardData = loadDataFromLocal();
+  on(els.assignmentForm, "submit", async event => {
+    event.preventDefault();
+
+    const assignment = {
+      title: document.getElementById("assignmentTitle").value.trim(),
+      detail: document.getElementById("assignmentDetail").value.trim(),
+      status: document.getElementById("assignmentStatus").value
+    };
+
+    if (!assignment.title || !assignment.detail) return;
+
+    dashboardData.assignments.unshift(assignment);
+    dashboardData.activities.unshift({
+      initials: "MS",
+      title: `New assignment created: ${assignment.title}`,
+      sub: `${assignment.detail} • just now`,
+      status: assignment.status,
+      tone: getToneClass(assignment.status) || "default"
+    });
+
+    await saveDashboardData();
+    renderAll();
+    els.assignmentForm.reset();
+    closeModal(els.assignmentModal);
+  });
+
+  on(els.addMockActivityBtn, "click", addRandomActivity);
+  on(els.addMockActivityBtn2, "click", addRandomActivity);
+
+  async function initializeDashboard() {
+    dashboardData = loadDataFromLocal();
+    dashboardData.teacherName = teacherProfile?.name || teacherProfile?.first_name || dashboardData.teacherName;
+    renderAll();
+
+    const cloudData = await loadDataFromSupabase();
+    if (cloudData) {
+      dashboardData = cloudData;
+      dashboardData.teacherName = teacherProfile?.name || teacherProfile?.first_name || dashboardData.teacherName;
+      saveDataToLocal();
       renderAll();
-
-      const cloudData = await loadDataFromSupabase();
-      if (cloudData) {
-        dashboardData = cloudData;
-        saveDataToLocal();
-        renderAll();
-      }
     }
+  }
 
-    initializeDashboard();
-  </script>
+  initializeDashboard();
+</script>
+
 </body>
 </html>

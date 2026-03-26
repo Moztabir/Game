@@ -470,94 +470,99 @@
   <footer>© <span id="year"></span> Mathhive</footer>
 
   <script>
-  function readProfile(){
-    const raw = sessionStorage.getItem('mq_profile') || localStorage.getItem('mq_profile');
-    if(!raw) return null;
-    try{
+  function readProfile() {
+    const raw = sessionStorage.getItem("mq_profile") || localStorage.getItem("mq_profile");
+    if (!raw) return null;
+
+    try {
       return JSON.parse(raw);
-    }catch{
+    } catch {
       return null;
     }
   }
 
   const p = readProfile();
 
-  if(!p){
-    window.location.replace('index.html');
-  } else {
-    document.getElementById('hello').textContent = `Hello, ${p.name}!`;
-    document.getElementById('subline').textContent = p.code ? `Class: ${p.code}` : 'Choose a game to start.';
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    function goToGame(url){
-      window.location.href = url;
-    }
-
-    function quickPlay(){
-      goToGame('Games/Game1.html');
-    }
-    function openLeaderboard(){
-     window.location.href = 'leaderboard.html';
-    }
-
-    function logout(){
-  sessionStorage.removeItem('mq_profile');
-  localStorage.removeItem('mq_player_id');
-  localStorage.removeItem('mathivPlayerName');
-  localStorage.removeItem('mathivClassCode');
-  window.location.href = 'index.html';
-}
-
-    function loadHighScores(){
-      const scores = {
-        1: Number(localStorage.getItem('game1HighScore')) || 0,
-        2: Number(localStorage.getItem('game2HighScore')) || 0,
-        3: Number(localStorage.getItem('game3HighScore')) || 0,
-        4: Number(localStorage.getItem('game4HighScore')) || 0,
-        5: Number(localStorage.getItem('game5HighScore')) || 0,
-        6: Number(localStorage.getItem('game6HighScore')) || 0
-      };
-
-      document.getElementById('hs1').textContent = scores[1];
-      document.getElementById('hs2').textContent = scores[2];
-      document.getElementById('hs3').textContent = scores[3];
-      document.getElementById('hs4').textContent = scores[4];
-      document.getElementById('hs5').textContent = scores[5];
-      document.getElementById('hs6').textContent = scores[6];
-
-      showBestBadge(scores);
-    }
-
-    function showBestBadge(scores){
-      for(let i = 1; i <= 6; i++){
-        const badge = document.getElementById(`best${i}`);
-        if(badge) badge.classList.remove('show');
-      }
-
-      let bestGame = null;
-      let bestScore = 0;
-
-      for(let i = 1; i <= 6; i++){
-        if(scores[i] > bestScore){
-          bestScore = scores[i];
-          bestGame = i;
-        }
-      }
-
-      if(bestGame !== null && bestScore > 0){
-        const bestBadge = document.getElementById(`best${bestGame}`);
-        if(bestBadge) bestBadge.classList.add('show');
-      }
-    }
-
-    loadHighScores();
-
-    window.goToGame = goToGame;
-    window.quickPlay = quickPlay;
-    window.openLeaderboard = openLeaderboard;
-    window.logout = logout;
-
+  if (!p) {
+    window.location.replace("index.html");
+    throw new Error("No student profile found");
   }
+
+  document.getElementById("hello").textContent = `Hello, ${p.username || "Player"}!`;
+  document.getElementById("subline").textContent = p.classCode
+    ? `Class: ${p.classCode}`
+    : "Choose a game to start.";
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  function goToGame(url) {
+    window.location.href = url;
+  }
+
+  function quickPlay() {
+    goToGame("Games/Game1.html");
+  }
+
+  function openLeaderboard() {
+    window.location.href = "leaderboard.html";
+  }
+
+  function logout() {
+    sessionStorage.removeItem("mq_profile");
+    localStorage.removeItem("mq_profile");
+    localStorage.removeItem("mq_player_id");
+    localStorage.removeItem("mathiveUsername");
+    localStorage.removeItem("mathiveClassCode");
+    window.location.href = "index.html";
+  }
+
+  function loadHighScores() {
+    const scores = {
+      1: Number(localStorage.getItem("game1HighScore")) || 0,
+      2: Number(localStorage.getItem("game2HighScore")) || 0,
+      3: Number(localStorage.getItem("game3HighScore")) || 0,
+      4: Number(localStorage.getItem("game4HighScore")) || 0,
+      5: Number(localStorage.getItem("game5HighScore")) || 0,
+      6: Number(localStorage.getItem("game6HighScore")) || 0
+    };
+
+    document.getElementById("hs1").textContent = scores[1];
+    document.getElementById("hs2").textContent = scores[2];
+    document.getElementById("hs3").textContent = scores[3];
+    document.getElementById("hs4").textContent = scores[4];
+    document.getElementById("hs5").textContent = scores[5];
+    document.getElementById("hs6").textContent = scores[6];
+
+    showBestBadge(scores);
+  }
+
+  function showBestBadge(scores) {
+    for (let i = 1; i <= 6; i++) {
+      const badge = document.getElementById(`best${i}`);
+      if (badge) badge.classList.remove("show");
+    }
+
+    let bestGame = null;
+    let bestScore = 0;
+
+    for (let i = 1; i <= 6; i++) {
+      if (scores[i] > bestScore) {
+        bestScore = scores[i];
+        bestGame = i;
+      }
+    }
+
+    if (bestGame !== null && bestScore > 0) {
+      const bestBadge = document.getElementById(`best${bestGame}`);
+      if (bestBadge) bestBadge.classList.add("show");
+    }
+  }
+
+  loadHighScores();
+
+  window.goToGame = goToGame;
+  window.quickPlay = quickPlay;
+  window.openLeaderboard = openLeaderboard;
+  window.logout = logout;
 </script>
 
 </body>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mathive Teacher Login</title>
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      min-height:100vh;
+      background:#f4f4f4;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      position:relative;
+      padding:20px;
+    }
+
+    body::before,
+    body::after,
+    .bg1,
+    .bg2{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      filter:blur(10px);
+      z-index:0;
+    }
+
+    body::before{
+      width:420px;
+      height:420px;
+      background:#8fc6df;
+      top:-180px;
+      left:-180px;
+    }
+
+    body::after{
+      width:320px;
+      height:320px;
+      background:#97c374;
+      top:-110px;
+      right:-110px;
+    }
+
+    .bg1{
+      width:320px;
+      height:320px;
+      background:#edcc9a;
+      bottom:-130px;
+      left:-130px;
+    }
+
+    .bg2{
+      width:300px;
+      height:300px;
+      background:#f7b500;
+      bottom:-120px;
+      right:-120px;
+    }
+
+    .card{
+      position:relative;
+      z-index:1;
+      width:100%;
+      max-width:440px;
+      background:rgba(255,255,255,0.95);
+      border-radius:28px;
+      box-shadow:0 18px 45px rgba(0,0,0,0.08);
+      padding:28px;
+      backdrop-filter:blur(12px);
+    }
+
+    .logo-wrap{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      margin-bottom:26px;
+    }
+
+    .logo-wrap img{
+      width:100%;
+      max-width:260px;
+      height:auto;
+      display:block;
+      object-fit:contain;
+    }
+
+    .login-box{
+      border-top:1px solid #ececec;
+      padding-top:24px;
+    }
+
+    .login-box h2{
+      text-align:center;
+      font-size:1.8rem;
+      color:#111;
+      margin-bottom:8px;
+    }
+
+    .login-box p{
+      text-align:center;
+      color:#666;
+      font-size:0.95rem;
+      margin-bottom:24px;
+      line-height:1.5;
+    }
+
+    .field{
+      margin-bottom:16px;
+    }
+
+    .field label{
+      display:block;
+      margin-bottom:8px;
+      font-size:0.92rem;
+      font-weight:700;
+      color:#222;
+    }
+
+    .field input{
+      width:100%;
+      padding:14px 15px;
+      border:1px solid #d8d8d8;
+      border-radius:14px;
+      font-size:1rem;
+      outline:none;
+      transition:0.2s ease;
+    }
+
+    .field input:focus{
+      border-color:#8fc165;
+      box-shadow:0 0 0 4px rgba(143,193,101,0.15);
+    }
+
+    .hint{
+      margin-top:6px;
+      font-size:0.78rem;
+      color:#888;
+    }
+
+    .buttons{
+      display:flex;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .buttons button,
+    .buttons a{
+      flex:1;
+      padding:14px;
+      border:none;
+      border-radius:14px;
+      font-size:1rem;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.2s ease;
+      text-align:center;
+      text-decoration:none;
+    }
+
+    .back-btn{
+      background:#ececec;
+      color:#222;
+    }
+
+    .back-btn:hover{
+      background:#e0e0e0;
+    }
+
+    .login-btn{
+      background:#8fc165;
+      color:#fff;
+    }
+
+    .login-btn:hover{
+      background:#7db252;
+      transform:translateY(-1px);
+    }
+
+    .message{
+      margin-top:16px;
+      text-align:center;
+      font-size:0.9rem;
+      font-weight:600;
+      min-height:20px;
+    }
+
+    .message.error{
+      color:#d13a3a;
+    }
+
+    .message.success{
+      color:#3a8f3a;
+    }
+
+    .footer-note{
+      margin-top:18px;
+      text-align:center;
+      font-size:0.8rem;
+      color:#777;
+      line-height:1.45;
+    }
+
+    @media (max-width:480px){
+      .card{
+        padding:22px;
+      }
+
+      .logo-wrap img{
+        max-width:220px;
+      }
+
+      .buttons{
+        flex-direction:column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg1"></div>
+  <div class="bg2"></div>
+
+  <div class="card">
+    <div class="logo-wrap">
+      <img src="assets/Mathieve_logo.png" alt="Mathive Logo" />
+    </div>
+
+    <div class="login-box">
+      <h2>Teacher Login</h2>
+      <p>Sign in to access class tools, student progress, and teacher features.</p>
+
+      <div class="field">
+        <label for="teacherName">Teacher First Name</label>
+        <input type="text" id="teacherName" placeholder="e.g. smith">
+      </div>
+
+      <div class="field">
+        <label for="teacherPassword">Password</label>
+        <input type="password" id="teacherPassword" placeholder="Enter password" />
+        <div class="hint">This page is ready for the teacher dashboard connection.</div>
+      </div>
+
+      <div class="buttons">
+        <a class="back-btn" href="index.html">Back</a>
+        <button class="login-btn" type="button" id="teacherLoginBtn">Login</button>
+      </div>
+
+      <div class="message" id="message"></div>
+
+      <div class="footer-note">
+        Teacher accounts use a separate login from student accounts.
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+
+  <script>
+  const teacherNameInput = document.getElementById("teacherName");
+  const teacherPasswordInput = document.getElementById("teacherPassword");
+  const teacherLoginBtn = document.getElementById("teacherLoginBtn");
+  const message = document.getElementById("message");
+
+  function showMessage(text, type = "") {
+    message.textContent = text;
+    message.className = "message" + (type ? " " + type : "");
+  }
+
+  async function validateTeacherLogin() {
+    const name = teacherNameInput.value.trim().toLowerCase();
+    const password = teacherPasswordInput.value.trim();
+
+    if (!name) {
+      showMessage("Please enter your first name.", "error");
+      return;
+    }
+
+    if (!password) {
+      showMessage("Please enter your password.", "error");
+      return;
+    }
+
+    try {
+      const { data, error } = await supabaseClient
+        .from("teachers")
+        .select("*")
+        .eq("first_name", name)
+        .eq("password", password)
+        .limit(1);
+
+      if (error) {
+        console.error("Teacher login error:", error);
+        showMessage("Database error. Check console.", "error");
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        showMessage("Invalid first name or password.", "error");
+        return;
+      }
+
+      const teacher = data[0];
+
+      const profile = {
+        id: teacher.id,
+        name: teacher.first_name,
+        role: "teacher",
+        ts: Date.now()
+      };
+
+      sessionStorage.setItem("mq_teacher_profile", JSON.stringify(profile));
+      localStorage.setItem("mq_teacher_profile", JSON.stringify(profile));
+
+      showMessage("Login successful. Redirecting...", "success");
+
+      setTimeout(() => {
+        window.location.href = "teacher-dashboard.html";
+      }, 800);
+
+    } catch (err) {
+      console.error("Teacher login catch error:", err);
+      showMessage("Something went wrong.", "error");
+    }
+  }
+
+  teacherLoginBtn.addEventListener("click", validateTeacherLogin);
+
+  teacherNameInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") validateTeacherLogin();
+  });
+
+  teacherPasswordInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") validateTeacherLogin();
+  });
+</script>
+</body>
+</html>

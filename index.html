@@ -5,210 +5,275 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mathive Login</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
     }
 
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      min-height: 100vh;
-      background: #f4f4f4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      position: relative;
-      padding: 20px;
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      min-height:100vh;
+      background:#f4f4f4;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      position:relative;
+      padding:20px;
     }
 
-    /* Background circles */
     body::before,
     body::after,
     .bg1,
-    .bg2 {
-      content: "";
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(10px);
-      z-index: 0;
+    .bg2{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      filter:blur(10px);
+      z-index:0;
     }
 
-    body::before {
-      width: 420px;
-      height: 420px;
-      background: #8fc6df;
-      top: -180px;
-      left: -180px;
+    body::before{
+      width:420px;
+      height:420px;
+      background:#8fc6df;
+      top:-180px;
+      left:-180px;
     }
 
-    body::after {
-      width: 320px;
-      height: 320px;
-      background: #97c374;
-      top: -110px;
-      right: -110px;
+    body::after{
+      width:320px;
+      height:320px;
+      background:#97c374;
+      top:-110px;
+      right:-110px;
     }
 
-    .bg1 {
-      width: 320px;
-      height: 320px;
-      background: #edcc9a;
-      bottom: -130px;
-      left: -130px;
+    .bg1{
+      width:320px;
+      height:320px;
+      background:#edcc9a;
+      bottom:-130px;
+      left:-130px;
     }
 
-    .bg2 {
-      width: 300px;
-      height: 300px;
-      background: #f7b500;
-      bottom: -120px;
-      right: -120px;
+    .bg2{
+      width:300px;
+      height:300px;
+      background:#f7b500;
+      bottom:-120px;
+      right:-120px;
     }
 
-    .card {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 430px;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 28px;
-      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
-      padding: 28px;
-      backdrop-filter: blur(12px);
+    .card{
+      position:relative;
+      z-index:1;
+      width:100%;
+      max-width:500px;
+      background:rgba(255,255,255,0.95);
+      border-radius:28px;
+      box-shadow:0 18px 45px rgba(0,0,0,0.08);
+      padding:28px;
+      backdrop-filter:blur(12px);
     }
 
-    .logo-wrap {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 26px;
+    .logo-wrap{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      margin-bottom:22px;
     }
 
-    .logo-wrap img {
-      width: 100%;
-      max-width: 260px; /* make png bigger */
-      height: auto;
-      display: block;
-      object-fit: contain;
+    .logo-wrap img{
+      width:100%;
+      max-width:260px;
+      height:auto;
+      display:block;
+      object-fit:contain;
     }
 
-    .login-box {
-      border-top: 1px solid #ececec;
-      padding-top: 24px;
+    .auth-box{
+      border-top:1px solid #ececec;
+      padding-top:22px;
     }
 
-    .login-box h2 {
-      text-align: center;
-      font-size: 1.8rem;
-      color: #111;
-      margin-bottom: 8px;
+    .tabs{
+      display:flex;
+      gap:10px;
+      margin-bottom:18px;
     }
 
-    .login-box p {
-      text-align: center;
-      color: #666;
-      font-size: 0.95rem;
-      margin-bottom: 24px;
+    .tab-btn{
+      flex:1;
+      border:none;
+      border-radius:14px;
+      padding:12px 14px;
+      font-size:0.98rem;
+      font-weight:700;
+      cursor:pointer;
+      background:#ececec;
+      color:#222;
+      transition:0.2s ease;
     }
 
-    .field {
-      margin-bottom: 16px;
+    .tab-btn.active{
+      background:#8fc165;
+      color:#fff;
     }
 
-    .field label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: #222;
+    .tab-btn:hover{
+      filter:brightness(0.98);
     }
 
-    .field input {
-      width: 100%;
-      padding: 14px 15px;
-      border: 1px solid #d8d8d8;
-      border-radius: 14px;
-      font-size: 1rem;
-      outline: none;
-      transition: 0.2s ease;
+    .panel{
+      display:none;
     }
 
-    .field input:focus {
-      border-color: #8fc165;
-      box-shadow: 0 0 0 4px rgba(143, 193, 101, 0.15);
+    .panel.active{
+      display:block;
     }
 
-    .hint {
-      margin-top: 6px;
-      font-size: 0.78rem;
-      color: #888;
+    .panel h2{
+      text-align:center;
+      font-size:1.8rem;
+      color:#111;
+      margin-bottom:8px;
     }
 
-    .buttons {
-      display: flex;
-      gap: 12px;
-      margin-top: 10px;
+    .panel p{
+      text-align:center;
+      color:#666;
+      font-size:0.95rem;
+      margin-bottom:22px;
+      line-height:1.5;
     }
 
-    .buttons button {
-      flex: 1;
-      padding: 14px;
-      border: none;
-      border-radius: 14px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.2s ease;
+    .field{
+      margin-bottom:16px;
     }
 
-    .clear-btn {
-      background: #ececec;
-      color: #222;
+    .field label{
+      display:block;
+      margin-bottom:8px;
+      font-size:0.92rem;
+      font-weight:700;
+      color:#222;
     }
 
-    .clear-btn:hover {
-      background: #e0e0e0;
+    .field input{
+      width:100%;
+      padding:14px 15px;
+      border:1px solid #d8d8d8;
+      border-radius:14px;
+      font-size:1rem;
+      outline:none;
+      transition:0.2s ease;
     }
 
-    .play-btn {
-      background: #8fc165;
-      color: #fff;
+    .field input:focus{
+      border-color:#8fc165;
+      box-shadow:0 0 0 4px rgba(143,193,101,0.15);
     }
 
-    .play-btn:hover {
-      background: #7db252;
-      transform: translateY(-1px);
+    .field-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
     }
 
-    .message {
-      margin-top: 16px;
-      text-align: center;
-      font-size: 0.9rem;
-      font-weight: 600;
-      min-height: 20px;
+    .hint{
+      margin-top:6px;
+      font-size:0.78rem;
+      color:#888;
     }
 
-    .message.error {
-      color: #d13a3a;
+    .buttons{
+      display:flex;
+      gap:12px;
+      margin-top:10px;
     }
 
-    .message.success {
-      color: #3a8f3a;
+    .buttons button{
+      flex:1;
+      padding:14px;
+      border:none;
+      border-radius:14px;
+      font-size:1rem;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.2s ease;
     }
 
-    @media (max-width: 480px) {
-      .card {
-        padding: 22px;
+    .clear-btn{
+      background:#ececec;
+      color:#222;
+    }
+
+    .clear-btn:hover{
+      background:#e0e0e0;
+    }
+
+    .main-btn{
+      background:#8fc165;
+      color:#fff;
+    }
+
+    .main-btn:hover{
+      background:#7db252;
+      transform:translateY(-1px);
+    }
+
+    .teacher-link{
+      display:block;
+      width:100%;
+      text-align:center;
+      margin-top:14px;
+      padding:13px 14px;
+      border-radius:14px;
+      text-decoration:none;
+      font-weight:700;
+      background:#f7b500;
+      color:#1b1b1b;
+      transition:0.2s ease;
+    }
+
+    .teacher-link:hover{
+      filter:brightness(0.97);
+      transform:translateY(-1px);
+    }
+
+    .message{
+      margin-top:16px;
+      text-align:center;
+      font-size:0.9rem;
+      font-weight:600;
+      min-height:20px;
+    }
+
+    .message.error{
+      color:#d13a3a;
+    }
+
+    .message.success{
+      color:#3a8f3a;
+    }
+
+    @media (max-width:560px){
+      .card{
+        padding:22px;
       }
 
-      .logo-wrap img {
-        max-width: 220px;
+      .logo-wrap img{
+        max-width:220px;
       }
 
-      .buttons {
-        flex-direction: column;
+      .field-grid{
+        grid-template-columns:1fr;
+      }
+
+      .buttons{
+        flex-direction:column;
       }
     }
   </style>
@@ -219,165 +284,354 @@
 
   <div class="card">
     <div class="logo-wrap">
-      <img src="assets/Mathieve_logo.png" alt="Mathiv Logo" />
+      <img src="assets/Mathieve_logo.png" alt="Mathive Logo" />
     </div>
 
-    <div class="login-box">
-      <h2>Welcome</h2>
-      <p>Type your first name and class code to begin.</p>
-
-      <div class="field">
-        <label for="playerName">Your first name</label>
-        <input type="text" id="playerName" placeholder="e.g. Alex" />
+    <div class="auth-box">
+      <div class="tabs">
+        <button class="tab-btn active" id="loginTabBtn" type="button">Login</button>
+        <button class="tab-btn" id="signupTabBtn" type="button">Sign Up</button>
       </div>
 
-      <div class="field">
-        <label for="classCode">Class code</label>
-        <input type="text" id="classCode" placeholder="e.g. 3F92" />
-        <div class="hint">Use first name only. No spaces or special symbols.</div>
-      </div>
+      <section class="panel active" id="loginPanel">
+        <h2>Welcome Back</h2>
+        <p>Log in with your username and class code.</p>
 
-      <div class="buttons">
-        <button class="clear-btn" type="button" id="clearBtn">Clear</button>
-        <button class="play-btn" type="button" id="playBtn">Play</button>
-      </div>
+        <div class="field">
+          <label for="loginUsername">Username</label>
+          <input type="text" id="loginUsername" placeholder="e.g. alex23" />
+        </div>
+
+        <div class="field">
+          <label for="loginClassCode">Class code</label>
+          <input type="text" id="loginClassCode" placeholder="e.g. 3F92" />
+          <div class="hint">For now, your class code is also your password.</div>
+        </div>
+
+        <div class="buttons">
+          <button class="clear-btn" type="button" id="loginClearBtn">Clear</button>
+          <button class="main-btn" type="button" id="loginBtn">Login</button>
+        </div>
+      </section>
+
+      <section class="panel" id="signupPanel">
+        <h2>Create Account</h2>
+        <p>Sign up as a new student to start playing.</p>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="signupFirstName">First name</label>
+            <input type="text" id="signupFirstName" placeholder="e.g. Alex" />
+          </div>
+
+          <div class="field">
+            <label for="signupLastName">Last name</label>
+            <input type="text" id="signupLastName" placeholder="e.g. Johnson" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="signupUsername">Username</label>
+          <input type="text" id="signupUsername" placeholder="e.g. alex23" />
+          <div class="hint">This is what you will use to log in later.</div>
+        </div>
+
+        <div class="field">
+          <label for="signupEmail">School email</label>
+          <input type="email" id="signupEmail" placeholder="e.g. alex@school.ca" />
+        </div>
+
+        <div class="field">
+          <label for="signupStudentId">Student ID</label>
+          <input type="text" id="signupStudentId" placeholder="e.g. 123456" />
+        </div>
+
+        <div class="field">
+          <label for="signupClassCode">Class code</label>
+          <input type="text" id="signupClassCode" placeholder="e.g. 3F92" />
+          <div class="hint">For now, your class code also works like your password.</div>
+        </div>
+
+        <div class="buttons">
+          <button class="clear-btn" type="button" id="signupClearBtn">Clear</button>
+          <button class="main-btn" type="button" id="signupBtn">Sign Up</button>
+        </div>
+      </section>
+
+      <a class="teacher-link" href="teacher-login.html">Teacher Login</a>
 
       <div class="message" id="message"></div>
     </div>
   </div>
 
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase.js"></script>
 
-<script>
-  const playerNameInput = document.getElementById("playerName");
-  const classCodeInput = document.getElementById("classCode");
-  const playBtn = document.getElementById("playBtn");
-  const clearBtn = document.getElementById("clearBtn");
-  const message = document.getElementById("message");
+  <script>
+    const loginTabBtn = document.getElementById("loginTabBtn");
+    const signupTabBtn = document.getElementById("signupTabBtn");
+    const loginPanel = document.getElementById("loginPanel");
+    const signupPanel = document.getElementById("signupPanel");
+    const message = document.getElementById("message");
 
-  function showMessage(text, type) {
-    message.textContent = text;
-    message.className = "message " + type;
-  }
+    const loginUsername = document.getElementById("loginUsername");
+    const loginClassCode = document.getElementById("loginClassCode");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginClearBtn = document.getElementById("loginClearBtn");
 
-  async function getOrCreatePlayer(name, classCode) {
-    const normalizedName = name.trim();
-    const normalizedCode = classCode.trim().toUpperCase();
+    const signupFirstName = document.getElementById("signupFirstName");
+    const signupLastName = document.getElementById("signupLastName");
+    const signupUsername = document.getElementById("signupUsername");
+    const signupEmail = document.getElementById("signupEmail");
+    const signupStudentId = document.getElementById("signupStudentId");
+    const signupClassCode = document.getElementById("signupClassCode");
+    const signupBtn = document.getElementById("signupBtn");
+    const signupClearBtn = document.getElementById("signupClearBtn");
 
-    const { data: existingPlayers, error: lookupError } = await supabaseClient
-      .from("players")
-      .select("id, full_name, nickname, class_code")
-      .eq("class_code", normalizedCode)
-      .or(`full_name.eq.${normalizedName},nickname.eq.${normalizedName}`)
-      .limit(1);
-
-    if (lookupError) {
-      console.error("Player lookup failed:", lookupError);
-      throw lookupError;
+    function showMessage(text, type = "") {
+      message.textContent = text;
+      message.className = "message" + (type ? " " + type : "");
     }
 
-    if (existingPlayers && existingPlayers.length > 0) {
-      const existingPlayer = existingPlayers[0];
-      localStorage.setItem("mq_player_id", existingPlayer.id);
-      return existingPlayer.id;
+    function switchTab(tab) {
+      const isLogin = tab === "login";
+
+      loginTabBtn.classList.toggle("active", isLogin);
+      signupTabBtn.classList.toggle("active", !isLogin);
+      loginPanel.classList.toggle("active", isLogin);
+      signupPanel.classList.toggle("active", !isLogin);
+
+      showMessage("");
+
+      if (isLogin) {
+        loginUsername.focus();
+      } else {
+        signupFirstName.focus();
+      }
     }
 
-    const newPlayerId = crypto.randomUUID();
-
-    const { data: newPlayer, error: createError } = await supabaseClient
-      .from("players")
-      .insert([
-        {
-          id: newPlayerId,
-          full_name: normalizedName,
-          nickname: normalizedName,
-          class_code: normalizedCode,
-          school_code: "Mathiv"
-        }
-      ])
-      .select()
-      .single();
-
-    if (createError) {
-      console.error("Player creation failed:", createError);
-      throw createError;
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
-    localStorage.setItem("mq_player_id", newPlayer.id);
-    return newPlayer.id;
-  }
-
-  async function validateLogin() {
-    const name = playerNameInput.value.trim();
-    const classCode = classCodeInput.value.trim().toUpperCase();
-
-    const validName = /^[A-Za-z]+$/.test(name);
-    const validCode = classCode === "3F92";
-
-    if (!name) {
-      showMessage("Please enter your first name.", "error");
-      return;
-    }
-
-    if (!validName) {
-      showMessage("Use first name only with letters only.", "error");
-      return;
-    }
-
-    if (!classCode) {
-      showMessage("Please enter the class code.", "error");
-      return;
-    }
-
-    if (!validCode) {
-      showMessage('Class code must be "3F92".', "error");
-      return;
-    }
-
-    try {
-      await getOrCreatePlayer(name, classCode);
-
-      const profile = JSON.stringify({
-        name,
-        code: classCode,
+    function saveStudentProfile(user) {
+      const profile = {
+        id: user.id,
+        username: user.username,
+        firstName: user.first_name || "",
+        lastName: user.last_name || "",
+        classCode: user.class_code,
+        schoolEmail: user.school_email || "",
+        studentId: user.student_id || "",
+        role: "student",
         ts: Date.now()
-      });
+      };
 
-      sessionStorage.setItem("mq_profile", profile);
-      localStorage.setItem("mq_profile", profile);
-      localStorage.setItem("mathivPlayerName", name);
-      localStorage.setItem("mathivClassCode", classCode);
-
-      showMessage("Login successful. Redirecting...", "success");
-
-      setTimeout(() => {
-        window.location.href = "home.html";
-      }, 800);
-    } catch (error) {
-      console.error(error);
-      showMessage("Could not connect to player database.", "error");
+      sessionStorage.setItem("mq_profile", JSON.stringify(profile));
+      localStorage.setItem("mq_profile", JSON.stringify(profile));
+      localStorage.setItem("mq_player_id", user.id);
+      localStorage.setItem("mathiveUsername", user.username);
+      localStorage.setItem("mathiveClassCode", user.class_code);
     }
-  }
 
-  playBtn.addEventListener("click", validateLogin);
+    async function validateLogin() {
+      const username = loginUsername.value.trim();
+      const classCode = loginClassCode.value.trim().toUpperCase();
 
-  clearBtn.addEventListener("click", () => {
-    playerNameInput.value = "";
-    classCodeInput.value = "";
-    showMessage("", "");
-    playerNameInput.focus();
-  });
+      if (!username) {
+        showMessage("Please enter your username.", "error");
+        return;
+      }
 
-  playerNameInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") validateLogin();
-  });
+      if (!/^[A-Za-z0-9_]+$/.test(username)) {
+        showMessage("Username can only use letters, numbers, and underscores.", "error");
+        return;
+      }
 
-  classCodeInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") validateLogin();
-  });
-</script>
+      if (!classCode) {
+        showMessage("Please enter your class code.", "error");
+        return;
+      }
 
+      try {
+        const { data: existingUsers, error } = await supabaseClient
+          .from("players")
+          .select("id, username, first_name, last_name, class_code, school_email, student_id")
+          .eq("username", username)
+          .eq("class_code", classCode)
+          .limit(1);
+
+        if (error) {
+          console.error("Login lookup failed:", error);
+          showMessage("Could not connect to the database.", "error");
+          return;
+        }
+
+        if (!existingUsers || existingUsers.length === 0) {
+          showMessage("No account found. Please sign up first.", "error");
+          return;
+        }
+
+        const user = existingUsers[0];
+        saveStudentProfile(user);
+
+        showMessage("Login successful. Redirecting...", "success");
+
+        setTimeout(() => {
+          window.location.href = "home.html";
+        }, 800);
+      } catch (err) {
+        console.error(err);
+        showMessage("Something went wrong while logging in.", "error");
+      }
+    }
+
+    async function validateSignup() {
+      const firstName = signupFirstName.value.trim();
+      const lastName = signupLastName.value.trim();
+      const username = signupUsername.value.trim();
+      const schoolEmail = signupEmail.value.trim().toLowerCase();
+      const studentId = signupStudentId.value.trim();
+      const classCode = signupClassCode.value.trim().toUpperCase();
+
+      if (!firstName) {
+        showMessage("Please enter your first name.", "error");
+        return;
+      }
+
+      if (!lastName) {
+        showMessage("Please enter your last name.", "error");
+        return;
+      }
+
+      if (!username) {
+        showMessage("Please create a username.", "error");
+        return;
+      }
+
+      if (!/^[A-Za-z0-9_]+$/.test(username)) {
+        showMessage("Username can only use letters, numbers, and underscores.", "error");
+        return;
+      }
+
+      if (!schoolEmail) {
+        showMessage("Please enter your school email.", "error");
+        return;
+      }
+
+      if (!isValidEmail(schoolEmail)) {
+        showMessage("Please enter a valid email address.", "error");
+        return;
+      }
+
+      if (!studentId) {
+        showMessage("Please enter your student ID.", "error");
+        return;
+      }
+
+      if (!classCode) {
+        showMessage("Please enter your class code.", "error");
+        return;
+      }
+
+      try {
+        const { data: existingUsers, error: lookupError } = await supabaseClient
+          .from("players")
+          .select("id, username, school_email, student_id")
+          .or(`username.eq.${username},school_email.eq.${schoolEmail},student_id.eq.${studentId}`);
+
+        if (lookupError) {
+          console.error("Signup lookup failed:", lookupError);
+          showMessage("Could not connect to the database.", "error");
+          return;
+        }
+
+        if (existingUsers && existingUsers.length > 0) {
+          showMessage("Account already exists. Please log in instead.", "error");
+          switchTab("login");
+          loginUsername.value = username;
+          loginClassCode.value = classCode;
+          return;
+        }
+
+        const newPlayerId = crypto.randomUUID();
+
+        const { data: newPlayer, error: createError } = await supabaseClient
+          .from("players")
+          .insert([
+            {
+              id: newPlayerId,
+              first_name: firstName,
+              last_name: lastName,
+              full_name: `${firstName} ${lastName}`.trim(),
+              nickname: firstName,
+              username: username,
+              school_email: schoolEmail,
+              student_id: studentId,
+              class_code: classCode,
+              school_code: "Mathive"
+            }
+          ])
+          .select()
+          .single();
+
+        if (createError) {
+          console.error("Signup create failed:", createError);
+          showMessage("Could not create account.", "error");
+          return;
+        }
+
+        saveStudentProfile(newPlayer);
+
+        showMessage("Sign up successful. Redirecting...", "success");
+
+        setTimeout(() => {
+          window.location.href = "home.html";
+        }, 800);
+      } catch (err) {
+        console.error(err);
+        showMessage("Something went wrong while signing up.", "error");
+      }
+    }
+
+    function clearLoginFields() {
+      loginUsername.value = "";
+      loginClassCode.value = "";
+      showMessage("");
+      loginUsername.focus();
+    }
+
+    function clearSignupFields() {
+      signupFirstName.value = "";
+      signupLastName.value = "";
+      signupUsername.value = "";
+      signupEmail.value = "";
+      signupStudentId.value = "";
+      signupClassCode.value = "";
+      showMessage("");
+      signupFirstName.focus();
+    }
+
+    loginTabBtn.addEventListener("click", () => switchTab("login"));
+    signupTabBtn.addEventListener("click", () => switchTab("signup"));
+
+    loginBtn.addEventListener("click", validateLogin);
+    signupBtn.addEventListener("click", validateSignup);
+
+    loginClearBtn.addEventListener("click", clearLoginFields);
+    signupClearBtn.addEventListener("click", clearSignupFields);
+
+    [loginUsername, loginClassCode].forEach(input => {
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") validateLogin();
+      });
+    });
+
+    [signupFirstName, signupLastName, signupUsername, signupEmail, signupStudentId, signupClassCode].forEach(input => {
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") validateSignup();
+      });
+    });
+  </script>
 </body>
 </html>

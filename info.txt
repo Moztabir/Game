@@ -2,12 +2,24 @@ Login Page
 UserName and class code only
 
 Sign Up page
-
+First and last name
+School email
+Student ID
+Class Code
 
 LeaderBoard
 1. Need to make a separate viewing for teachers to see Student actual name
-2. Need to change Student status to only see highscores only
-3. 
+2. Need to change Student status to only see highscores only not per game
 
-Teachers
-Previous test and 
+Teachers view
+1. Able to see every student Game score/ times played. 
+2. Able to see amount of time logged in.
+3. Able to edit student Information, First and last name, School email, Student ID, class code
+4. all student scores
+5. leaderboard by class
+6. student progress by game
+7. ability to add/remove students
+8. class analytics
+9. reset scores
+10.  teacher-dashboard.html new html file
+11. Teacher-Login.html new html file

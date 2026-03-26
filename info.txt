@@ -1,0 +1,13 @@
+Login Page
+UserName and class code only
+
+Sign Up page
+
+
+LeaderBoard
+1. Need to make a separate viewing for teachers to see Student actual name
+2. Need to change Student status to only see highscores only
+3. 
+
+Teachers
+Previous test and 

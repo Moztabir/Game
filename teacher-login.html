@@ -290,23 +290,25 @@
     }
 
     try {
-      const { data: teacher, error } = await supabaseClient
-        .from("teachers")
-        .select("*")
-        .eq("first_name", name)
-        .eq("password", password)
-        .maybeSingle();
+      const { data, error } = await supabaseClient
+  .from("teachers")
+  .select("*")
+  .eq("first_name", name)
+  .eq("password", password)
+  .limit(1);
 
-      if (error) {
-        console.error("Teacher login error:", error);
-        showMessage("Database error. Check console.", "error");
-        return;
-      }
+if (error) {
+  console.error("Teacher login error:", error);
+  showMessage("Database error. Check console.", "error");
+  return;
+}
 
-      if (!teacher) {
-        showMessage("Invalid first name or password.", "error");
-        return;
-      }
+if (!data || data.length === 0) {
+  showMessage("Invalid first name or password.", "error");
+  return;
+}
+
+const teacher = data[0];
 
       const profile = {
         id: teacher.id,
@@ -322,7 +324,7 @@
       showMessage("Login successful. Redirecting...", "success");
 
       setTimeout(() => {
-        window.location.href = "teacher-dashboard.html";
+        window.location.href = "Teacher-dashboard.html";
       }, 800);
 
     } catch (err) {

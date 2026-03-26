@@ -527,19 +527,19 @@
       console.log("Leaderboard: supabaseClient loaded", supabaseClient);
 
       const { data, error } = await supabaseClient
-        .from("score_attempts")
-        .select(`
-          player_id,
-          game_number,
-          score,
-          submitted_at,
-          players (
-            full_name,
-            nickname,
-            class_code
-          )
-        `)
-        .order("submitted_at", { ascending: false });
+       .from("score_attempts")
+       .select(`
+        player_id,
+       game_number,
+        score,
+        created_at,
+        players (
+        full_name,
+        nickname,
+        class_code
+    )
+  `)
+  .order("created_at", { ascending: false });
 
       console.log("Leaderboard raw data:", data);
       console.log("Leaderboard raw error:", error);

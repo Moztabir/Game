@@ -1,5 +1,5 @@
 Login Page
-UserName and class code only
+U  erName and class code only
 
 Sign Up page
 First and last name

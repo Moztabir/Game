@@ -21,5 +21,342 @@ Teachers view
 7. ability to add/remove students
 8. class analytics
 9. reset scores
-10.  teacher-dashboard.html new html file
-11. Teacher-Login.html new html file
+
+Yes — the teacher dashboard can be built to show all of that.
+
+To support those 10 features cleanly, the dashboard should be split into a few sections and backed by the right Supabase queries. The main thing is that some of these are just UI changes, while others need extra database fields or tables.
+
+Here’s the best structure for your `teacher-dashboard.html`.
+
+## What the dashboard should include
+
+### 1. Student overview table
+
+This should be the main table and include:
+
+* First name
+* Last name
+* Username
+* School email
+* Student ID
+* Class code
+* Total score
+* Times played
+* Last active
+* Time logged in
+
+This lets the teacher quickly scan all students.
+
+### 2. Class filter
+
+At the top of the page, add a dropdown or search box for `class_code`.
+
+That way the teacher can:
+
+* view only one class
+* filter leaderboard by class
+* view analytics by class
+
+### 3. Leaderboard by class
+
+Show a leaderboard card or table that changes when a class is selected.
+
+Suggested columns:
+
+* Rank
+* Username
+* Total score
+* Times played
+
+### 4. Student profile editor
+
+Each student row should have an **Edit** button.
+
+The teacher should be able to update:
+
+* first name
+* last name
+* school email
+* student ID
+* class code
+
+Best way:
+
+* open a modal
+* prefill current student data
+* save changes to Supabase
+
+### 5. Student progress by game
+
+For each student, show:
+
+* Game 1 high score
+* Game 2 high score
+* Game 3 high score
+* Game 4 high score
+* Game 5 high score
+* total attempts per game
+
+This can be:
+
+* a popup when clicking a student
+* or a side panel/card below the main table
+
+### 6. Class analytics
+
+Show teacher-friendly summary cards such as:
+
+* total students in class
+* total games played
+* average score
+* highest score
+* lowest score
+* most played game
+* least played game
+* average improvement
+
+### 7. Student analytics
+
+For each student, show insights like:
+
+* highest score
+* lowest score
+* total games played
+* average score
+* best game
+* weakest game
+* recent improvement
+* performance label like:
+
+  * Improving
+  * Excellent
+  * Needs Support
+  * Consistent
+
+### 8. Reset scores
+
+Add buttons for:
+
+* reset one student’s scores
+* reset all scores for a selected class
+
+This should always ask for confirmation first.
+
+### 9. Notification board
+
+Add a “Recent Sign-Ups” panel showing:
+
+* student name
+* email
+* class code
+* signup date
+
+This can be sorted newest first.
+
+### 10. Login time tracking
+
+To show “amount of time logged in,” you need to store login sessions.
+
+You need either:
+
+* a `login_sessions` table
+  or
+* fields like `last_login`, `last_logout`, `total_time_logged_in`
+
+Without session tracking in the backend, this part cannot be accurate.
+
+---
+
+## What your database should have
+
+Your current setup likely already has `players` and `score_attempts`.
+
+To support everything well, use these:
+
+### `players`
+
+```sql
+id
+username
+first_name
+last_name
+school_email
+student_id
+class_code
+created_at
+last_active
+```
+
+### `score_attempts`
+
+```sql
+id
+player_id
+game_number
+score
+created_at
+```
+
+### `login_sessions`
+
+```sql
+id
+player_id
+login_time
+logout_time
+session_minutes
+created_at
+```
+
+This table is needed for time logged in.
+
+---
+
+## What each feature depends on
+
+### Easy with current score data
+
+These are straightforward if your score system is already working:
+
+* every student’s score
+* times played
+* class filter
+* class leaderboard
+* student progress by game
+* reset scores
+* new sign-up board
+
+### Needs extra backend support
+
+These need more than just the existing score table:
+
+* amount of time logged in
+* improvement tracking
+* detailed student analytics
+* class analytics beyond simple totals
+
+---
+
+## Best page layout
+
+A strong teacher dashboard layout would be:
+
+### Top bar
+
+* Dashboard title
+* Class filter dropdown
+* Search student input
+* Refresh button
+
+### Stats cards
+
+* Total students
+* Total plays
+* Average score
+* New sign-ups
+* Best class performer
+
+### Main content
+
+Left side:
+
+* students table
+
+Right side:
+
+* class leaderboard
+* recent sign-ups
+* class analytics
+
+### Bottom section
+
+* student progress by game
+* charts/analytics
+* reset tools
+
+---
+
+## Suggested analytics teachers would actually care about
+
+Besides what you listed, these are useful:
+
+* Most active student
+* Least active student
+* Average score per game
+* Hardest game in the class
+* Easiest game in the class
+* Students with no activity yet
+* Students improving over last 5 attempts
+* Students whose scores are dropping
+* Most attempted game
+* Total class engagement
+
+---
+
+## Improvement logic example
+
+For “Improving / Excellent / Needs Support,” you can calculate labels like this:
+
+* **Excellent**: average score is high and consistent
+* **Improving**: recent average is better than older average
+* **Needs Support**: low average and low improvement
+* **Consistent**: stable scores with little change
+
+For example:
+
+* compare last 5 scores vs previous 5 scores
+* if last 5 average is higher, mark as improving
+
+---
+
+## Reset scores options
+
+Use two reset buttons:
+
+### Per student
+
+Deletes only that student’s entries from `score_attempts`
+
+### Per class
+
+Deletes all `score_attempts` where player belongs to that class
+
+Also good to have:
+
+* archive old scores instead of hard delete
+* or reset by setting scores to inactive term data
+
+---
+
+## What I recommend you build first
+
+Build in this order:
+
+1. class filter
+2. student table with scores and times played
+3. class leaderboard
+4. edit student info modal
+5. recent sign-up board
+6. student progress by game
+7. analytics cards
+8. reset scores
+9. login-time tracking
+10. advanced improvement analytics
+
+That way the dashboard becomes usable fast.
+
+---
+
+## Important note
+
+For features 2, 6, and 10, the frontend alone is not enough. Your Supabase tables must store the needed data first.
+
+So the dashboard can absolutely show all of this, but part of it is:
+
+* HTML/CSS layout
+* JavaScript fetching and rendering
+* Supabase schema support
+
+Paste your current `teacher-dashboard.html`, your `supabase.js`, and your table structure next, and I’ll turn it into the full working teacher dashboard code.
+const supabaseUrl = "https://sjpfzfvmgjhqjnspgmua.supabase.co";
+const supabaseKey = "sb_publishable_vMpgHf8DI0nRSeDVRImzUw_QXM2XzGR"

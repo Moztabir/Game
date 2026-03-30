@@ -516,7 +516,7 @@
       </div>
 
       <div class="top-center">
-        <div class="top-pill">⏱ Time: <span id="time">30</span>s</div>
+        <div class="top-pill">⏱ Time: <span id="time">60</span>s</div>
         <div class="top-pill">⭐ Score: <span id="score">0</span></div>
         <div class="top-pill">🔥 Combo: <span id="combo">0</span></div>
       </div>
@@ -530,7 +530,7 @@
     <main>
       <section class="card" id="gameCard">
         <div class="play-timer-wrap">
-          <div class="play-timer">⏱ Time Left: <span id="playTime">30</span>s</div>
+          <div class="play-timer">⏱ Time Left: <span id="playTime">60</span>s</div>
         </div>
 
         <div class="hint">+10 correct • −10 wrong • +5 fast • +25 every 5 combo</div>
@@ -688,7 +688,7 @@
   let started = false;
   let ended = false;
   let mode = null;
-  let timeLeft = 30;
+  let timeLeft = 60;
   let score = 0;
   let combo = 0;
   let timer = null;
@@ -797,9 +797,9 @@
     await runCountdown();
 
     graphBox.style.display = 'block';
+    gameReady = true;
     newRound();
     startTimer();
-    gameReady = true;
     updateHUD();
   }
 
@@ -845,21 +845,27 @@
 
     const easyQuestions = [
       {
-        text: `Which category has the greatest number?`,
-        answer: maxItem.label,
-        options: shuffleUnique([
-          maxItem.label,
-          ...pickOtherLabels(data, maxItem.label, 3)
-        ])
-      },
+  text: `Which category has the greatest number?`,
+  answer: maxItem.label,
+  options: shuffleUnique(
+    [
+      maxItem.label,
+      ...pickOtherLabels(data, [maxItem.label], 3)
+    ],
+    data.map(item => item.label)
+  )
+},
       {
-        text: `Which category has the least number?`,
-        answer: minItem.label,
-        options: shuffleUnique([
-          minItem.label,
-          ...pickOtherLabels(data, minItem.label, 3)
-        ])
-      },
+  text: `Which category has the least number?`,
+  answer: minItem.label,
+  options: shuffleUnique(
+    [
+      minItem.label,
+      ...pickOtherLabels(data, [minItem.label], 3)
+    ],
+    data.map(item => item.label)
+  )
+},
       {
         text: `How many chose ${a.label}?`,
         answer: String(a.value),
@@ -876,23 +882,34 @@
         options: buildNumberOptions(c.value)
       },
       {
-        text: `Which category has more: ${a.label} or ${b.label}?`,
-        answer: a.value >= b.value ? a.label : b.label,
-        options: shuffleUnique([
-          a.label,
-          b.label,
-          ...pickOtherLabels(data, "", 2)
-        ])
-      },
-      {
-        text: `Which category has fewer: ${a.label} or ${b.label}?`,
-        answer: a.value <= b.value ? a.label : b.label,
-        options: shuffleUnique([
-          a.label,
-          b.label,
-          ...pickOtherLabels(data, "", 2)
-        ])
-      },
+  text: `Which category has more: ${a.label} or ${b.label}?`,
+  answer: a.value === b.value
+    ? [a.label, b.label]
+    : [a.value > b.value ? a.label : b.label],
+  options: shuffleUnique(
+    [
+      a.label,
+      b.label,
+      ...pickOtherLabels(data, [a.label, b.label], 2)
+    ],
+    data.map(item => item.label)
+  )
+},
+{
+  text: `Which category has fewer: ${a.label} or ${b.label}?`,
+  answer: a.value === b.value
+    ? [a.label, b.label]
+    : [a.value < b.value ? a.label : b.label],
+  options: shuffleUnique(
+    [
+      a.label,
+      b.label,
+      ...pickOtherLabels(data, [a.label, b.label], 2)
+    ],
+    data.map(item => item.label)
+  )
+},
+
       {
         text: `How many more chose ${maxItem.label} than ${minItem.label}?`,
         answer: String(maxItem.value - minItem.value),
@@ -1061,27 +1078,42 @@
     };
   }
 
-  function pickOtherLabels(data, exclude, count){
-    const others = data
-      .filter(item => !exclude || item.label !== exclude)
-      .map(item => item.label);
+ function pickOtherLabels(data, excludes = [], count = 2){
+  const excludeList = Array.isArray(excludes) ? excludes : [excludes];
 
-    return others.slice(0, count);
+  const others = data
+    .filter(item => !excludeList.includes(item.label))
+    .map(item => item.label);
+
+  for(let i = others.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [others[i], others[j]] = [others[j], others[i]];
   }
 
-  function shuffleUnique(arr){
-    const unique = [...new Set(arr)];
-    while(unique.length < 4){
-      unique.push(unique[unique.length - 1] || "0");
-    }
+  return others.slice(0, count);
+}
 
-    for(let i = unique.length - 1; i > 0; i--){
-      const j = Math.floor(Math.random() * (i + 1));
-      [unique[i], unique[j]] = [unique[j], unique[i]];
-    }
+  function shuffleUnique(arr, fallbackPool = []){
+  const unique = [...new Set(arr)];
 
-    return unique.slice(0, 4);
+  const extraChoices = fallbackPool.filter(item => !unique.includes(item));
+
+  for(let i = extraChoices.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [extraChoices[i], extraChoices[j]] = [extraChoices[j], extraChoices[i]];
   }
+
+  while(unique.length < 4 && extraChoices.length){
+    unique.push(extraChoices.shift());
+  }
+
+  for(let i = unique.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [unique[i], unique[j]] = [unique[j], unique[i]];
+  }
+
+  return unique.slice(0, 4);
+}
 
   function buildNumberOptions(correct){
     const set = new Set([String(correct)]);
@@ -1164,49 +1196,53 @@
   }
 
   function choose(selected){
-    if(!started || ended || timeLeft <= 0 || !currentRound || !gameReady) return;
+  if(!started || ended || timeLeft <= 0 || !currentRound || !gameReady) return;
 
-    gameReady = false;
-    setChoiceButtonsEnabled(false);
+  gameReady = false;
+  setChoiceButtonsEnabled(false);
 
-    const secs = (performance.now() - roundStart) / 1000;
+  const secs = (performance.now() - roundStart) / 1000;
 
-    if(selected === currentRound.answer){
-      playCorrectSound();
-      score += 10;
-      combo += 1;
+  const correctAnswers = Array.isArray(currentRound.answer)
+    ? currentRound.answer
+    : [currentRound.answer];
 
-      let message = '✅ Correct! +10';
+  if(correctAnswers.includes(selected)){
+    playCorrectSound();
+    score += 10;
+    combo += 1;
 
-      if(secs <= 2.5){
-        score += 5;
-        message = '✅ Correct! +10 (Fast +5)';
-      }
+    let message = '✅ Correct! +10';
 
-      if(combo % 5 === 0){
-        score += 25;
-        message += ' • Combo +25';
-      }
-
-      msgEl.textContent = message;
-      msgEl.className = 'msg good';
-    } else {
-      playWrongSound();
-      score = Math.max(0, score - 10);
-      combo = 0;
-      msgEl.textContent = '❌ Wrong! −10';
-      msgEl.className = 'msg bad';
+    if(secs <= 2.5){
+      score += 5;
+      message = '✅ Correct! +10 (Fast +5)';
     }
 
-    updateHUD();
+    if(combo % 5 === 0){
+      score += 25;
+      message += ' • Combo +25';
+    }
 
-    setTimeout(() => {
-      if(!ended){
-        gameReady = true;
-        newRound();
-      }
-    }, 350);
+    msgEl.textContent = message;
+    msgEl.className = 'msg good';
+  } else {
+    playWrongSound();
+    score = Math.max(0, score - 10);
+    combo = 0;
+    msgEl.textContent = '❌ Wrong! −10';
+    msgEl.className = 'msg bad';
   }
+
+  updateHUD();
+
+  setTimeout(() => {
+    if(!ended){
+      gameReady = true;
+      newRound();
+    }
+  }, 350);
+}
 
   function saveHighScore(){
     let highScore = Number(localStorage.getItem('game2HighScore')) || 0;
@@ -1223,7 +1259,7 @@
 
   function startTimer(){
     clearInterval(timer);
-    timeLeft = 30;
+    timeLeft = 60;
     updateHUD();
 
     timer = setInterval(() => {
@@ -1266,7 +1302,7 @@
     started = false;
     ended = false;
     mode = null;
-    timeLeft = 30;
+    timeLeft =60;
     score = 0;
     combo = 0;
     roundStart = 0;

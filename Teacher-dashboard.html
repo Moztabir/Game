@@ -13,13 +13,12 @@
       --c4:#FB8500;
       --c5:#F28482;
 
-      --bg:#f4f8fd;
-      --bg2:#edf4fb;
+      --bg:#f7fbff;
+      --bg-soft:#eef6ff;
       --card:#ffffff;
-      --card-soft:rgba(255,255,255,.82);
-      --text:#18212b;
+      --text:#17212b;
       --muted:#667385;
-      --line:rgba(20,30,50,.08);
+      --line:rgba(23,33,43,.09);
 
       --blue:#4d8dff;
       --blue-dark:#2d6ee8;
@@ -27,12 +26,13 @@
       --yellow:#d89a14;
       --red:#df5a5a;
 
-      --shadow:0 18px 38px rgba(20,30,50,.08);
-      --shadow-soft:0 10px 24px rgba(20,30,50,.05);
-      --radius-xl:30px;
+      --shadow:0 14px 34px rgba(20,30,50,.08);
+      --shadow-soft:0 8px 20px rgba(20,30,50,.05);
+
+      --radius-xl:28px;
       --radius-lg:22px;
-      --radius-md:18px;
-      --radius-sm:14px;
+      --radius-md:16px;
+      --radius-sm:12px;
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
@@ -42,9 +42,9 @@
       font-family: ui-rounded, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color:var(--text);
       background:
-        radial-gradient(70vmax 70vmax at 0% 0%, rgba(142,202,230,.42) 0 18%, transparent 19%),
-        radial-gradient(60vmax 60vmax at 100% 100%, rgba(144,190,109,.22) 0 15%, transparent 16%),
-        linear-gradient(180deg, #f9fbff 0%, #f3f8fd 100%);
+        radial-gradient(70vmax 70vmax at 0% 0%, rgba(142,202,230,.33) 0 18%, transparent 19%),
+        radial-gradient(50vmax 50vmax at 100% 100%, rgba(144,190,109,.18) 0 18%, transparent 19%),
+        linear-gradient(180deg, #fbfdff 0%, #f4f8fd 100%);
     }
 
     a{text-decoration:none;color:inherit}
@@ -53,18 +53,18 @@
     input,select,textarea{outline:none}
 
     .app{
-      display:grid;
-      grid-template-columns: 300px minmax(0,1fr);
       min-height:100vh;
+      display:grid;
+      grid-template-columns:280px minmax(0,1fr);
     }
 
     .sidebar{
       position:sticky;
       top:0;
       height:100vh;
-      padding:24px;
-      background:rgba(255,255,255,.78);
-      backdrop-filter: blur(18px);
+      padding:24px 18px;
+      background:rgba(255,255,255,.75);
+      backdrop-filter: blur(16px);
       border-right:1px solid var(--line);
       overflow:auto;
     }
@@ -73,64 +73,69 @@
       display:flex;
       align-items:center;
       gap:14px;
-      margin-bottom:24px;
+      margin-bottom:26px;
+      padding:6px 8px;
     }
 
     .brand-mark{
-      width:58px;
-      height:58px;
-      border-radius:20px;
+      width:54px;
+      height:54px;
+      border-radius:18px;
       display:grid;
       place-items:center;
-      color:#fff;
       font-weight:900;
-      font-size:1.2rem;
+      color:#fff;
       background:linear-gradient(135deg,var(--blue),var(--c1));
       box-shadow:var(--shadow);
     }
 
     .brand h1{
-      font-size:1.2rem;
-      line-height:1.05;
+      font-size:1.15rem;
+      line-height:1;
     }
 
     .brand p{
+      margin-top:5px;
       color:var(--muted);
-      font-size:.92rem;
-      margin-top:4px;
+      font-size:.9rem;
     }
 
-    .nav-section + .nav-section{margin-top:20px}
-    .nav-title{
-      margin:0 0 10px 8px;
-      font-size:.75rem;
+    .nav-group + .nav-group{margin-top:18px}
+    .nav-label{
+      margin:0 10px 10px;
+      font-size:.76rem;
       font-weight:900;
-      letter-spacing:.08em;
       text-transform:uppercase;
+      letter-spacing:.08em;
       color:var(--muted);
     }
 
     .nav{
       display:grid;
-      gap:10px;
+      gap:8px;
     }
 
-    .nav a{
+    .nav a,
+    .nav button{
+      width:100%;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      padding:13px 14px;
-      border-radius:18px;
-      transition:.2s ease;
+      padding:12px 14px;
+      border-radius:16px;
+      cursor:pointer;
       color:#334155;
+      transition:.18s ease;
+      text-align:left;
     }
 
     .nav a:hover,
+    .nav button:hover,
     .nav a.active{
-      transform:translateX(4px);
-      background:#edf5ff;
+      background:#eef5ff;
       color:var(--blue-dark);
+      transform:translateX(3px);
     }
 
     .nav-left{
@@ -141,9 +146,9 @@
     }
 
     .nav-icon{
-      width:38px;
-      height:38px;
-      border-radius:14px;
+      width:36px;
+      height:36px;
+      border-radius:12px;
       display:grid;
       place-items:center;
       background:#fff;
@@ -152,9 +157,9 @@
     }
 
     .nav-badge{
-      min-width:30px;
-      height:30px;
-      padding:0 10px;
+      min-width:28px;
+      height:28px;
+      padding:0 8px;
       border-radius:999px;
       display:grid;
       place-items:center;
@@ -165,65 +170,105 @@
       border:1px solid var(--line);
     }
 
-    .teacher-panel{
-      margin-top:24px;
-      padding:20px;
-      border-radius:26px;
+    .teacher-box{
+      margin-top:20px;
+      padding:18px;
+      border-radius:24px;
       color:#fff;
-      background:linear-gradient(135deg,var(--blue),#76a7ff 55%, var(--c1));
+      background:linear-gradient(135deg,var(--blue),#75a8ff 60%, var(--c1));
       box-shadow:var(--shadow);
-      position:relative;
-      overflow:hidden;
     }
 
-    .teacher-panel::after{
-      content:"";
-      position:absolute;
-      width:160px;
-      height:160px;
-      right:-44px;
-      bottom:-54px;
-      border-radius:50%;
-      background:rgba(255,255,255,.14);
-    }
-
-    .teacher-panel h3{
-      font-size:1.08rem;
+    .teacher-box h3{
+      font-size:1.05rem;
       margin-bottom:8px;
-      position:relative;
-      z-index:1;
     }
 
-    .teacher-panel p{
-      font-size:.93rem;
-      line-height:1.6;
-      color:rgba(255,255,255,.92);
-      position:relative;
-      z-index:1;
+    .teacher-box p{
+      font-size:.92rem;
+      line-height:1.55;
+      color:rgba(255,255,255,.93);
     }
 
-    .teacher-panel .stack{
-      position:relative;
-      z-index:1;
+    .teacher-box .mini-stack{
       display:grid;
       gap:10px;
-      margin-top:16px;
+      margin-top:14px;
     }
 
     .main{
-      padding:28px;
+      padding:24px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      margin-bottom:18px;
+      flex-wrap:wrap;
+    }
+
+    .topbar-left h2{
+      font-size:1.7rem;
+      line-height:1.05;
+      margin-bottom:4px;
+    }
+
+    .topbar-left p{
+      color:var(--muted);
+      font-size:.95rem;
+    }
+
+    .topbar-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      padding:12px 15px;
+      border-radius:16px;
+      cursor:pointer;
+      font-weight:900;
+      border:1px solid var(--line);
+      background:#fff;
+      box-shadow:var(--shadow-soft);
+      transition:.18s ease;
+      color:#233042;
+    }
+
+    .btn:hover{transform:translateY(-2px)}
+    .btn.primary{
+      color:#fff;
+      border-color:transparent;
+      background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+    }
+    .btn.green{
+      color:#fff;
+      border-color:transparent;
+      background:linear-gradient(135deg,var(--green),#249563);
+    }
+    .btn.red{
+      color:#fff;
+      border-color:transparent;
+      background:linear-gradient(135deg,var(--red),#c34747);
+    }
+    .btn.small{
+      padding:9px 12px;
+      border-radius:12px;
+      font-size:.9rem;
     }
 
     .hero{
       display:grid;
-      grid-template-columns: 1.3fr .9fr;
-      gap:22px;
-      margin-bottom:22px;
+      grid-template-columns:1.35fr .95fr;
+      gap:18px;
+      margin-bottom:18px;
     }
 
-    .hero-card,
     .card{
-      background:var(--card-soft);
+      background:rgba(255,255,255,.86);
       border:1px solid rgba(20,30,50,.06);
       border-radius:var(--radius-xl);
       box-shadow:var(--shadow);
@@ -231,20 +276,7 @@
     }
 
     .hero-card{
-      padding:24px;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .hero-card::before{
-      content:"";
-      position:absolute;
-      width:180px;
-      height:180px;
-      right:-50px;
-      top:-60px;
-      border-radius:50%;
-      background:rgba(77,141,255,.08);
+      padding:22px;
     }
 
     .eyebrow{
@@ -256,47 +288,45 @@
       border-radius:999px;
       background:#fff;
       border:1px solid var(--line);
-      font-size:.84rem;
+      font-size:.82rem;
       font-weight:900;
       color:var(--muted);
     }
 
     .dot{
-      width:9px;
-      height:9px;
+      width:8px;
+      height:8px;
       border-radius:50%;
       background:var(--green);
       box-shadow:0 0 0 6px rgba(47,173,116,.12);
     }
 
-    .hero-card h2{
-      font-size:2rem;
-      line-height:1.04;
+    .hero-card h3{
+      font-size:1.55rem;
       margin-bottom:8px;
     }
 
     .hero-card p{
       color:var(--muted);
       line-height:1.6;
-      max-width:720px;
     }
 
-    .top-actions{
+    .controls{
       display:flex;
-      gap:12px;
+      gap:10px;
       flex-wrap:wrap;
-      margin-top:20px;
+      margin-top:18px;
     }
 
     .search{
       position:relative;
-      flex:1 1 280px;
+      flex:1 1 260px;
     }
 
     .search input{
       width:100%;
-      padding:14px 16px 14px 46px;
-      border-radius:18px;
+      padding:13px 14px 13px 42px;
+      border-radius:16px;
       border:1px solid var(--line);
       background:#fff;
       box-shadow:var(--shadow-soft);
@@ -305,300 +335,109 @@
     .search::before{
       content:"⌕";
       position:absolute;
-      left:16px;
       top:50%;
+      left:14px;
       transform:translateY(-50%);
       color:var(--muted);
+      font-weight:700;
     }
 
-    .btn{
-      padding:14px 16px;
-      border-radius:18px;
-      cursor:pointer;
-      font-weight:900;
-      border:1px solid var(--line);
-      background:#fff;
-      box-shadow:var(--shadow-soft);
-      transition:.18s ease;
-      color:#233042;
-    }
-
-    .btn:hover{
-      transform:translateY(-2px);
-    }
-
-    .btn.primary{
-      color:#fff;
-      border-color:transparent;
-      background:linear-gradient(135deg,var(--blue),var(--blue-dark));
-    }
-
-    .btn.green{
-      color:#fff;
-      border-color:transparent;
-      background:linear-gradient(135deg,var(--green),#229862);
-    }
-
-    .btn.small{
-      padding:10px 12px;
-      border-radius:14px;
-      font-size:.92rem;
-    }
-
-    .quick-card{
-      padding:22px;
-      display:grid;
-      gap:14px;
-      align-content:start;
-    }
-
-    .quick-card h3{
-      font-size:1.1rem;
-    }
-
-    .quick-card p{
-      color:var(--muted);
-      line-height:1.55;
-      font-size:.94rem;
-    }
-
-    .mini-actions{
-      display:grid;
-      gap:10px;
-      margin-top:2px;
-    }
-
-    .filters{
+    .filter-row{
       display:flex;
-      gap:12px;
+      gap:10px;
       flex-wrap:wrap;
-      margin-bottom:22px;
+      margin-top:14px;
     }
 
-    .select-wrap select{
-      padding:13px 14px;
+    .filter-row select{
+      padding:12px 14px;
       border-radius:16px;
       border:1px solid var(--line);
       background:#fff;
-      color:var(--text);
-      min-width:170px;
       box-shadow:var(--shadow-soft);
+      min-width:170px;
     }
 
     .stats{
       display:grid;
       grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:18px;
-      margin-bottom:22px;
+      gap:16px;
+      margin-bottom:18px;
     }
 
     .stat-card{
-      padding:20px;
-      border-radius:26px;
-      background:var(--card-soft);
+      padding:18px;
+      border-radius:24px;
+      background:rgba(255,255,255,.86);
       border:1px solid rgba(20,30,50,.06);
       box-shadow:var(--shadow);
-      position:relative;
-      overflow:hidden;
-    }
-
-    .stat-card::after{
-      content:"";
-      position:absolute;
-      right:-18px;
-      top:-18px;
-      width:88px;
-      height:88px;
-      border-radius:50%;
-      background:rgba(77,141,255,.08);
     }
 
     .stat-top{
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap:12px;
+      gap:10px;
       margin-bottom:14px;
     }
 
     .stat-label{
-      font-size:.92rem;
-      font-weight:800;
       color:var(--muted);
+      font-weight:800;
+      font-size:.92rem;
     }
 
     .stat-icon{
-      width:48px;
-      height:48px;
-      border-radius:16px;
+      width:44px;
+      height:44px;
       display:grid;
       place-items:center;
+      border-radius:14px;
       background:#edf5ff;
-      font-size:1.2rem;
+      font-size:1.1rem;
     }
 
     .stat-value{
-      font-size:2rem;
-      line-height:1;
+      font-size:1.95rem;
       font-weight:900;
+      line-height:1;
       margin-bottom:8px;
     }
 
     .stat-sub{
-      font-size:.92rem;
+      color:var(--muted);
+      font-size:.9rem;
       font-weight:800;
-      color:var(--green);
     }
 
-    .content-grid{
+    .grid{
       display:grid;
-      grid-template-columns: 1.45fr 1fr;
-      gap:22px;
-      margin-bottom:22px;
+      grid-template-columns:1.45fr 1fr;
+      gap:18px;
+      margin-bottom:18px;
     }
 
     .section-card{
-      padding:22px;
+      padding:20px;
     }
 
     .section-head{
       display:flex;
       justify-content:space-between;
       align-items:flex-start;
-      gap:14px;
+      gap:12px;
+      margin-bottom:16px;
       flex-wrap:wrap;
-      margin-bottom:18px;
     }
 
     .section-head h3{
-      font-size:1.16rem;
+      font-size:1.08rem;
       margin-bottom:4px;
     }
 
     .section-head p{
       color:var(--muted);
-      font-size:.93rem;
-    }
-
-    .link-btn{
-      color:var(--blue-dark);
-      font-weight:900;
-    }
-
-    .chart{
-      display:grid;
-      gap:14px;
-    }
-
-    .chart-row{
-      display:grid;
-      grid-template-columns: 130px 1fr 58px;
-      align-items:center;
-      gap:14px;
-      font-size:.95rem;
-      font-weight:800;
-    }
-
-    .bar-track,.progress{
-      background:#edf2fa;
-      border-radius:999px;
-      overflow:hidden;
-    }
-
-    .bar-track{height:12px}
-    .bar-fill{
-      height:100%;
-      border-radius:999px;
-      background:linear-gradient(90deg,var(--c1),var(--blue));
-    }
-
-    .mini-grid{
-      margin-top:18px;
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:14px;
-    }
-
-    .mini-box{
-      background:linear-gradient(180deg,#f8fbff,#eef5ff);
-      border:1px solid rgba(20,30,50,.05);
-      border-radius:20px;
-      padding:16px;
-    }
-
-    .mini-box .label{
-      color:var(--muted);
-      font-size:.9rem;
-      margin-bottom:8px;
-      font-weight:800;
-    }
-
-    .mini-box .value{
-      font-size:1.45rem;
-      font-weight:900;
-      margin-bottom:4px;
-    }
-
-    .small{
-      font-size:.86rem;
-      color:var(--muted);
-    }
-
-    .list{
-      display:grid;
-      gap:14px;
-    }
-
-    .list-row{
-      display:grid;
-      grid-template-columns:auto 1fr auto;
-      gap:14px;
-      align-items:center;
-      padding:14px;
-      border:1px solid var(--line);
-      border-radius:20px;
-      background:#fff;
-      box-shadow:var(--shadow-soft);
-    }
-
-    .avatar{
-      width:46px;
-      height:46px;
-      border-radius:50%;
-      display:grid;
-      place-items:center;
-      font-weight:900;
-      color:#fff;
-      background:linear-gradient(135deg,var(--blue),#7aa7ff);
-      flex-shrink:0;
-    }
-
-    .item-title{
-      font-weight:900;
-      margin-bottom:4px;
-    }
-
-    .item-sub{
-      color:var(--muted);
       font-size:.92rem;
-    }
-
-    .pill{
-      padding:8px 12px;
-      border-radius:999px;
-      font-size:.82rem;
-      font-weight:900;
-      white-space:nowrap;
-      background:#eef5ff;
-      color:var(--blue-dark);
-    }
-
-    .pill.green{background:rgba(47,173,116,.12);color:#188456}
-    .pill.yellow{background:rgba(255,183,3,.18);color:#9f6c00}
-    .pill.red{background:rgba(223,90,90,.14);color:#b63b3b}
-
-    .table-card{
-      margin-bottom:22px;
     }
 
     .table-wrap{
@@ -608,134 +447,193 @@
     table{
       width:100%;
       border-collapse:collapse;
-      min-width:760px;
+      min-width:1050px;
     }
 
     th,td{
-      text-align:left;
-      padding:14px 12px;
+      padding:13px 10px;
       border-bottom:1px solid rgba(20,30,50,.06);
-      font-size:.95rem;
+      text-align:left;
+      font-size:.93rem;
+      vertical-align:middle;
     }
 
     th{
-      font-size:.82rem;
+      font-size:.8rem;
+      color:var(--muted);
       text-transform:uppercase;
       letter-spacing:.05em;
-      color:var(--muted);
     }
 
     .student-cell{
       display:flex;
       align-items:center;
-      gap:12px;
+      gap:10px;
     }
 
-    .student-mini{
+    .avatar{
       width:40px;
       height:40px;
       border-radius:50%;
       display:grid;
       place-items:center;
-      font-size:.88rem;
       font-weight:900;
       color:var(--blue-dark);
       background:#eef5ff;
+      flex-shrink:0;
     }
 
-    .progress{
-      width:110px;
-      height:10px;
-      margin-bottom:5px;
+    .muted{
+      color:var(--muted);
+      font-size:.88rem;
     }
 
-    .progress span{
-      display:block;
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:7px 11px;
+      border-radius:999px;
+      font-size:.8rem;
+      font-weight:900;
+      white-space:nowrap;
+      background:#eef5ff;
+      color:var(--blue-dark);
+    }
+
+    .pill.green{background:rgba(47,173,116,.13);color:#188456}
+    .pill.yellow{background:rgba(255,183,3,.18);color:#996700}
+    .pill.red{background:rgba(223,90,90,.14);color:#b63b3b}
+
+    .action-group{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .list{
+      display:grid;
+      gap:12px;
+    }
+
+    .list-row{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:12px;
+      align-items:center;
+      padding:13px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .item-title{
+      font-weight:900;
+      margin-bottom:4px;
+    }
+
+    .item-sub{
+      color:var(--muted);
+      font-size:.9rem;
+      line-height:1.45;
+    }
+
+    .chart{
+      display:grid;
+      gap:12px;
+    }
+
+    .chart-row{
+      display:grid;
+      grid-template-columns:125px 1fr 52px;
+      gap:12px;
+      align-items:center;
+      font-size:.92rem;
+      font-weight:800;
+    }
+
+    .bar-track{
+      height:12px;
+      background:#edf2fa;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .bar-fill{
       height:100%;
       border-radius:999px;
-      background:linear-gradient(90deg,var(--c2),var(--green));
+      background:linear-gradient(90deg,var(--c1),var(--blue));
     }
 
-    .bottom-grid{
+    .mini-grid{
       display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:22px;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+      margin-top:16px;
     }
 
-    .notes{
-      padding:22px;
-      border-radius:30px;
-      background:linear-gradient(135deg,#162840,#294666 55%, #355789);
+    .mini-box{
+      padding:14px;
+      border-radius:18px;
+      background:linear-gradient(180deg,#f8fbff,#eef5ff);
+      border:1px solid rgba(20,30,50,.05);
+    }
+
+    .mini-box .label{
+      color:var(--muted);
+      font-weight:800;
+      font-size:.88rem;
+      margin-bottom:8px;
+    }
+
+    .mini-box .value{
+      font-size:1.35rem;
+      font-weight:900;
+      margin-bottom:4px;
+    }
+
+    .notes-box{
+      padding:18px;
+      border-radius:24px;
       color:#fff;
-      position:relative;
-      overflow:hidden;
+      background:linear-gradient(135deg,#16314e,#274b76 55%, #356093);
       box-shadow:var(--shadow);
     }
 
-    .notes::after{
-      content:"";
-      position:absolute;
-      right:-30px;
-      top:-20px;
-      width:140px;
-      height:140px;
-      border-radius:50%;
-      background:rgba(255,255,255,.08);
-    }
-
-    .notes h3{
-      position:relative;
-      z-index:1;
+    .notes-box h3{
       margin-bottom:6px;
     }
 
-    .notes p{
-      position:relative;
-      z-index:1;
-      color:rgba(255,255,255,.88);
-      line-height:1.6;
-      margin-bottom:16px;
+    .notes-box p{
+      color:rgba(255,255,255,.9);
+      line-height:1.55;
+      margin-bottom:14px;
     }
 
-    .notes ul{
-      position:relative;
-      z-index:1;
-      padding-left:20px;
-      line-height:1.85;
-      margin-bottom:16px;
-    }
-
-    .notes textarea{
-      position:relative;
-      z-index:1;
+    .notes-box textarea{
       width:100%;
-      min-height:110px;
+      min-height:108px;
       resize:vertical;
       border:none;
-      border-radius:18px;
+      border-radius:16px;
       padding:14px;
-      background:rgba(255,255,255,.96);
+      background:rgba(255,255,255,.97);
       color:#183150;
     }
 
     .notes-actions{
-      position:relative;
-      z-index:1;
       display:flex;
       gap:10px;
       flex-wrap:wrap;
       margin-top:12px;
     }
 
-    .notes-actions .btn{
-      border:none;
-    }
-
-    .empty-state{
-      padding:28px;
-      border:1px dashed rgba(20,30,50,.14);
-      border-radius:20px;
+    .empty{
+      padding:24px;
       text-align:center;
+      border:1px dashed rgba(20,30,50,.13);
+      border-radius:18px;
       color:var(--muted);
       font-weight:800;
       background:#fbfdff;
@@ -744,51 +642,46 @@
     .modal{
       position:fixed;
       inset:0;
-      background:rgba(15,23,42,.45);
+      background:rgba(15,23,42,.48);
       display:none;
       align-items:center;
       justify-content:center;
       padding:20px;
-      z-index:1000;
+      z-index:999;
     }
 
-    .modal.show{
-      display:flex;
-    }
+    .modal.show{display:flex}
 
     .modal-card{
-      width:min(560px,100%);
+      width:min(780px,100%);
+      max-height:90vh;
+      overflow:auto;
       background:#fff;
-      border-radius:28px;
-      padding:22px;
+      border-radius:24px;
+      padding:20px;
       box-shadow:0 24px 60px rgba(0,0,0,.18);
     }
 
     .modal-head{
       display:flex;
-      justify-content:space-between;
       align-items:center;
-      gap:12px;
+      justify-content:space-between;
+      gap:10px;
       margin-bottom:16px;
     }
 
-    .modal-head h3{
-      font-size:1.2rem;
-    }
-
     .icon-btn{
-      width:42px;
-      height:42px;
-      border:none;
-      border-radius:14px;
+      width:40px;
+      height:40px;
+      border-radius:12px;
       background:#f4f8fd;
       cursor:pointer;
-      font-size:1rem;
     }
 
     .form-grid{
       display:grid;
-      gap:14px;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
     }
 
     .field{
@@ -796,24 +689,23 @@
       gap:8px;
     }
 
+    .field.full{
+      grid-column:1/-1;
+    }
+
     .field label{
       font-weight:900;
-      font-size:.92rem;
+      font-size:.9rem;
     }
 
     .field input,
     .field select,
     .field textarea{
       width:100%;
-      padding:13px 14px;
-      border-radius:16px;
+      padding:12px 13px;
+      border-radius:14px;
       border:1px solid var(--line);
       background:#fff;
-    }
-
-    .field textarea{
-      min-height:110px;
-      resize:vertical;
     }
 
     .form-actions{
@@ -821,17 +713,12 @@
       justify-content:flex-end;
       gap:10px;
       flex-wrap:wrap;
-      margin-top:4px;
-    }
-
-    .hidden-input{
-      display:none;
+      margin-top:16px;
     }
 
     @media (max-width:1250px){
       .hero,
-      .content-grid,
-      .bottom-grid{
+      .grid{
         grid-template-columns:1fr;
       }
 
@@ -840,7 +727,7 @@
       }
     }
 
-    @media (max-width:930px){
+    @media (max-width:980px){
       .app{
         grid-template-columns:1fr;
       }
@@ -853,31 +740,20 @@
       }
     }
 
-    @media (max-width:640px){
-      .main,.sidebar{
-        padding:18px;
-      }
-
-      .stats{
-        grid-template-columns:1fr;
-      }
-
-      .mini-grid{
-        grid-template-columns:1fr;
-      }
-
+    @media (max-width:680px){
+      .main,.sidebar{padding:18px}
+      .stats{grid-template-columns:1fr}
+      .mini-grid{grid-template-columns:1fr}
+      .form-grid{grid-template-columns:1fr}
       .chart-row{
-        grid-template-columns:95px 1fr 46px;
-        gap:10px;
-        font-size:.9rem;
+        grid-template-columns:96px 1fr 42px;
+        gap:8px;
       }
-
       .list-row{
         grid-template-columns:auto 1fr;
       }
-
       .list-row .pill{
-        grid-column:2 / 3;
+        grid-column:2/3;
         justify-self:start;
       }
     }
@@ -890,87 +766,139 @@
         <div class="brand-mark">M</div>
         <div>
           <h1>Mathive</h1>
-          <p>Teacher Portal</p>
+          <p>Teacher Dashboard</p>
         </div>
       </div>
 
-      <div class="nav-section">
-        <div class="nav-title">Main</div>
+      <div class="nav-group">
+        <div class="nav-label">Overview</div>
         <nav class="nav">
-          <a href="#dashboard" class="active"><span class="nav-left"><span class="nav-icon">📊</span>Dashboard</span><span class="nav-badge" id="navDashboardBadge">4</span></a>
-          <a href="#students"><span class="nav-left"><span class="nav-icon">👨‍🎓</span>Students</span><span class="nav-badge" id="navStudentsBadge">0</span></a>
-          <a href="#assignments"><span class="nav-left"><span class="nav-icon">📝</span>Assignments</span><span class="nav-badge" id="navAssignmentsBadge">0</span></a>
-          <a href="#games"><span class="nav-left"><span class="nav-icon">🎮</span>Games</span><span class="nav-badge">5</span></a>
-          <a href="#reports"><span class="nav-left"><span class="nav-icon">📁</span>Reports</span><span class="nav-badge">2</span></a>
+          <a href="#dashboard" class="active">
+            <span class="nav-left"><span class="nav-icon">📊</span>Dashboard</span>
+            <span class="nav-badge" id="navDashboardBadge">•</span>
+          </a>
+          <a href="#studentsSection">
+            <span class="nav-left"><span class="nav-icon">👨‍🎓</span>Students</span>
+            <span class="nav-badge" id="navStudentsBadge">0</span>
+          </a>
+          <a href="#leaderboardSection">
+            <span class="nav-left"><span class="nav-icon">🏆</span>Leaderboard</span>
+            <span class="nav-badge" id="navLeaderboardBadge">0</span>
+          </a>
+          <a href="#notificationsSection">
+            <span class="nav-left"><span class="nav-icon">🔔</span>Sign-ups</span>
+            <span class="nav-badge" id="navSignupBadge">0</span>
+          </a>
         </nav>
       </div>
 
-      <div class="nav-section">
-        <div class="nav-title">Manage</div>
+      <div class="nav-group">
+        <div class="nav-label">Actions</div>
         <nav class="nav">
-          <a href="#activity"><span class="nav-left"><span class="nav-icon">💬</span>Activity</span><span class="nav-badge" id="navMessagesBadge">0</span></a>
-          <a href="#"><span class="nav-left"><span class="nav-icon">⚙️</span>Settings</span><span class="nav-badge">•</span></a>
-          <a href="index.html"><span class="nav-left"><span class="nav-icon">↩</span>Back to Site</span><span class="nav-badge">↗</span></a>
+          <button id="refreshBtn">
+            <span class="nav-left"><span class="nav-icon">↻</span>Refresh Data</span>
+            <span class="nav-badge">↻</span>
+          </button>
+          <button id="resetClassScoresBtn">
+            <span class="nav-left"><span class="nav-icon">🗑️</span>Reset Class Scores</span>
+            <span class="nav-badge">!</span>
+          </button>
+          <button id="exportBtn">
+            <span class="nav-left"><span class="nav-icon">⬇️</span>Export JSON</span>
+            <span class="nav-badge">↓</span>
+          </button>
+          <button id="logoutBtn">
+            <span class="nav-left"><span class="nav-icon">↩</span>Logout</span>
+            <span class="nav-badge">↗</span>
+          </button>
         </nav>
       </div>
 
-      <div class="teacher-panel">
-        <h3 id="welcomeTeacher">Welcome back, Ms. Parker</h3>
-        <p id="welcomeSummary">You have 3 assignments to review and 9 students who improved their score this week.</p>
-        <div class="stack">
-          <button class="btn" id="openAssignmentFromSidebar">Create New Task</button>
-          <button class="btn" id="syncMathiveBtn">Sync Local Data</button>
+      <div class="teacher-box">
+        <h3 id="welcomeTeacher">Welcome back</h3>
+        <p id="welcomeSummary">Loading live class data from Mathive...</p>
+        <div class="mini-stack">
+          <button class="btn" id="openNotesFocusBtn">Teacher Notes</button>
+          <button class="btn" id="openClassAnalyticsBtn">Class Analytics</button>
         </div>
       </div>
     </aside>
 
     <main class="main" id="dashboard">
-      <section class="hero">
-        <div class="hero-card">
-          <div class="eyebrow"><span class="dot"></span> Live classroom overview</div>
+      <div class="topbar">
+        <div class="topbar-left">
           <h2>Teacher Dashboard</h2>
-          <p>Track student progress, assignments, recent classroom activity, and game performance across Mathive in one clean teacher view.</p>
+          <p>Minimal, clear classroom management with real student score data from Mathive.</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn" id="openEditModalBtn">Edit Student</button>
+          <button class="btn primary" id="openDetailsModalBtn">Student Analytics</button>
+        </div>
+      </div>
 
-          <div class="top-actions">
+      <section class="hero">
+        <article class="card hero-card">
+          <div class="eyebrow"><span class="dot"></span> Live classroom overview</div>
+          <h3>Track scores, class progress, sign-ups, and student performance</h3>
+          <p>
+            This dashboard uses your real Supabase data from players and score attempts.
+            Filter by class code, review leaderboard performance, edit student info, inspect progress by game,
+            and reset student or class scores.
+          </p>
+
+          <div class="controls">
             <label class="search">
-              <input type="text" id="searchInput" placeholder="Search students, assignments, or reports" />
+              <input type="text" id="searchInput" placeholder="Search by username, name, email, ID, or class code" />
             </label>
-            <button class="btn" id="exportBtn">Export JSON</button>
-            <button class="btn" id="importJsonBtn">Import JSON</button>
-            <button class="btn primary" id="openAssignmentModal">+ Add Assignment</button>
+            <button class="btn" id="reloadBtn">Reload</button>
           </div>
-        </div>
 
-        <div class="hero-card quick-card">
-          <h3>Quick Actions</h3>
-          <p>Use these tools to reset, import, sync, or build demo classroom data while testing your Supabase setup.</p>
-          <div class="mini-actions">
-            <button class="btn green" id="openStudentModal">+ Add Student</button>
-            <button class="btn" id="resetToDemoBtn">Reset to Demo Data</button>
-            <button class="btn" id="addMockActivityBtn">Add Demo Activity</button>
+          <div class="filter-row">
+            <select id="classFilter">
+              <option value="all">All Classes</option>
+            </select>
+
+            <select id="statusFilter">
+              <option value="all">All Statuses</option>
+              <option value="excellent">Excellent</option>
+              <option value="improving">Improving</option>
+              <option value="consistent">Consistent</option>
+              <option value="needs support">Needs Support</option>
+            </select>
           </div>
-          <input type="file" id="jsonFileInput" class="hidden-input" accept=".json,application/json" />
-        </div>
-      </section>
+        </article>
 
-      <section class="filters">
-        <div class="select-wrap">
-          <select id="classFilter">
-            <option value="all">All Classes</option>
-          </select>
-        </div>
+        <article class="card hero-card">
+          <div class="section-head">
+            <div>
+              <h3>Quick Summary</h3>
+              <p>Top class snapshot based on current filters</p>
+            </div>
+          </div>
 
-        <div class="select-wrap">
-          <select id="statusFilter">
-            <option value="all">All Statuses</option>
-            <option value="excellent">Excellent</option>
-            <option value="on track">On Track</option>
-            <option value="needs support">Needs Support</option>
-            <option value="behind">Behind</option>
-          </select>
-        </div>
-
-        <button class="btn small" id="resetFiltersBtn">Reset Filters</button>
+          <div class="mini-grid">
+            <div class="mini-box">
+              <div class="label">Best Student</div>
+              <div class="value" id="bestStudentBox">—</div>
+              <div class="muted" id="bestStudentSub">Waiting for data</div>
+            </div>
+            <div class="mini-box">
+              <div class="label">Most Played Game</div>
+              <div class="value" id="mostPlayedGameBox">—</div>
+              <div class="muted" id="mostPlayedGameSub">Waiting for data</div>
+            </div>
+            <div class="mini-box">
+              <div class="label">Highest Score</div>
+              <div class="value" id="highestScoreBox">—</div>
+              <div class="muted" id="highestScoreSub">Waiting for data</div>
+            </div>
+            <div class="mini-box">
+              <div class="label">Lowest Score</div>
+              <div class="value" id="lowestScoreBox">—</div>
+              <div class="muted" id="lowestScoreSub">Waiting for data</div>
+            </div>
+          </div>
+        </article>
       </section>
 
       <section class="stats">
@@ -980,84 +908,100 @@
             <div class="stat-icon">👨‍🎓</div>
           </div>
           <div class="stat-value" id="statStudents">0</div>
-          <div class="stat-sub" id="statStudentsSub">Updated live</div>
+          <div class="stat-sub" id="statStudentsSub">Across current filter</div>
         </article>
 
         <article class="stat-card">
           <div class="stat-top">
-            <div class="stat-label">Avg. Accuracy</div>
-            <div class="stat-icon">🎯</div>
-          </div>
-          <div class="stat-value" id="statAccuracy">0%</div>
-          <div class="stat-sub" id="statAccuracySub">Across filtered students</div>
-        </article>
-
-        <article class="stat-card">
-          <div class="stat-top">
-            <div class="stat-label">Games Completed</div>
+            <div class="stat-label">Times Played</div>
             <div class="stat-icon">🎮</div>
           </div>
-          <div class="stat-value" id="statGames">0</div>
-          <div class="stat-sub" id="statGamesSub">Across filtered students</div>
+          <div class="stat-value" id="statAttempts">0</div>
+          <div class="stat-sub" id="statAttemptsSub">Total score attempts</div>
         </article>
 
         <article class="stat-card">
           <div class="stat-top">
-            <div class="stat-label">Pending Reviews</div>
-            <div class="stat-icon">📝</div>
+            <div class="stat-label">Average Score</div>
+            <div class="stat-icon">📈</div>
           </div>
-          <div class="stat-value" id="statPending">0</div>
-          <div class="stat-sub" id="statPendingSub">Assignments still open</div>
+          <div class="stat-value" id="statAverageScore">0</div>
+          <div class="stat-sub" id="statAverageScoreSub">Across filtered students</div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-top">
+            <div class="stat-label">Logged-in Time</div>
+            <div class="stat-icon">⏱️</div>
+          </div>
+          <div class="stat-value" id="statLoginTime">—</div>
+          <div class="stat-sub" id="statLoginTimeSub">Uses login_sessions if available</div>
         </article>
       </section>
 
-      <section class="content-grid" id="games">
+      <section class="grid">
+        <article class="card section-card" id="leaderboardSection">
+          <div class="section-head">
+            <div>
+              <h3>Leaderboard by Class</h3>
+              <p>Ranked by total score for the selected class</p>
+            </div>
+          </div>
+          <div class="list" id="leaderboardList"></div>
+        </article>
+
+        <article class="card section-card" id="notificationsSection">
+          <div class="section-head">
+            <div>
+              <h3>New Sign-up Notifications</h3>
+              <p>Newest player registrations</p>
+            </div>
+          </div>
+          <div class="list" id="signupList"></div>
+        </article>
+      </section>
+
+      <section class="grid">
         <article class="card section-card">
           <div class="section-head">
             <div>
               <h3>Class Performance by Game</h3>
-              <p>Average performance across the latest student game sessions</p>
+              <p>Average score by game for the selected class</p>
             </div>
-            <a href="#reports" class="link-btn">View full report</a>
           </div>
-
           <div class="chart" id="gameChart"></div>
 
           <div class="mini-grid">
             <div class="mini-box">
               <div class="label">Most Improved</div>
               <div class="value" id="mostImproved">—</div>
-              <div class="small" id="mostImprovedSub">No change data yet</div>
+              <div class="muted" id="mostImprovedSub">Based on recent attempts</div>
             </div>
-
             <div class="mini-box">
-              <div class="label">Top Class Streak</div>
-              <div class="value" id="topStreak">—</div>
-              <div class="small" id="topStreakSub">Streak updates live</div>
+              <div class="label">Needs Support</div>
+              <div class="value" id="needsSupport">—</div>
+              <div class="muted" id="needsSupportSub">Lowest current performers</div>
             </div>
           </div>
         </article>
 
-        <article class="card section-card" id="activity">
+        <article class="card section-card">
           <div class="section-head">
             <div>
-              <h3>Recent Activity</h3>
-              <p>Latest updates from your students</p>
+              <h3>Class Analytics</h3>
+              <p>Teacher-friendly classroom insights</p>
             </div>
-            <button class="btn small" id="addMockActivityBtn2">Add Demo Activity</button>
           </div>
-
-          <div class="list" id="activityList"></div>
+          <div class="list" id="analyticsList"></div>
         </article>
       </section>
 
-      <section class="card section-card table-card" id="students">
+      <section class="card section-card" id="studentsSection" style="margin-bottom:18px;">
         <div class="section-head">
           <div>
-            <h3>Student Progress</h3>
-            <p>Quick classroom snapshot with completion and accuracy</p>
+            <h3>Students</h3>
+            <p>Every student’s scores, class code, attempts, login time, and progress label</p>
           </div>
-          <button class="btn small" id="openStudentModal2">+ Add Student</button>
         </div>
 
         <div class="table-wrap">
@@ -1065,11 +1009,15 @@
             <thead>
               <tr>
                 <th>Student</th>
-                <th>Grade</th>
-                <th>Completed</th>
-                <th>Accuracy</th>
-                <th>Progress</th>
+                <th>Class</th>
+                <th>Total Score</th>
+                <th>Times Played</th>
+                <th>Highest</th>
+                <th>Lowest</th>
+                <th>Avg</th>
+                <th>Logged Time</th>
                 <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="studentTableBody"></tbody>
@@ -1077,125 +1025,82 @@
         </div>
       </section>
 
-      <section class="bottom-grid">
-        <article class="notes">
+      <section class="grid">
+        <article class="notes-box" id="notesSection">
           <h3>Teacher Notes</h3>
-          <p>This section is useful for weekly reminders, lesson plans, and focus topics like multiplication, area, symmetry, or place value.</p>
-          <ul id="notesList"></ul>
-          <textarea id="notesInput" placeholder="Write a new teacher note..."></textarea>
+          <p>Use this area for reminders, lesson focus, or what to check next in class.</p>
+          <textarea id="notesInput" placeholder="Write a teacher note..."></textarea>
           <div class="notes-actions">
             <button class="btn" id="saveNoteBtn">Save Note</button>
             <button class="btn" id="clearNotesBtn">Clear Notes</button>
           </div>
+          <div class="list" id="notesList" style="margin-top:14px;"></div>
         </article>
 
-        <article class="card section-card" id="assignments">
+        <article class="card section-card">
           <div class="section-head">
             <div>
-              <h3>Upcoming Tasks</h3>
-              <p>What needs your attention next</p>
+              <h3>Per-Game Student Progress</h3>
+              <p>Breakdown of progress by game for the selected student</p>
             </div>
           </div>
-
-          <div class="list" id="assignmentList"></div>
+          <div class="empty" id="progressEmpty">Choose a student from the table to view their per-game progress.</div>
+          <div class="chart" id="studentProgressChart" style="display:none;"></div>
         </article>
       </section>
     </main>
   </div>
 
-  <div class="modal" id="studentModal" aria-hidden="true">
+  <div class="modal" id="editModal" aria-hidden="true">
     <div class="modal-card">
       <div class="modal-head">
-        <h3>Add Student</h3>
-        <button class="icon-btn" data-close="studentModal">✕</button>
+        <h3>Edit Student Information</h3>
+        <button class="icon-btn" data-close="editModal">✕</button>
       </div>
 
-      <form id="studentForm" class="form-grid">
-        <div class="field">
-          <label for="studentName">Student Name</label>
-          <input id="studentName" required placeholder="Ava Lee" />
+      <form id="editStudentForm">
+        <input type="hidden" id="editStudentId" />
+        <div class="form-grid">
+          <div class="field">
+            <label for="editFirstName">First Name</label>
+            <input id="editFirstName" />
+          </div>
+          <div class="field">
+            <label for="editLastName">Last Name</label>
+            <input id="editLastName" />
+          </div>
+          <div class="field">
+            <label for="editUsername">Username</label>
+            <input id="editUsername" />
+          </div>
+          <div class="field">
+            <label for="editSchoolEmail">School Email</label>
+            <input id="editSchoolEmail" type="email" />
+          </div>
+          <div class="field">
+            <label for="editStudentIdNumber">Student ID</label>
+            <input id="editStudentIdNumber" />
+          </div>
+          <div class="field">
+            <label for="editClassCode">Class Code</label>
+            <input id="editClassCode" />
+          </div>
         </div>
-
-        <div class="field">
-          <label for="studentClass">Class</label>
-          <input id="studentClass" required placeholder="Grade 4A" />
-        </div>
-
-        <div class="field">
-          <label for="studentGrade">Grade</label>
-          <input id="studentGrade" required placeholder="B+" />
-        </div>
-
-        <div class="field">
-          <label for="studentCompleted">Completed Tasks</label>
-          <input id="studentCompleted" type="number" min="0" required placeholder="12" />
-        </div>
-
-        <div class="field">
-          <label for="studentTotal">Total Tasks</label>
-          <input id="studentTotal" type="number" min="1" required placeholder="15" />
-        </div>
-
-        <div class="field">
-          <label for="studentAccuracy">Accuracy %</label>
-          <input id="studentAccuracy" type="number" min="0" max="100" required placeholder="84" />
-        </div>
-
-        <div class="field">
-          <label for="studentGamesCompleted">Games Completed</label>
-          <input id="studentGamesCompleted" type="number" min="0" required placeholder="6" />
-        </div>
-
-        <div class="field">
-          <label for="studentImprovement">Improvement This Week %</label>
-          <input id="studentImprovement" type="number" min="0" required placeholder="8" />
-        </div>
-
-        <div class="field">
-          <label for="studentStreak">Current Streak (days)</label>
-          <input id="studentStreak" type="number" min="0" required placeholder="5" />
-        </div>
-
         <div class="form-actions">
-          <button type="button" class="btn" data-close="studentModal">Cancel</button>
-          <button type="submit" class="btn primary">Save Student</button>
+          <button type="button" class="btn" data-close="editModal">Cancel</button>
+          <button type="submit" class="btn primary">Save Changes</button>
         </div>
       </form>
     </div>
   </div>
 
-  <div class="modal" id="assignmentModal" aria-hidden="true">
+  <div class="modal" id="detailsModal" aria-hidden="true">
     <div class="modal-card">
       <div class="modal-head">
-        <h3>Add Assignment</h3>
-        <button class="icon-btn" data-close="assignmentModal">✕</button>
+        <h3>Student Analytics</h3>
+        <button class="icon-btn" data-close="detailsModal">✕</button>
       </div>
-
-      <form id="assignmentForm" class="form-grid">
-        <div class="field">
-          <label for="assignmentTitle">Title</label>
-          <input id="assignmentTitle" required placeholder="Grade Quiz 4 submissions" />
-        </div>
-
-        <div class="field">
-          <label for="assignmentDetail">Detail</label>
-          <input id="assignmentDetail" required placeholder="12 submissions waiting" />
-        </div>
-
-        <div class="field">
-          <label for="assignmentStatus">Status</label>
-          <select id="assignmentStatus">
-            <option value="Today">Today</option>
-            <option value="Planned">Planned</option>
-            <option value="Ready">Ready</option>
-          </select>
-        </div>
-
-        <div class="form-actions">
-          <button type="button" class="btn" data-close="assignmentModal">Cancel</button>
-          <button type="submit" class="btn primary">Save Assignment</button>
-        </div>
-      </form>
+      <div class="list" id="detailsList"></div>
     </div>
   </div>
 
@@ -1203,847 +1108,861 @@
   <script src="js/supabase.js"></script>
 
   <script>
-  const STORAGE_KEY = "mathiveTeacherDashboardData";
-  const DASHBOARD_ROW_KEY = "teacher_dashboard_main";
+    const els = {
+      searchInput: document.getElementById("searchInput"),
+      classFilter: document.getElementById("classFilter"),
+      statusFilter: document.getElementById("statusFilter"),
+      refreshBtn: document.getElementById("refreshBtn"),
+      reloadBtn: document.getElementById("reloadBtn"),
+      logoutBtn: document.getElementById("logoutBtn"),
+      exportBtn: document.getElementById("exportBtn"),
+      resetClassScoresBtn: document.getElementById("resetClassScoresBtn"),
+      openEditModalBtn: document.getElementById("openEditModalBtn"),
+      openDetailsModalBtn: document.getElementById("openDetailsModalBtn"),
+      openNotesFocusBtn: document.getElementById("openNotesFocusBtn"),
+      openClassAnalyticsBtn: document.getElementById("openClassAnalyticsBtn"),
 
-  function readTeacherProfile() {
-    const raw =
-      sessionStorage.getItem("mq_teacher_profile") ||
-      localStorage.getItem("mq_teacher_profile");
+      statStudents: document.getElementById("statStudents"),
+      statStudentsSub: document.getElementById("statStudentsSub"),
+      statAttempts: document.getElementById("statAttempts"),
+      statAttemptsSub: document.getElementById("statAttemptsSub"),
+      statAverageScore: document.getElementById("statAverageScore"),
+      statAverageScoreSub: document.getElementById("statAverageScoreSub"),
+      statLoginTime: document.getElementById("statLoginTime"),
+      statLoginTimeSub: document.getElementById("statLoginTimeSub"),
 
-    if (!raw) return null;
+      bestStudentBox: document.getElementById("bestStudentBox"),
+      bestStudentSub: document.getElementById("bestStudentSub"),
+      mostPlayedGameBox: document.getElementById("mostPlayedGameBox"),
+      mostPlayedGameSub: document.getElementById("mostPlayedGameSub"),
+      highestScoreBox: document.getElementById("highestScoreBox"),
+      highestScoreSub: document.getElementById("highestScoreSub"),
+      lowestScoreBox: document.getElementById("lowestScoreBox"),
+      lowestScoreSub: document.getElementById("lowestScoreSub"),
 
-    try {
-      return JSON.parse(raw);
-    } catch {
-      return null;
-    }
-  }
+      mostImproved: document.getElementById("mostImproved"),
+      mostImprovedSub: document.getElementById("mostImprovedSub"),
+      needsSupport: document.getElementById("needsSupport"),
+      needsSupportSub: document.getElementById("needsSupportSub"),
 
-  const teacherProfile = readTeacherProfile();
+      navStudentsBadge: document.getElementById("navStudentsBadge"),
+      navLeaderboardBadge: document.getElementById("navLeaderboardBadge"),
+      navSignupBadge: document.getElementById("navSignupBadge"),
+      welcomeTeacher: document.getElementById("welcomeTeacher"),
+      welcomeSummary: document.getElementById("welcomeSummary"),
 
-  if (!teacherProfile) {
-    window.location.replace("teacher-login.html");
-    throw new Error("No teacher profile found");
-  }
+      studentTableBody: document.getElementById("studentTableBody"),
+      leaderboardList: document.getElementById("leaderboardList"),
+      signupList: document.getElementById("signupList"),
+      analyticsList: document.getElementById("analyticsList"),
+      gameChart: document.getElementById("gameChart"),
 
-  const defaultData = {
-    teacherName: teacherProfile?.name || teacherProfile?.first_name || "Teacher",
-    notes: [
-      "Review Assignment 3 by Thursday",
-      "Focus next lesson on area strategies",
-      "Check in with students below 70%"
-    ],
-    assignments: [
-      { title: "Grade Quiz 4 submissions", detail: "12 submissions waiting", status: "Today" },
-      { title: "Publish Pattern Pop challenge", detail: "Scheduled for tomorrow morning", status: "Planned" },
-      { title: "Parent progress export", detail: "Generate weekly JSON report", status: "Ready" }
-    ],
-    activities: [
-      { initials: "AL", title: "Ava finished Area Race", sub: "Scored 92% • 8 minutes ago", status: "Improved", tone: "green" },
-      { initials: "JM", title: "Jayden submitted Dice Dash", sub: "Score: 17 correct • 16 minutes ago", status: "Reviewed", tone: "default" },
-      { initials: "SK", title: "Sofia needs help on Times Table", sub: "Accuracy dropped below 65%", status: "Attention", tone: "yellow" },
-      { initials: "DL", title: "Daniel missed Assignment 3", sub: "No submission yet • due yesterday", status: "Late", tone: "red" }
-    ],
-    gamePerformance: [
-      { name: "Dice Dash", score: 91 },
-      { name: "Place Value", score: 84 },
-      { name: "Times Table", score: 78 },
-      { name: "Pattern Pop", score: 88 },
-      { name: "Area Race", score: 73 }
-    ],
-    students: [
-      { name: "Ava Lee", className: "Grade 4A", grade: "A", completed: 14, total: 15, accuracy: 92, gamesCompleted: 7, status: "Excellent", improvement: 22, streak: 14 },
-      { name: "Jayden Moore", className: "Grade 4A", grade: "B+", completed: 12, total: 15, accuracy: 84, gamesCompleted: 6, status: "On Track", improvement: 10, streak: 9 },
-      { name: "Sofia Khan", className: "Grade 4A", grade: "C+", completed: 10, total: 15, accuracy: 67, gamesCompleted: 5, status: "Needs Support", improvement: 4, streak: 4 },
-      { name: "Daniel Long", className: "Grade 4A", grade: "C", completed: 8, total: 15, accuracy: 61, gamesCompleted: 4, status: "Behind", improvement: 2, streak: 2 },
-      { name: "Noah Patel", className: "Grade 4B", grade: "A-", completed: 13, total: 15, accuracy: 89, gamesCompleted: 8, status: "Excellent", improvement: 15, streak: 12 },
-      { name: "Mia Chen", className: "Grade 4B", grade: "B", completed: 11, total: 15, accuracy: 81, gamesCompleted: 6, status: "On Track", improvement: 8, streak: 7 }
-    ]
-  };
+      notesInput: document.getElementById("notesInput"),
+      saveNoteBtn: document.getElementById("saveNoteBtn"),
+      clearNotesBtn: document.getElementById("clearNotesBtn"),
+      notesList: document.getElementById("notesList"),
 
-  const els = {
-    syncMathiveBtn: document.getElementById("syncMathiveBtn"),
-    importJsonBtn: document.getElementById("importJsonBtn"),
-    resetToDemoBtn: document.getElementById("resetToDemoBtn"),
-    jsonFileInput: document.getElementById("jsonFileInput"),
-    searchInput: document.getElementById("searchInput"),
-    classFilter: document.getElementById("classFilter"),
-    statusFilter: document.getElementById("statusFilter"),
-    resetFiltersBtn: document.getElementById("resetFiltersBtn"),
-    studentTableBody: document.getElementById("studentTableBody"),
-    activityList: document.getElementById("activityList"),
-    assignmentList: document.getElementById("assignmentList"),
-    notesList: document.getElementById("notesList"),
-    notesInput: document.getElementById("notesInput"),
-    saveNoteBtn: document.getElementById("saveNoteBtn"),
-    clearNotesBtn: document.getElementById("clearNotesBtn"),
-    exportBtn: document.getElementById("exportBtn"),
-    gameChart: document.getElementById("gameChart"),
-    statStudents: document.getElementById("statStudents"),
-    statAccuracy: document.getElementById("statAccuracy"),
-    statGames: document.getElementById("statGames"),
-    statPending: document.getElementById("statPending"),
-    statStudentsSub: document.getElementById("statStudentsSub"),
-    statAccuracySub: document.getElementById("statAccuracySub"),
-    statGamesSub: document.getElementById("statGamesSub"),
-    statPendingSub: document.getElementById("statPendingSub"),
-    mostImproved: document.getElementById("mostImproved"),
-    mostImprovedSub: document.getElementById("mostImprovedSub"),
-    topStreak: document.getElementById("topStreak"),
-    topStreakSub: document.getElementById("topStreakSub"),
-    welcomeTeacher: document.getElementById("welcomeTeacher"),
-    welcomeSummary: document.getElementById("welcomeSummary"),
-    navStudentsBadge: document.getElementById("navStudentsBadge"),
-    navAssignmentsBadge: document.getElementById("navAssignmentsBadge"),
-    navMessagesBadge: document.getElementById("navMessagesBadge"),
-    openStudentModal: document.getElementById("openStudentModal"),
-    openStudentModal2: document.getElementById("openStudentModal2"),
-    openAssignmentModal: document.getElementById("openAssignmentModal"),
-    openAssignmentFromSidebar: document.getElementById("openAssignmentFromSidebar"),
-    studentModal: document.getElementById("studentModal"),
-    assignmentModal: document.getElementById("assignmentModal"),
-    studentForm: document.getElementById("studentForm"),
-    assignmentForm: document.getElementById("assignmentForm"),
-    addMockActivityBtn: document.getElementById("addMockActivityBtn"),
-    addMockActivityBtn2: document.getElementById("addMockActivityBtn2")
-  };
+      progressEmpty: document.getElementById("progressEmpty"),
+      studentProgressChart: document.getElementById("studentProgressChart"),
 
-  let dashboardData = cloneDefaultData();
+      editModal: document.getElementById("editModal"),
+      detailsModal: document.getElementById("detailsModal"),
+      editStudentForm: document.getElementById("editStudentForm"),
+      detailsList: document.getElementById("detailsList"),
 
-  const inferredGameKeys = [
-    "game1HighScore",
-    "game2HighScore",
-    "game3HighScore",
-    "game4HighScore",
-    "game5HighScore",
-    "game6HighScore"
-  ];
+      editStudentId: document.getElementById("editStudentId"),
+      editFirstName: document.getElementById("editFirstName"),
+      editLastName: document.getElementById("editLastName"),
+      editUsername: document.getElementById("editUsername"),
+      editSchoolEmail: document.getElementById("editSchoolEmail"),
+      editStudentIdNumber: document.getElementById("editStudentIdNumber"),
+      editClassCode: document.getElementById("editClassCode")
+    };
 
-  function cloneDefaultData() {
-    return JSON.parse(JSON.stringify(defaultData));
-  }
+    const NOTE_KEY = "mathive_teacher_notes_v2";
 
-  function safeParseJson(value) {
-    try {
-      return JSON.parse(value);
-    } catch {
-      return null;
-    }
-  }
+    let players = [];
+    let scoreAttempts = [];
+    let loginSessions = [];
+    let derivedStudents = [];
+    let selectedStudentId = null;
 
-  function getInitials(name) {
-    return String(name || "")
-      .split(" ")
-      .filter(Boolean)
-      .slice(0, 2)
-      .map(part => part[0].toUpperCase())
-      .join("");
-  }
-
-  function escapeHtml(value) {
-    return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
-  }
-
-  function getToneClass(status) {
-    const s = String(status || "").toLowerCase();
-    if (s.includes("excellent") || s.includes("ready") || s.includes("improved")) return "green";
-    if (s.includes("support") || s.includes("today") || s.includes("attention") || s.includes("planned")) return "yellow";
-    if (s.includes("behind") || s.includes("late")) return "red";
-    return "";
-  }
-
-  function normalizeStudent(raw) {
-    if (!raw || typeof raw !== "object") return null;
-
-    const name = raw.name || raw.studentName || raw.fullName || raw.username || raw.playerName;
-    if (!name) return null;
-
-    const className = raw.className || raw.class || raw.classroom || raw.gradeGroup || "Grade 4A";
-    const grade = raw.grade || raw.letterGrade || raw.level || "B";
-    const completed = Number(raw.completed ?? raw.completedTasks ?? raw.assignmentsCompleted ?? 0);
-    const total = Math.max(1, Number(raw.total ?? raw.totalTasks ?? raw.assignmentsTotal ?? 15));
-    const accuracy = Math.max(0, Math.min(100, Number(raw.accuracy ?? raw.averageAccuracy ?? raw.avgAccuracy ?? raw.score ?? 0)));
-    const gamesCompleted = Number(raw.gamesCompleted ?? raw.gameCount ?? raw.completedGames ?? 0);
-    const improvement = Number(raw.improvement ?? raw.weeklyImprovement ?? raw.scoreChange ?? 0);
-    const streak = Number(raw.streak ?? raw.currentStreak ?? raw.loginStreak ?? 0);
-
-    let status = raw.status || "On Track";
-    if (!raw.status) {
-      if (accuracy >= 88) status = "Excellent";
-      else if (accuracy >= 75) status = "On Track";
-      else if (accuracy >= 65) status = "Needs Support";
-      else status = "Behind";
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
     }
 
-    return { name, className, grade, completed, total, accuracy, gamesCompleted, improvement, streak, status };
-  }
-
-  function normalizeAssignment(raw) {
-    if (!raw || typeof raw !== "object") return null;
-    const title = raw.title || raw.name || raw.assignmentTitle || raw.task;
-    const detail = raw.detail || raw.description || raw.assignmentDetail || raw.subtitle || "No details yet";
-    const status = raw.status || raw.state || raw.label || "Planned";
-    if (!title) return null;
-    return { title, detail, status };
-  }
-
-  function normalizeActivity(raw) {
-    if (!raw || typeof raw !== "object") return null;
-    const title = raw.title || raw.message || raw.activityTitle || raw.event;
-    const sub = raw.sub || raw.detail || raw.description || raw.time || "Recent activity";
-    const initials = raw.initials || getInitials(raw.name || raw.studentName || raw.actor || title || "M");
-    const status = raw.status || raw.label || "Reviewed";
-    const tone = raw.tone || getToneClass(status) || "default";
-    if (!title) return null;
-    return { initials, title, sub, status, tone };
-  }
-
-  function normalizeGamePerformance(raw, fallbackName) {
-    if (typeof raw === "number") {
-      return { name: fallbackName || "Game", score: Math.max(0, Math.min(100, raw)) };
-    }
-    if (!raw || typeof raw !== "object") return null;
-    const name = raw.name || raw.game || raw.title || fallbackName || "Game";
-    const score = Number(raw.score ?? raw.average ?? raw.avg ?? raw.highScore ?? 0);
-    return { name, score: Math.max(0, Math.min(100, score)) };
-  }
-
-  function openModal(modal) {
-    if (!modal) return;
-    modal.classList.add("show");
-    modal.setAttribute("aria-hidden", "false");
-  }
-
-  function closeModal(modal) {
-    if (!modal) return;
-    modal.classList.remove("show");
-    modal.setAttribute("aria-hidden", "true");
-  }
-
-  function on(el, event, handler) {
-    if (el) el.addEventListener(event, handler);
-  }
-
-  function downloadJsonFile(filename, data) {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    URL.revokeObjectURL(url);
-  }
-
-  function getFilteredStudents() {
-    const query = els.searchInput.value.trim().toLowerCase();
-    const selectedClass = els.classFilter.value;
-    const selectedStatus = els.statusFilter.value;
-
-    return dashboardData.students.filter(student => {
-      const matchesQuery = !query || [student.name, student.className, student.grade, student.status].join(" ").toLowerCase().includes(query);
-      const matchesClass = selectedClass === "all" || student.className === selectedClass;
-      const matchesStatus = selectedStatus === "all" || student.status.toLowerCase() === selectedStatus;
-      return matchesQuery && matchesClass && matchesStatus;
-    });
-  }
-
-  function populateClassFilter() {
-    const classes = [...new Set(dashboardData.students.map(student => student.className))].sort();
-    const current = els.classFilter.value || "all";
-
-    els.classFilter.innerHTML =
-      '<option value="all">All Classes</option>' +
-      classes.map(className => `<option value="${escapeHtml(className)}">${escapeHtml(className)}</option>`).join("");
-
-    els.classFilter.value = classes.includes(current) ? current : "all";
-  }
-
-  function renderStudents() {
-    const students = getFilteredStudents();
-
-    if (!students.length) {
-      els.studentTableBody.innerHTML = `<tr><td colspan="6"><div class="empty-state">No students match the current search or filters.</div></td></tr>`;
-      return;
+    function getTeacherProfile() {
+      try {
+        return JSON.parse(sessionStorage.getItem("mq_teacher_profile") || localStorage.getItem("mq_teacher_profile") || "null");
+      } catch {
+        return null;
+      }
     }
 
-    els.studentTableBody.innerHTML = students.map(student => {
-      const progress = Math.round((student.completed / student.total) * 100);
-      return `
+    function getInitials(name) {
+      return String(name || "")
+        .split(" ")
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(part => part[0].toUpperCase())
+        .join("") || "M";
+    }
+
+    function openModal(modal) {
+      modal.classList.add("show");
+      modal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeModal(modal) {
+      modal.classList.remove("show");
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    function on(el, event, handler) {
+      if (el) el.addEventListener(event, handler);
+    }
+
+    function formatMinutes(totalMinutes) {
+      if (totalMinutes == null || Number.isNaN(totalMinutes)) return "—";
+      if (totalMinutes < 60) return `${Math.round(totalMinutes)}m`;
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = Math.round(totalMinutes % 60);
+      return `${hours}h ${minutes}m`;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return "—";
+      const date = new Date(dateStr);
+      if (Number.isNaN(date.getTime())) return "—";
+      return date.toLocaleString();
+    }
+
+    function downloadJson(filename, data) {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function getStudentDisplayName(player) {
+      const first = player.first_name || "";
+      const last = player.last_name || "";
+      const full = `${first} ${last}`.trim();
+      return full || player.username || "Unknown Student";
+    }
+
+    function getStatusLabel(student) {
+      const avg = student.averageScore || 0;
+      const improvement = student.improvementDelta || 0;
+
+      if (avg >= 85) return "Excellent";
+      if (improvement >= 8) return "Improving";
+      if (avg < 60) return "Needs Support";
+      return "Consistent";
+    }
+
+    function getStatusTone(label) {
+      const v = String(label).toLowerCase();
+      if (v.includes("excellent") || v.includes("improving")) return "green";
+      if (v.includes("support")) return "red";
+      return "yellow";
+    }
+
+    function groupAttemptsByPlayer(playerId) {
+      return scoreAttempts.filter(a => String(a.player_id) === String(playerId));
+    }
+
+    function buildDerivedStudents() {
+      derivedStudents = players.map(player => {
+        const attempts = groupAttemptsByPlayer(player.id);
+        const scores = attempts.map(a => Number(a.score) || 0);
+        const totalScore = scores.reduce((sum, n) => sum + n, 0);
+        const attemptsCount = attempts.length;
+        const highestScore = scores.length ? Math.max(...scores) : 0;
+        const lowestScore = scores.length ? Math.min(...scores) : 0;
+        const averageScore = scores.length ? Math.round(totalScore / scores.length) : 0;
+
+        const gameMap = {};
+        attempts.forEach(a => {
+          const game = Number(a.game_number) || 0;
+          if (!gameMap[game]) gameMap[game] = [];
+          gameMap[game].push(Number(a.score) || 0);
+        });
+
+        const perGame = Object.entries(gameMap).map(([gameNumber, arr]) => ({
+          gameNumber: Number(gameNumber),
+          attempts: arr.length,
+          highest: Math.max(...arr),
+          lowest: Math.min(...arr),
+          average: Math.round(arr.reduce((s, n) => s + n, 0) / arr.length),
+          total: arr.reduce((s, n) => s + n, 0)
+        })).sort((a, b) => a.gameNumber - b.gameNumber);
+
+        const recent = attempts.slice(-5).map(a => Number(a.score) || 0);
+        const previous = attempts.slice(-10, -5).map(a => Number(a.score) || 0);
+        const recentAvg = recent.length ? recent.reduce((s, n) => s + n, 0) / recent.length : 0;
+        const previousAvg = previous.length ? previous.reduce((s, n) => s + n, 0) / previous.length : 0;
+        const improvementDelta = Math.round(recentAvg - previousAvg);
+
+        const sessionRows = loginSessions.filter(s => String(s.player_id) === String(player.id));
+        const totalMinutes = sessionRows.reduce((sum, row) => {
+          if (row.session_minutes != null) return sum + Number(row.session_minutes || 0);
+          if (row.login_time && row.logout_time) {
+            const diff = (new Date(row.logout_time) - new Date(row.login_time)) / 60000;
+            return sum + (Number.isFinite(diff) ? diff : 0);
+          }
+          return sum;
+        }, 0);
+
+        const status = getStatusLabel({
+          averageScore,
+          improvementDelta
+        });
+
+        return {
+          ...player,
+          displayName: getStudentDisplayName(player),
+          totalScore,
+          attemptsCount,
+          highestScore,
+          lowestScore,
+          averageScore,
+          totalMinutes: Math.round(totalMinutes),
+          perGame,
+          improvementDelta,
+          status
+        };
+      });
+    }
+
+    function populateClassFilter() {
+      const current = els.classFilter.value || "all";
+      const codes = [...new Set(players.map(p => p.class_code).filter(Boolean))].sort();
+      els.classFilter.innerHTML =
+        '<option value="all">All Classes</option>' +
+        codes.map(code => `<option value="${escapeHtml(code)}">${escapeHtml(code)}</option>`).join("");
+      els.classFilter.value = codes.includes(current) ? current : "all";
+    }
+
+    function getFilteredStudents() {
+      const query = els.searchInput.value.trim().toLowerCase();
+      const classCode = els.classFilter.value;
+      const status = els.statusFilter.value;
+
+      return derivedStudents.filter(student => {
+        const haystack = [
+          student.displayName,
+          student.username,
+          student.school_email,
+          student.student_id,
+          student.class_code,
+          student.status
+        ].join(" ").toLowerCase();
+
+        const classMatch = classCode === "all" || student.class_code === classCode;
+        const queryMatch = !query || haystack.includes(query);
+        const statusMatch = status === "all" || String(student.status).toLowerCase() === status;
+
+        return classMatch && queryMatch && statusMatch;
+      });
+    }
+
+    function getSelectedStudent() {
+      return derivedStudents.find(s => String(s.id) === String(selectedStudentId)) || null;
+    }
+
+    function renderStudentsTable() {
+      const rows = getFilteredStudents();
+
+      els.studentTableBody.innerHTML = rows.length ? rows.map(student => `
         <tr>
           <td>
             <div class="student-cell">
-              <div class="student-mini">${escapeHtml(getInitials(student.name))}</div>
+              <div class="avatar">${escapeHtml(getInitials(student.displayName))}</div>
               <div>
-                <strong>${escapeHtml(student.name)}</strong><br>
-                <span class="small">${escapeHtml(student.className)}</span>
+                <div><strong>${escapeHtml(student.displayName)}</strong></div>
+                <div class="muted">${escapeHtml(student.username || "No username")}</div>
               </div>
             </div>
           </td>
-          <td>${escapeHtml(student.grade)}</td>
-          <td>${student.completed} / ${student.total}</td>
-          <td>${student.accuracy}%</td>
+          <td>${escapeHtml(student.class_code || "—")}</td>
+          <td>${student.totalScore}</td>
+          <td>${student.attemptsCount}</td>
+          <td>${student.highestScore}</td>
+          <td>${student.lowestScore || 0}</td>
+          <td>${student.averageScore}</td>
+          <td>${escapeHtml(formatMinutes(student.totalMinutes))}</td>
+          <td><span class="pill ${getStatusTone(student.status)}">${escapeHtml(student.status)}</span></td>
           <td>
-            <div class="progress"><span style="width:${progress}%"></span></div>
-            <span class="small">${progress}% complete</span>
+            <div class="action-group">
+              <button class="btn small" onclick="window.viewStudentProgress('${student.id}')">Progress</button>
+              <button class="btn small" onclick="window.openStudentDetails('${student.id}')">Analytics</button>
+              <button class="btn small" onclick="window.openStudentEdit('${student.id}')">Edit</button>
+              <button class="btn small red" onclick="window.resetOneStudentScores('${student.id}')">Reset</button>
+            </div>
           </td>
-          <td><span class="pill ${getToneClass(student.status)}">${escapeHtml(student.status)}</span></td>
         </tr>
+      `).join("") : `<tr><td colspan="10"><div class="empty">No students matched your current filters.</div></td></tr>`;
+    }
+
+    function renderLeaderboard() {
+      const students = [...getFilteredStudents()]
+        .sort((a, b) => b.totalScore - a.totalScore)
+        .slice(0, 8);
+
+      els.navLeaderboardBadge.textContent = students.length;
+
+      els.leaderboardList.innerHTML = students.length ? students.map((student, index) => `
+        <div class="list-row">
+          <div class="avatar">${index + 1}</div>
+          <div>
+            <div class="item-title">${escapeHtml(student.displayName)}</div>
+            <div class="item-sub">${escapeHtml(student.class_code || "No class")} • ${student.attemptsCount} plays</div>
+          </div>
+          <div class="pill ${index === 0 ? "green" : ""}">${student.totalScore} pts</div>
+        </div>
+      `).join("") : `<div class="empty">No leaderboard data yet.</div>`;
+    }
+
+    function renderSignups() {
+      const list = [...players]
+        .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
+        .slice(0, 8);
+
+      els.navSignupBadge.textContent = list.length;
+
+      els.signupList.innerHTML = list.length ? list.map(player => `
+        <div class="list-row">
+          <div class="avatar">${escapeHtml(getInitials(getStudentDisplayName(player)))}</div>
+          <div>
+            <div class="item-title">${escapeHtml(getStudentDisplayName(player))}</div>
+            <div class="item-sub">${escapeHtml(player.school_email || player.username || "No email")} • ${escapeHtml(player.class_code || "No class")}</div>
+          </div>
+          <div class="pill">${escapeHtml(formatDate(player.created_at))}</div>
+        </div>
+      `).join("") : `<div class="empty">No sign-up data found.</div>`;
+    }
+
+    function renderGameChart() {
+      const students = getFilteredStudents();
+      const attempts = scoreAttempts.filter(a => {
+        const player = students.find(s => String(s.id) === String(a.player_id));
+        return !!player;
+      });
+
+      const gameGroups = {};
+      attempts.forEach(a => {
+        const game = Number(a.game_number) || 0;
+        if (!gameGroups[game]) gameGroups[game] = [];
+        gameGroups[game].push(Number(a.score) || 0);
+      });
+
+      const gameRows = Object.entries(gameGroups)
+        .map(([game, arr]) => ({
+          name: `Game ${game}`,
+          avg: Math.round(arr.reduce((sum, n) => sum + n, 0) / arr.length),
+          plays: arr.length
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+      els.gameChart.innerHTML = gameRows.length ? gameRows.map(row => `
+        <div class="chart-row">
+          <span>${escapeHtml(row.name)}</span>
+          <div class="bar-track"><div class="bar-fill" style="width:${Math.max(3, Math.min(row.avg, 100))}%"></div></div>
+          <strong>${row.avg}</strong>
+        </div>
+      `).join("") : `<div class="empty">No game score data available yet.</div>`;
+
+      const mostPlayed = gameRows.sort((a, b) => b.plays - a.plays)[0];
+      els.mostPlayedGameBox.textContent = mostPlayed ? mostPlayed.name : "—";
+      els.mostPlayedGameSub.textContent = mostPlayed ? `${mostPlayed.plays} total plays` : "No attempts yet";
+    }
+
+    function renderAnalytics() {
+      const students = getFilteredStudents();
+      const allAttempts = students.flatMap(student => groupAttemptsByPlayer(student.id));
+      const allScores = allAttempts.map(a => Number(a.score) || 0);
+
+      const bestStudent = [...students].sort((a, b) => b.totalScore - a.totalScore)[0];
+      const highest = allScores.length ? Math.max(...allScores) : null;
+      const lowest = allScores.length ? Math.min(...allScores) : null;
+      const avgScore = allScores.length ? Math.round(allScores.reduce((s, n) => s + n, 0) / allScores.length) : 0;
+
+      const improved = [...students].sort((a, b) => b.improvementDelta - a.improvementDelta)[0];
+      const support = [...students].sort((a, b) => a.averageScore - b.averageScore)[0];
+
+      const totalMinutes = students.reduce((sum, s) => sum + (s.totalMinutes || 0), 0);
+      const gamesTouched = new Set(allAttempts.map(a => Number(a.game_number) || 0)).size;
+
+      els.bestStudentBox.textContent = bestStudent ? bestStudent.displayName : "—";
+      els.bestStudentSub.textContent = bestStudent ? `${bestStudent.totalScore} total points` : "No data yet";
+
+      els.highestScoreBox.textContent = highest != null ? highest : "—";
+      els.highestScoreSub.textContent = highest != null ? "Top single attempt" : "No attempts yet";
+
+      els.lowestScoreBox.textContent = lowest != null ? lowest : "—";
+      els.lowestScoreSub.textContent = lowest != null ? "Lowest single attempt" : "No attempts yet";
+
+      els.mostImproved.textContent = improved ? improved.displayName : "—";
+      els.mostImprovedSub.textContent = improved ? `${improved.improvementDelta >= 0 ? "+" : ""}${improved.improvementDelta} recent change` : "No recent trend";
+
+      els.needsSupport.textContent = support ? support.displayName : "—";
+      els.needsSupportSub.textContent = support ? `Avg ${support.averageScore}` : "No data";
+
+      els.analyticsList.innerHTML = `
+        <div class="list-row">
+          <div class="avatar">1</div>
+          <div>
+            <div class="item-title">Students in view</div>
+            <div class="item-sub">Filtered student count for the current class/search</div>
+          </div>
+          <div class="pill">${students.length}</div>
+        </div>
+        <div class="list-row">
+          <div class="avatar">2</div>
+          <div>
+            <div class="item-title">Total score attempts</div>
+            <div class="item-sub">How many game scores were submitted</div>
+          </div>
+          <div class="pill">${allAttempts.length}</div>
+        </div>
+        <div class="list-row">
+          <div class="avatar">3</div>
+          <div>
+            <div class="item-title">Average class score</div>
+            <div class="item-sub">Average across all filtered attempts</div>
+          </div>
+          <div class="pill">${avgScore}</div>
+        </div>
+        <div class="list-row">
+          <div class="avatar">4</div>
+          <div>
+            <div class="item-title">Games used</div>
+            <div class="item-sub">How many unique games were played</div>
+          </div>
+          <div class="pill">${gamesTouched}</div>
+        </div>
+        <div class="list-row">
+          <div class="avatar">5</div>
+          <div>
+            <div class="item-title">Total login time</div>
+            <div class="item-sub">Uses login_sessions if your table exists</div>
+          </div>
+          <div class="pill">${formatMinutes(totalMinutes)}</div>
+        </div>
       `;
-    }).join("");
-  }
-
-  function renderActivities() {
-    const query = els.searchInput.value.trim().toLowerCase();
-    const activities = dashboardData.activities.filter(activity => {
-      return !query || [activity.title, activity.sub, activity.status].join(" ").toLowerCase().includes(query);
-    });
-
-    if (!activities.length) {
-      els.activityList.innerHTML = `<div class="empty-state">No activity matched your search.</div>`;
-      return;
     }
 
-    els.activityList.innerHTML = activities.map(activity => `
-      <div class="list-row">
-        <div class="avatar">${escapeHtml(activity.initials)}</div>
-        <div>
-          <div class="item-title">${escapeHtml(activity.title)}</div>
-          <div class="item-sub">${escapeHtml(activity.sub)}</div>
+    function renderStats() {
+      const students = getFilteredStudents();
+      const attempts = students.flatMap(student => groupAttemptsByPlayer(student.id));
+      const scores = attempts.map(a => Number(a.score) || 0);
+      const totalMinutes = students.reduce((sum, student) => sum + (student.totalMinutes || 0), 0);
+      const avgScore = scores.length ? Math.round(scores.reduce((sum, n) => sum + n, 0) / scores.length) : 0;
+
+      els.statStudents.textContent = students.length;
+      els.statStudentsSub.textContent = `${players.length} total registered students`;
+
+      els.statAttempts.textContent = attempts.length;
+      els.statAttemptsSub.textContent = "Across current class filter";
+
+      els.statAverageScore.textContent = avgScore;
+      els.statAverageScoreSub.textContent = scores.length ? "Across filtered attempts" : "No scores yet";
+
+      els.statLoginTime.textContent = totalMinutes ? formatMinutes(totalMinutes) : "—";
+      els.statLoginTimeSub.textContent = loginSessions.length ? "Calculated from login_sessions" : "login_sessions not found or empty";
+
+      els.navStudentsBadge.textContent = players.length;
+
+      const teacher = getTeacherProfile();
+      els.welcomeTeacher.textContent = `Welcome back, ${teacher?.name || teacher?.first_name || "Teacher"}`;
+      els.welcomeSummary.textContent = `${students.length} students shown, ${attempts.length} score attempts, ${scores.length ? avgScore : 0} average score.`;
+    }
+
+    function renderNotes() {
+      const notes = JSON.parse(localStorage.getItem(NOTE_KEY) || "[]");
+      els.notesList.innerHTML = notes.length ? notes.map(note => `
+        <div class="list-row">
+          <div class="avatar">📝</div>
+          <div>
+            <div class="item-title">Teacher Note</div>
+            <div class="item-sub">${escapeHtml(note)}</div>
+          </div>
+          <div class="pill">Saved</div>
         </div>
-        <div class="pill ${activity.tone === "default" ? "" : escapeHtml(activity.tone)}">${escapeHtml(activity.status)}</div>
-      </div>
-    `).join("");
-  }
-
-  function renderAssignments() {
-    const query = els.searchInput.value.trim().toLowerCase();
-    const assignments = dashboardData.assignments.filter(item => {
-      return !query || [item.title, item.detail, item.status].join(" ").toLowerCase().includes(query);
-    });
-
-    if (!assignments.length) {
-      els.assignmentList.innerHTML = `<div class="empty-state">No assignments matched your search.</div>`;
-      return;
+      `).join("") : `<div class="empty">No notes saved yet.</div>`;
     }
 
-    els.assignmentList.innerHTML = assignments.map((item, index) => `
-      <div class="list-row">
-        <div class="avatar">${index + 1}</div>
-        <div>
-          <div class="item-title">${escapeHtml(item.title)}</div>
-          <div class="item-sub">${escapeHtml(item.detail)}</div>
-        </div>
-        <div class="pill ${getToneClass(item.status)}">${escapeHtml(item.status)}</div>
-      </div>
-    `).join("");
-  }
-
-  function renderNotes() {
-    if (!dashboardData.notes.length) {
-      els.notesList.innerHTML = `<li>No notes yet. Add your first one below.</li>`;
-      return;
+    function renderAll() {
+      populateClassFilter();
+      renderStudentsTable();
+      renderLeaderboard();
+      renderSignups();
+      renderGameChart();
+      renderAnalytics();
+      renderStats();
+      renderNotes();
     }
 
-    els.notesList.innerHTML = dashboardData.notes.map(note => `<li>${escapeHtml(note)}</li>`).join("");
-  }
+    async function loadPlayers() {
+      const { data, error } = await window.supabaseClient
+        .from("players")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-  function renderGameChart() {
-    const rows = dashboardData.gamePerformance.map(game => `
-      <div class="chart-row">
-        <span>${escapeHtml(game.name)}</span>
-        <div class="bar-track"><div class="bar-fill" style="width:${game.score}%"></div></div>
-        <strong>${game.score}%</strong>
-      </div>
-    `).join("");
-
-    els.gameChart.innerHTML = rows || `<div class="empty-state">No game data available.</div>`;
-  }
-
-  function renderStats() {
-    const students = getFilteredStudents();
-    const totalStudents = students.length;
-    const avgAccuracy = totalStudents
-      ? Math.round(students.reduce((sum, student) => sum + student.accuracy, 0) / totalStudents)
-      : 0;
-    const totalGames = students.reduce((sum, student) => sum + student.gamesCompleted, 0);
-    const pendingReviews = dashboardData.assignments.filter(item => item.status.toLowerCase() !== "ready").length;
-    const improved = [...dashboardData.students].sort((a, b) => b.improvement - a.improvement)[0];
-    const streak = [...dashboardData.students].sort((a, b) => b.streak - a.streak)[0];
-
-    els.statStudents.textContent = totalStudents;
-    els.statAccuracy.textContent = `${avgAccuracy}%`;
-    els.statGames.textContent = totalGames;
-    els.statPending.textContent = pendingReviews;
-
-    els.statStudentsSub.textContent = totalStudents === dashboardData.students.length
-      ? "All students shown"
-      : `Filtered from ${dashboardData.students.length}`;
-
-    els.statAccuracySub.textContent = totalStudents ? "Across filtered students" : "No matching students";
-    els.statGamesSub.textContent = totalStudents ? "Across filtered students" : "No matching students";
-    els.statPendingSub.textContent = `${dashboardData.assignments.length} total assignments`;
-
-    els.mostImproved.textContent = improved ? improved.name : "—";
-    els.mostImprovedSub.textContent = improved ? `+${improved.improvement}% this week` : "No change data yet";
-
-    els.topStreak.textContent = streak ? `${streak.streak} days` : "—";
-    els.topStreakSub.textContent = streak ? `${streak.name} has the top streak` : "Streak updates live";
-
-    els.navStudentsBadge.textContent = dashboardData.students.length;
-    els.navAssignmentsBadge.textContent = dashboardData.assignments.length;
-    els.navMessagesBadge.textContent = dashboardData.activities.length;
-
-    els.welcomeTeacher.textContent = `Welcome back, ${dashboardData.teacherName}`;
-    els.welcomeSummary.textContent = `You have ${pendingReviews} assignments to review and ${dashboardData.students.filter(student => student.improvement >= 8).length} students who improved their score this week.`;
-  }
-
-  function renderAll() {
-    populateClassFilter();
-    renderStudents();
-    renderActivities();
-    renderAssignments();
-    renderNotes();
-    renderGameChart();
-    renderStats();
-  }
-
-  function loadDataFromLocal() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : cloneDefaultData();
-    } catch (error) {
-      console.warn("Failed to load local dashboard data:", error);
-      return cloneDefaultData();
-    }
-  }
-
-  function saveDataToLocal() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(dashboardData));
-  }
-
-  async function loadDataFromSupabase() {
-    if (!window.supabaseClient) return null;
-
-    const { data, error } = await window.supabaseClient
-      .from("teacher_dashboards")
-      .select("*")
-      .eq("dashboard_key", DASHBOARD_ROW_KEY)
-      .single();
-
-    if (error && error.code !== "PGRST116") {
-      console.error("Supabase load error:", error);
-      return null;
+      if (error) throw error;
+      players = data || [];
     }
 
-    if (!data) {
-      const starter = cloneDefaultData();
+    async function loadScoreAttempts() {
+      const { data, error } = await window.supabaseClient
+        .from("score_attempts")
+        .select("*")
+        .order("created_at", { ascending: true });
 
-      const { error: insertError } = await window.supabaseClient
-        .from("teacher_dashboards")
-        .upsert({
-          dashboard_key: DASHBOARD_ROW_KEY,
-          teacher_name: starter.teacherName,
-          notes: starter.notes,
-          assignments: starter.assignments,
-          activities: starter.activities,
-          game_performance: starter.gamePerformance,
-          students: starter.students,
-          updated_at: new Date().toISOString()
-        }, { onConflict: "dashboard_key" });
-
-      if (insertError) {
-        console.error("Supabase starter row error:", insertError);
-        return null;
-      }
-
-      return starter;
+      if (error) throw error;
+      scoreAttempts = data || [];
     }
 
-    return {
-      teacherName: data.teacher_name || defaultData.teacherName,
-      notes: Array.isArray(data.notes) ? data.notes.map(String) : cloneDefaultData().notes,
-      assignments: Array.isArray(data.assignments) ? data.assignments.map(normalizeAssignment).filter(Boolean) : cloneDefaultData().assignments,
-      activities: Array.isArray(data.activities) ? data.activities.map(normalizeActivity).filter(Boolean) : cloneDefaultData().activities,
-      gamePerformance: Array.isArray(data.game_performance) ? data.game_performance.map((item, index) => normalizeGamePerformance(item, `Game ${index + 1}`)).filter(Boolean) : cloneDefaultData().gamePerformance,
-      students: Array.isArray(data.students) ? data.students.map(normalizeStudent).filter(Boolean) : cloneDefaultData().students
-    };
-  }
+    async function loadLoginSessionsSafe() {
+      try {
+        const { data, error } = await window.supabaseClient
+          .from("login_sessions")
+          .select("*")
+          .order("created_at", { ascending: false });
 
-  async function saveDataToSupabase() {
-    if (!window.supabaseClient) {
-      saveDataToLocal();
-      return;
-    }
-
-    const payload = {
-      dashboard_key: DASHBOARD_ROW_KEY,
-      teacher_name: dashboardData.teacherName,
-      notes: dashboardData.notes,
-      assignments: dashboardData.assignments,
-      activities: dashboardData.activities,
-      game_performance: dashboardData.gamePerformance,
-      students: dashboardData.students,
-      updated_at: new Date().toISOString()
-    };
-
-    const { error } = await window.supabaseClient
-      .from("teacher_dashboards")
-      .upsert(payload, { onConflict: "dashboard_key" });
-
-    if (error) {
-      console.error("Supabase save error:", error);
-      saveDataToLocal();
-    }
-  }
-
-  async function saveDashboardData() {
-    await saveDataToSupabase();
-    saveDataToLocal();
-  }
-
-  async function syncFromMathiveLocalStorage() {
-    const merged = cloneDefaultData();
-    const found = { students:false, assignments:false, activities:false, games:false, notes:false, teacher:false };
-
-    const studentCandidates = ["mathiveStudents", "mathive_students", "mq_students", "students", "mathiveClassroomData", "mathive_student_records"];
-    for (const key of studentCandidates) {
-      const parsed = safeParseJson(localStorage.getItem(key));
-      if (Array.isArray(parsed)) {
-        const normalized = parsed.map(normalizeStudent).filter(Boolean);
-        if (normalized.length) {
-          merged.students = normalized;
-          found.students = true;
-          break;
+        if (error) {
+          loginSessions = [];
+          return;
         }
+        loginSessions = data || [];
+      } catch {
+        loginSessions = [];
       }
     }
 
-    const assignmentCandidates = ["mathiveAssignments", "mathive_assignments", "mq_assignments", "assignments", "mathive_tasks"];
-    for (const key of assignmentCandidates) {
-      const parsed = safeParseJson(localStorage.getItem(key));
-      if (Array.isArray(parsed)) {
-        const normalized = parsed.map(normalizeAssignment).filter(Boolean);
-        if (normalized.length) {
-          merged.assignments = normalized;
-          found.assignments = true;
-          break;
-        }
-      }
-    }
-
-    const activityCandidates = ["mathiveActivities", "mathive_activity", "mq_activity", "recentActivity", "mathive_logs"];
-    for (const key of activityCandidates) {
-      const parsed = safeParseJson(localStorage.getItem(key));
-      if (Array.isArray(parsed)) {
-        const normalized = parsed.map(normalizeActivity).filter(Boolean);
-        if (normalized.length) {
-          merged.activities = normalized;
-          found.activities = true;
-          break;
-        }
-      }
-    }
-
-    const notesCandidates = ["mathiveTeacherNotes", "mathive_teacher_notes", "teacherNotes", "mq_teacher_notes"];
-    for (const key of notesCandidates) {
-      const parsed = safeParseJson(localStorage.getItem(key));
-      if (Array.isArray(parsed) && parsed.length) {
-        merged.notes = parsed.map(String);
-        found.notes = true;
-        break;
-      }
-    }
-
-    const gameCandidates = ["mathiveGamePerformance", "mathive_game_performance", "mq_game_scores", "gamePerformance"];
-    for (const key of gameCandidates) {
-      const parsed = safeParseJson(localStorage.getItem(key));
-      if (Array.isArray(parsed)) {
-        const normalized = parsed.map((item, index) => normalizeGamePerformance(item, `Game ${index + 1}`)).filter(Boolean);
-        if (normalized.length) {
-          merged.gamePerformance = normalized;
-          found.games = true;
-          break;
-        }
-      }
-    }
-
-    if (!found.games) {
-      const inferredGames = inferredGameKeys.map((key, index) => {
-        const raw = Number(localStorage.getItem(key));
-        if (Number.isNaN(raw) || raw <= 0) return null;
-        const names = ["Dice Dash", "Place Value", "Times Table", "Pattern Pop", "Area Race", "Symmetry Sprint"];
-        return { name: names[index] || `Game ${index + 1}`, score: Math.max(0, Math.min(100, raw)) };
-      }).filter(Boolean);
-
-      if (inferredGames.length) {
-        merged.gamePerformance = inferredGames;
-        found.games = true;
-      }
-    }
-
-    const teacherStoredProfile =
-      safeParseJson(sessionStorage.getItem("mq_teacher_profile")) ||
-      safeParseJson(localStorage.getItem("mq_teacher_profile"));
-
-    if (teacherStoredProfile) {
-      merged.teacherName =
-        teacherStoredProfile.first_name ||
-        teacherStoredProfile.teacherName ||
-        teacherStoredProfile.name ||
-        merged.teacherName;
-      found.teacher = true;
-    }
-
-    if (!found.students) {
-      const studentProfile =
-        safeParseJson(sessionStorage.getItem("mq_profile")) ||
-        safeParseJson(localStorage.getItem("mq_profile"));
-
-      const playerName = studentProfile?.username || studentProfile?.name || localStorage.getItem("mathiveUsername");
-
-      if (playerName) {
-        const avgGameScore = merged.gamePerformance.length
-          ? Math.round(merged.gamePerformance.reduce((sum, game) => sum + Number(game.score || 0), 0) / merged.gamePerformance.length)
-          : 0;
-
-        merged.students = [{
-          name: playerName,
-          className: studentProfile?.classCode || "Grade 4A",
-          grade: avgGameScore >= 88 ? "A" : avgGameScore >= 75 ? "B" : avgGameScore >= 65 ? "C+" : "C",
-          completed: studentProfile?.completed ?? merged.assignments.length,
-          total: studentProfile?.total ?? Math.max(merged.assignments.length, 1),
-          accuracy: avgGameScore,
-          gamesCompleted: merged.gamePerformance.length,
-          status: avgGameScore >= 88 ? "Excellent" : avgGameScore >= 75 ? "On Track" : avgGameScore >= 65 ? "Needs Support" : "Behind",
-          improvement: 0,
-          streak: Number(studentProfile?.streak ?? 0)
-        }];
-        found.students = true;
-      }
-    }
-
-    dashboardData = merged;
-    await saveDashboardData();
-    renderAll();
-
-    const foundCount = Object.values(found).filter(Boolean).length;
-    alert(
-      foundCount
-        ? `Mathive sync complete. Connected ${foundCount} data section${foundCount === 1 ? "" : "s"}.`
-        : "No existing Mathive localStorage keys were found, so the page stayed on demo data."
-    );
-  }
-
-  function importDashboardJson(file) {
-    const reader = new FileReader();
-
-    reader.onload = async () => {
-      const parsed = safeParseJson(reader.result);
-
-      if (!parsed || typeof parsed !== "object") {
-        alert("That file is not valid dashboard JSON.");
+    async function reloadDashboard() {
+      if (!window.supabaseClient) {
+        alert("Supabase client is not loaded.");
         return;
       }
 
-      const next = cloneDefaultData();
-
-      if (Array.isArray(parsed.students)) next.students = parsed.students.map(normalizeStudent).filter(Boolean);
-      if (Array.isArray(parsed.assignments)) next.assignments = parsed.assignments.map(normalizeAssignment).filter(Boolean);
-      if (Array.isArray(parsed.activities)) next.activities = parsed.activities.map(normalizeActivity).filter(Boolean);
-      if (Array.isArray(parsed.gamePerformance)) next.gamePerformance = parsed.gamePerformance.map((item, index) => normalizeGamePerformance(item, `Game ${index + 1}`)).filter(Boolean);
-      if (Array.isArray(parsed.notes)) next.notes = parsed.notes.map(String);
-      if (parsed.teacherName) next.teacherName = String(parsed.teacherName);
-
-      dashboardData = next;
-      await saveDashboardData();
-      renderAll();
-      alert("Dashboard JSON imported successfully.");
-    };
-
-    reader.readAsText(file);
-  }
-
-  function addRandomActivity() {
-    const samples = [
-      { initials: "NP", title: "Noah improved on Place Value", sub: "Score increased to 90% • just now", status: "Improved", tone: "green" },
-      { initials: "MC", title: "Mia finished Pattern Pop", sub: "Accuracy 86% • just now", status: "Reviewed", tone: "default" },
-      { initials: "SK", title: "Sofia requested help", sub: "Asked for support on multiplication • just now", status: "Attention", tone: "yellow" }
-    ];
-
-    dashboardData.activities.unshift(samples[Math.floor(Math.random() * samples.length)]);
-    saveDashboardData().then(() => {
-      renderActivities();
-      renderStats();
-    });
-  }
-
-  on(els.searchInput, "input", renderAll);
-  on(els.classFilter, "change", renderAll);
-  on(els.statusFilter, "change", renderAll);
-
-  on(els.syncMathiveBtn, "click", async () => {
-    await syncFromMathiveLocalStorage();
-  });
-
-  on(els.importJsonBtn, "click", () => els.jsonFileInput.click());
-
-  on(els.resetToDemoBtn, "click", async () => {
-    dashboardData = cloneDefaultData();
-    dashboardData.teacherName = teacherProfile?.name || teacherProfile?.first_name || "Teacher";
-    await saveDashboardData();
-    renderAll();
-  });
-
-  on(els.jsonFileInput, "change", event => {
-    const file = event.target.files?.[0];
-    if (file) importDashboardJson(file);
-    event.target.value = "";
-  });
-
-  on(els.resetFiltersBtn, "click", () => {
-    els.searchInput.value = "";
-    els.classFilter.value = "all";
-    els.statusFilter.value = "all";
-    renderAll();
-  });
-
-  on(els.saveNoteBtn, "click", async () => {
-    const value = els.notesInput.value.trim();
-    if (!value) return;
-
-    dashboardData.notes.unshift(value);
-    els.notesInput.value = "";
-    await saveDashboardData();
-    renderNotes();
-  });
-
-  on(els.clearNotesBtn, "click", async () => {
-    dashboardData.notes = [];
-    await saveDashboardData();
-    renderNotes();
-  });
-
-  on(els.exportBtn, "click", () => {
-    downloadJsonFile("mathive-teacher-dashboard-data.json", dashboardData);
-  });
-
-  on(els.openStudentModal, "click", () => openModal(els.studentModal));
-  on(els.openStudentModal2, "click", () => openModal(els.studentModal));
-  on(els.openAssignmentModal, "click", () => openModal(els.assignmentModal));
-  on(els.openAssignmentFromSidebar, "click", () => openModal(els.assignmentModal));
-
-  document.querySelectorAll("[data-close]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const modal = document.getElementById(btn.dataset.close);
-      if (modal) closeModal(modal);
-    });
-  });
-
-  [els.studentModal, els.assignmentModal].forEach(modal => {
-    if (!modal) return;
-    modal.addEventListener("click", event => {
-      if (event.target === modal) closeModal(modal);
-    });
-  });
-
-  document.addEventListener("keydown", event => {
-    if (event.key === "Escape") {
-      closeModal(els.studentModal);
-      closeModal(els.assignmentModal);
+      try {
+        await Promise.all([
+          loadPlayers(),
+          loadScoreAttempts(),
+          loadLoginSessionsSafe()
+        ]);
+        buildDerivedStudents();
+        renderAll();
+      } catch (error) {
+        console.error("Dashboard load failed:", error);
+        alert("Failed to load live dashboard data. Check your Supabase tables and RLS.");
+      }
     }
-  });
 
-  on(els.studentForm, "submit", async event => {
-    event.preventDefault();
-
-    const student = {
-      name: document.getElementById("studentName").value.trim(),
-      className: document.getElementById("studentClass").value.trim(),
-      grade: document.getElementById("studentGrade").value.trim(),
-      completed: Number(document.getElementById("studentCompleted").value),
-      total: Number(document.getElementById("studentTotal").value),
-      accuracy: Number(document.getElementById("studentAccuracy").value),
-      gamesCompleted: Number(document.getElementById("studentGamesCompleted").value),
-      improvement: Number(document.getElementById("studentImprovement").value),
-      streak: Number(document.getElementById("studentStreak").value),
-      status: "On Track"
-    };
-
-    if (!student.name || !student.className || !student.grade || student.total <= 0) return;
-
-    if (student.accuracy >= 88) student.status = "Excellent";
-    else if (student.accuracy >= 75) student.status = "On Track";
-    else if (student.accuracy >= 65) student.status = "Needs Support";
-    else student.status = "Behind";
-
-    dashboardData.students.unshift(student);
-    dashboardData.activities.unshift({
-      initials: getInitials(student.name),
-      title: `${student.name} was added to ${student.className}`,
-      sub: `Starting accuracy ${student.accuracy}% • just now`,
-      status: "Reviewed",
-      tone: "default"
-    });
-
-    await saveDashboardData();
-    renderAll();
-    els.studentForm.reset();
-    closeModal(els.studentModal);
-  });
-
-  on(els.assignmentForm, "submit", async event => {
-    event.preventDefault();
-
-    const assignment = {
-      title: document.getElementById("assignmentTitle").value.trim(),
-      detail: document.getElementById("assignmentDetail").value.trim(),
-      status: document.getElementById("assignmentStatus").value
-    };
-
-    if (!assignment.title || !assignment.detail) return;
-
-    dashboardData.assignments.unshift(assignment);
-    dashboardData.activities.unshift({
-      initials: "MS",
-      title: `New assignment created: ${assignment.title}`,
-      sub: `${assignment.detail} • just now`,
-      status: assignment.status,
-      tone: getToneClass(assignment.status) || "default"
-    });
-
-    await saveDashboardData();
-    renderAll();
-    els.assignmentForm.reset();
-    closeModal(els.assignmentModal);
-  });
-
-  on(els.addMockActivityBtn, "click", addRandomActivity);
-  on(els.addMockActivityBtn2, "click", addRandomActivity);
-
-  async function initializeDashboard() {
-    dashboardData = loadDataFromLocal();
-    dashboardData.teacherName = teacherProfile?.name || teacherProfile?.first_name || dashboardData.teacherName;
-    renderAll();
-
-    const cloudData = await loadDataFromSupabase();
-    if (cloudData) {
-      dashboardData = cloudData;
-      dashboardData.teacherName = teacherProfile?.name || teacherProfile?.first_name || dashboardData.teacherName;
-      saveDataToLocal();
-      renderAll();
+    function exportDashboardData() {
+      downloadJson("mathive-teacher-dashboard.json", {
+        exported_at: new Date().toISOString(),
+        players,
+        score_attempts: scoreAttempts,
+        login_sessions: loginSessions,
+        derived_students: derivedStudents
+      });
     }
-  }
 
-  initializeDashboard();
-</script>
+    window.viewStudentProgress = function(playerId) {
+      selectedStudentId = playerId;
+      const student = derivedStudents.find(s => String(s.id) === String(playerId));
+      if (!student) return;
 
+      els.progressEmpty.style.display = "none";
+      els.studentProgressChart.style.display = "grid";
+
+      if (!student.perGame.length) {
+        els.studentProgressChart.innerHTML = `<div class="empty">This student has no game attempts yet.</div>`;
+        return;
+      }
+
+      els.studentProgressChart.innerHTML = student.perGame.map(game => `
+        <div class="chart-row">
+          <span>Game ${game.gameNumber}</span>
+          <div class="bar-track"><div class="bar-fill" style="width:${Math.max(3, Math.min(game.average, 100))}%"></div></div>
+          <strong>${game.average}</strong>
+        </div>
+      `).join("");
+    };
+
+    window.openStudentDetails = function(playerId) {
+      selectedStudentId = playerId;
+      const student = derivedStudents.find(s => String(s.id) === String(playerId));
+      if (!student) return;
+
+      const bestGame = [...student.perGame].sort((a, b) => b.average - a.average)[0];
+      const weakGame = [...student.perGame].sort((a, b) => a.average - b.average)[0];
+
+      els.detailsList.innerHTML = `
+        <div class="list-row">
+          <div class="avatar">${escapeHtml(getInitials(student.displayName))}</div>
+          <div>
+            <div class="item-title">${escapeHtml(student.displayName)}</div>
+            <div class="item-sub">${escapeHtml(student.school_email || "No email")} • ${escapeHtml(student.class_code || "No class")}</div>
+          </div>
+          <div class="pill ${getStatusTone(student.status)}">${escapeHtml(student.status)}</div>
+        </div>
+        <div class="list-row">
+          <div class="avatar">↑</div>
+          <div>
+            <div class="item-title">Improvement</div>
+            <div class="item-sub">Recent average compared with the previous recent set</div>
+          </div>
+          <div class="pill">${student.improvementDelta >= 0 ? "+" : ""}${student.improvementDelta}</div>
+        </div>
+        <div class="list-row">
+          <div class="avatar">★</div>
+          <div>
+            <div class="item-title">Highest / Lowest / Average</div>
+            <div class="item-sub">Single-attempt high, low, and overall average</div>
+          </div>
+          <div class="pill">${student.highestScore} / ${student.lowestScore} / ${student.averageScore}</div>
+        </div>
+        <div class="list-row">
+          <div class="avatar">🎮</div>
+          <div>
+            <div class="item-title">Times Played</div>
+            <div class="item-sub">Total number of score submissions</div>
+          </div>
+          <div class="pill">${student.attemptsCount}</div>
+        </div>
+        <div class="list-row">
+          <div class="avatar">🏆</div>
+          <div>
+            <div class="item-title">Best Game</div>
+            <div class="item-sub">Highest average game performance</div>
+          </div>
+          <div class="pill">${bestGame ? `Game ${bestGame.gameNumber} • ${bestGame.average}` : "—"}</div>
+        </div>
+        <div class="list-row">
+          <div class="avatar">⚠</div>
+          <div>
+            <div class="item-title">Weakest Game</div>
+            <div class="item-sub">Lowest average game performance</div>
+          </div>
+          <div class="pill">${weakGame ? `Game ${weakGame.gameNumber} • ${weakGame.average}` : "—"}</div>
+        </div>
+        <div class="list-row">
+          <div class="avatar">⏱</div>
+          <div>
+            <div class="item-title">Logged-in Time</div>
+            <div class="item-sub">Calculated from login sessions if available</div>
+          </div>
+          <div class="pill">${formatMinutes(student.totalMinutes)}</div>
+        </div>
+      `;
+
+      openModal(els.detailsModal);
+    };
+
+    window.openStudentEdit = function(playerId) {
+      selectedStudentId = playerId;
+      const student = players.find(s => String(s.id) === String(playerId));
+      if (!student) return;
+
+      els.editStudentId.value = student.id || "";
+      els.editFirstName.value = student.first_name || "";
+      els.editLastName.value = student.last_name || "";
+      els.editUsername.value = student.username || "";
+      els.editSchoolEmail.value = student.school_email || "";
+      els.editStudentIdNumber.value = student.student_id || "";
+      els.editClassCode.value = student.class_code || "";
+
+      openModal(els.editModal);
+    };
+
+    window.resetOneStudentScores = async function(playerId) {
+      const student = derivedStudents.find(s => String(s.id) === String(playerId));
+      if (!student) return;
+
+      const ok = confirm(`Reset all scores for ${student.displayName}?`);
+      if (!ok) return;
+
+      const { error } = await window.supabaseClient
+        .from("score_attempts")
+        .delete()
+        .eq("player_id", playerId);
+
+      if (error) {
+        console.error(error);
+        alert("Failed to reset that student's scores.");
+        return;
+      }
+
+      await reloadDashboard();
+    };
+
+    async function resetSelectedClassScores() {
+      const classCode = els.classFilter.value;
+      if (classCode === "all") {
+        alert("Choose one class first before resetting class scores.");
+        return;
+      }
+
+      const classStudents = players.filter(p => p.class_code === classCode).map(p => p.id);
+      if (!classStudents.length) {
+        alert("No students found for that class.");
+        return;
+      }
+
+      const ok = confirm(`Reset all scores for class ${classCode}? This will delete score_attempts for that class.`);
+      if (!ok) return;
+
+      const { error } = await window.supabaseClient
+        .from("score_attempts")
+        .delete()
+        .in("player_id", classStudents);
+
+      if (error) {
+        console.error(error);
+        alert("Failed to reset class scores.");
+        return;
+      }
+
+      await reloadDashboard();
+    }
+
+    on(els.editStudentForm, "submit", async (event) => {
+      event.preventDefault();
+
+      const id = els.editStudentId.value;
+      if (!id) return;
+
+      const updates = {
+        first_name: els.editFirstName.value.trim() || null,
+        last_name: els.editLastName.value.trim() || null,
+        username: els.editUsername.value.trim() || null,
+        school_email: els.editSchoolEmail.value.trim() || null,
+        student_id: els.editStudentIdNumber.value.trim() || null,
+        class_code: els.editClassCode.value.trim() || null
+      };
+
+      const { error } = await window.supabaseClient
+        .from("players")
+        .update(updates)
+        .eq("id", id);
+
+      if (error) {
+        console.error(error);
+        alert("Failed to update student information.");
+        return;
+      }
+
+      closeModal(els.editModal);
+      await reloadDashboard();
+    });
+
+    on(els.searchInput, "input", renderAll);
+    on(els.classFilter, "change", renderAll);
+    on(els.statusFilter, "change", renderAll);
+
+    on(els.refreshBtn, "click", reloadDashboard);
+    on(els.reloadBtn, "click", reloadDashboard);
+    on(els.exportBtn, "click", exportDashboardData);
+    on(els.resetClassScoresBtn, "click", resetSelectedClassScores);
+
+    on(els.logoutBtn, "click", () => {
+      sessionStorage.removeItem("mq_teacher_profile");
+      localStorage.removeItem("mq_teacher_profile");
+      window.location.href = "teacher-login.html";
+    });
+
+    on(els.openEditModalBtn, "click", () => {
+      if (!selectedStudentId) {
+        alert("Select a student first by clicking Edit or Analytics from the table.");
+        return;
+      }
+      window.openStudentEdit(selectedStudentId);
+    });
+
+    on(els.openDetailsModalBtn, "click", () => {
+      if (!selectedStudentId) {
+        alert("Select a student first by clicking Progress or Analytics from the table.");
+        return;
+      }
+      window.openStudentDetails(selectedStudentId);
+    });
+
+    on(els.openNotesFocusBtn, "click", () => {
+      document.getElementById("notesSection").scrollIntoView({ behavior: "smooth" });
+      els.notesInput.focus();
+    });
+
+    on(els.openClassAnalyticsBtn, "click", () => {
+      document.querySelector("#dashboard").scrollIntoView({ behavior: "smooth" });
+    });
+
+    on(els.saveNoteBtn, "click", () => {
+      const value = els.notesInput.value.trim();
+      if (!value) return;
+      const notes = JSON.parse(localStorage.getItem(NOTE_KEY) || "[]");
+      notes.unshift(value);
+      localStorage.setItem(NOTE_KEY, JSON.stringify(notes.slice(0, 20)));
+      els.notesInput.value = "";
+      renderNotes();
+    });
+
+    on(els.clearNotesBtn, "click", () => {
+      localStorage.removeItem(NOTE_KEY);
+      renderNotes();
+    });
+
+    document.querySelectorAll("[data-close]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const modal = document.getElementById(btn.dataset.close);
+        if (modal) closeModal(modal);
+      });
+    });
+
+    [els.editModal, els.detailsModal].forEach(modal => {
+      modal.addEventListener("click", (event) => {
+        if (event.target === modal) closeModal(modal);
+      });
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeModal(els.editModal);
+        closeModal(els.detailsModal);
+      }
+    });
+
+    async function initialize() {
+      const teacherProfile = getTeacherProfile();
+      if (!teacherProfile) {
+        window.location.replace("teacher-login.html");
+        return;
+      }
+
+      els.welcomeTeacher.textContent = `Welcome back, ${teacherProfile.name || teacherProfile.first_name || "Teacher"}`;
+
+      if (!window.supabaseClient) {
+        alert("Supabase is not connected. Check js/supabase.js.");
+        return;
+      }
+
+      await reloadDashboard();
+    }
+
+    initialize();
+  </script>
 </body>
 </html>
